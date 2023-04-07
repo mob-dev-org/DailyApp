@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "DailyApps",
+    "slug": "DailyApps",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/images/icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.mob.dev.expo-template"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./src/assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.mob_dev.expotemplate"
+    },
+    "web": {
+      "favicon": "./src/assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-community-flipper",
+      "./plugins/disableForcedDarkModeAndroid.js",
+      "expo-localization"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "59d72699-699f-4342-9b6a-8d903088fa0a"
+      }
+    },
+    "owner": "mob_dev"
+  }
+}
