@@ -55,15 +55,16 @@ function BottomTabNavigator() {
                 //     ),
                 // })}
                 options={{
-                    title: t('navigation:tabOne') ?? 'Tab One',
+                    title: 'Home',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
                 }}
             />
             <BottomTab.Screen
                 name="TabTwo"
                 component={TabTwoScreen}
                 options={{
-                    title: t('navigation:tabTwo') ?? 'Tab Two',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+                    title: 'Teams  ',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="shirtsinbulk" color={color} />,
                 }}
             />
 
@@ -71,8 +72,8 @@ function BottomTabNavigator() {
                 name="TabThree"
                 component={TabThreeScreen}
                 options={{
-                    title: t('navigation:TabThree') ?? 'Tab Three',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+                    title: 'Summary',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
                 }}
             />
         </BottomTab.Navigator>

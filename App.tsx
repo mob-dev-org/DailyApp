@@ -8,20 +8,14 @@ import Navigation from '@/navigation';
 import store, { persistor } from '@/store';
 
 export default function App() {
-    const isLoadingComplete = useCachedResources();
-
-    if (!isLoadingComplete) {
-        return null;
-    } else {
-        return (
-            <StoreProvider store={store}>
-                <PersistGate persistor={persistor}>
-                    <SafeAreaProvider>
-                        <Navigation />
-                        <StatusBar />
-                    </SafeAreaProvider>
-                </PersistGate>
-            </StoreProvider>
-        );
-    }
+    return (
+        <StoreProvider store={store}>
+            <PersistGate persistor={persistor}>
+                <SafeAreaProvider>
+                    <Navigation />
+                    <StatusBar />
+                </SafeAreaProvider>
+            </PersistGate>
+        </StoreProvider>
+    );
 }
