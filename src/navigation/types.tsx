@@ -20,6 +20,7 @@ export type StackNavScreenProps<Screen extends keyof StackNavParamList> = Native
 export type BottomTabsParamList = {
     TabOne: undefined;
     TabTwo: undefined;
+    TabThree: undefined;
 };
 
 export type BottomTabsScreenProps<Screen extends keyof BottomTabsParamList> = CompositeScreenProps<

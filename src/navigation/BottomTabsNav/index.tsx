@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Colors from '@/constants/Colors';
 import { BottomTabsParamList } from '@/navigation/types';
 import TabOneScreen from '@/screens/TabOne';
+import TabThreeScreen from '@/screens/TabThree';
 import TabTwoScreen from '@/screens/TabTwo';
 import { useAppSelector } from '@/store/hooks';
 
@@ -62,6 +63,15 @@ function BottomTabNavigator() {
                 component={TabTwoScreen}
                 options={{
                     title: t('navigation:tabTwo') ?? 'Tab Two',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+                }}
+            />
+
+            <BottomTab.Screen
+                name="TabThree"
+                component={TabThreeScreen}
+                options={{
+                    title: t('navigation:TabThree') ?? 'Tab Three',
                     tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
                 }}
             />
