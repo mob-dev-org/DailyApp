@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 type Player = {
     name: string;
+    goal?: number;
+    assists?: number;
+    apear?: number;
 };
 
 type Team = {
@@ -13,14 +16,29 @@ type Team = {
 export default function TabTwoScreen() {
     const [team1, setTeam1] = useState<Team>({
         name: 'Bajro',
-        players: [{ name: 'Bajram' }, { name: 'Ahmet' }, { name: 'Harun' }],
+        players: [
+            { name: 'Bajram', goal: 2, assists: 0, apear: 5 },
+            { name: 'Ahmet', goal: 3, assists: 1, apear: 5 },
+            { name: 'Irfan', goal: 2, assists: 0, apear: 5 },
+            { name: 'Keno', goal: 1, assists: 0, apear: 4 },
+            { name: 'Harun', goal: 1, assists: 1, apear: 5 },
+        ],
     });
     const [team2, setTeam2] = useState<Team>({
         name: 'Malik',
-        players: [{ name: 'Malik' }, { name: 'Mahir' }, { name: 'Adi' }],
+        players: [
+            { name: 'Malik', goal: 3, assists: 1, apear: 5 },
+            { name: 'Mahir', goal: 2, assists: 3, apear: 5 },
+            { name: 'Adi', goal: 1, assists: 2, apear: 4 },
+            { name: 'Pepa', goal: 1, assists: 2, apear: 5 },
+            { name: 'Mirza', goal: 1, assists: 2, apear: 1 },
+            { name: 'Almo', goal: 1, assists: 2, apear: 3 },
+        ],
     });
     const [newPlayerName, setNewPlayerName] = useState('');
     const [newPlayerName1, setNewPlayerName1] = useState('');
+    // const [count, setCount] = useState(0);
+    // const [count2, setCount2] = useState(0);
 
     const addPlayer = (teamId: number) => {
         // Check if teamId is 1 and newPlayerName is not empty
@@ -56,105 +74,171 @@ export default function TabTwoScreen() {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.teamContainer}>
-                <Text style={styles.teamName}>TEAM: {team1.name}</Text>
-                <Button title="Clear Team 1" onPress={clearTeam1} />
-                <View style={styles.playerList}>
-                    {team1.players.map((player, index) => (
-                        <Text key={index} style={styles.player}>
-                            {player.name}
-                        </Text>
-                    ))}
-                </View>
-                <View style={styles.addPlayerContainer}>
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={styles.teamContainer}>
+                    <Text style={styles.teamName}>TEAM {team1.name}</Text>
+                    {/* <Button title="Goal" onPress={() => setCount(count + 1)} /> */}
+                    <Button title="Clear Team 1" onPress={clearTeam1} />
+                    <View style={styles.teamName}>
+                        {team1.players.map((player, index) => (
+                            <Text key={index} style={styles.playerName}>
+                                {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                            </Text>
+                        ))}
+                    </View>
+                    {/* <View style={styles.addPlayerContainer}> */}
                     <TextInput
-                        style={styles.addPlayerInput}
+                        style={styles.input}
                         placeholder="Enter player name..."
                         value={newPlayerName}
                         onChangeText={setNewPlayerName}
                     />
-                    <TouchableOpacity style={styles.addButton} onPress={() => addPlayer(1)} disabled={!newPlayerName}>
-                        <Text style={styles.addButtonText}>Add Player</Text>
+                    <TouchableOpacity style={styles.button} onPress={() => addPlayer(1)} disabled={!newPlayerName}>
+                        <Text style={styles.buttonText}>Add Player</Text>
                     </TouchableOpacity>
+                    {/* </View> */}
                 </View>
-            </View>
-            {/* TEAM2 */}
-            <View style={styles.teamContainer}>
-                <Text style={styles.teamName}>TEAM: {team2.name}</Text>
-                <Button title="Clear Team 2" onPress={clearTeam2} />
-
-                <View style={styles.playerList}>
-                    {team2.players.map((player, index) => (
-                        <Text key={index} style={styles.player}>
-                            {player.name}
-                        </Text>
-                    ))}
-                </View>
-                <View style={styles.addPlayerContainer}>
+                {/* TEAM2 */}
+                <View style={styles.teamContainer}>
+                    <Text style={styles.teamName}>TEAM {team2.name}</Text>
+                    {/* <Button title="Goal" onPress={() => setCount2(count2 + 1)} /> */}
+                    <Button title="Clear Team 2" onPress={clearTeam2} />
+                    <View style={styles.teamName}>
+                        {team2.players.map((player, index) => (
+                            <Text key={index} style={styles.playerName}>
+                                {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                            </Text>
+                        ))}
+                    </View>
+                    {/* <View style={styles.addPlayerContainer}> */}
                     <TextInput
-                        style={styles.addPlayerInput}
+                        style={styles.input}
                         placeholder="Enter player name..."
                         value={newPlayerName1}
                         onChangeText={setNewPlayerName1}
                     />
-                    <TouchableOpacity style={styles.addButton} onPress={() => addPlayer(2)} disabled={!newPlayerName1}>
-                        <Text style={styles.addButtonText}>Add Player</Text>
+                    <TouchableOpacity style={styles.button} onPress={() => addPlayer(2)} disabled={!newPlayerName1}>
+                        <Text style={styles.buttonText}>Add Player</Text>
                     </TouchableOpacity>
+                    {/* </View> */}
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
+        backgroundColor: '#fff',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+    },
+    contentContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
     },
     teamContainer: {
+        flex: 1,
         marginBottom: 16,
+        paddingTop: 24,
+    },
+    team: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 16,
     },
     teamName: {
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    playerList: {
-        backgroundColor: '#a123',
-        borderRadius: 8,
-        marginBottom: 16,
-        padding: 16,
-        maxHeight: 200,
-    },
-    addPlayerContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 16,
-    },
-    addPlayerInput: {
-        flex: 1,
-        height: 40,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: 'gray',
-        paddingHorizontal: 8,
-        marginRight: 16,
-    },
-    addButton: {
-        backgroundColor: '#007BFF',
-        borderRadius: 8,
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-    },
-    addButtonText: {
-        color: 'white',
-        fontWeight: 'bold',
-    },
-    player: {
         marginBottom: 8,
+    },
+    playerName: {
+        fontSize: 16,
+        marginBottom: 4,
         borderWidth: 1,
         padding: 4,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
         borderRadius: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        marginBottom: 8,
+    },
+    button: {
+        backgroundColor: 'blue',
+        borderRadius: 8,
+        padding: 12,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 });
+
+// const styles = StyleSheet.create({
+//     contentContainer: {
+//         flexGrow: 1,
+//         justifyContent: 'center',
+//     },
+//     container: {
+//         flex: 1,
+//         backgroundColor: '#fff',
+//         paddingHorizontal: 16,
+//         paddingTop: 24,
+//     },
+//     teamContainer: {
+//         flex: 1,
+//         marginBottom: 16,
+//     },
+//     teamName: {
+//         fontSize: 24,
+//         fontWeight: 'bold',
+//         marginBottom: 16,
+//     },
+//     playerList: {
+//         flex: 1,
+//         borderRadius: 8,
+//         marginBottom: 16,
+//         padding: 16,
+//         maxHeight: 200,
+//     },
+//     addPlayerContainer: {
+//         flex: 1,
+//         flexDirection: 'row',
+//         alignItems: 'center',
+//         marginBottom: 16,
+//         paddingTop: 24,
+//     },
+//     addPlayerInput: {
+//         flex: 1,
+//         height: 40,
+//         borderRadius: 8,
+//         borderWidth: 1,
+//         borderColor: 'gray',
+//         paddingHorizontal: 8,
+//         marginRight: 16,
+//     },
+//     addButton: {
+//         backgroundColor: '#007BFF',
+//         borderRadius: 8,
+//         paddingVertical: 8,
+//         paddingHorizontal: 16,
+//     },
+//     addButtonText: {
+//         color: 'white',
+//         fontWeight: 'bold',
+//     },
+//     player: {
+//         marginBottom: 8,
+//         borderWidth: 1,
+//         padding: 4,
+//         borderRadius: 8,
+//     },
+// });
