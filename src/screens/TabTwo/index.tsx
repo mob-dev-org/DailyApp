@@ -48,7 +48,7 @@ export default function TabTwoScreen() {
             // Use the setTeam1 function to update the team1 state
             // Use the spread operator to create spread copy of the previous team1 state
             // Update the players property of team1 state with a new array that contains the previous players and the newPlayer
-            setTeam1((prevTeam1) => ({ ...prevTeam1, players: [...prevTeam1.players, newPlayer] }));
+            setTeam1((startState) => ({ ...startState, players: [...startState.players, newPlayer] }));
             // Clear the newPlayerName input field by setting it to an empty string
             setNewPlayerName('');
         }
@@ -58,7 +58,7 @@ export default function TabTwoScreen() {
             // Use the setTeam2 function to update the team2 state
             // Use the spread operator to create a shallow copy of the previous team2 state
             // Update the players property of team2 state with a new array that contains the previous players and the newPlayer
-            setTeam2((prevTeam2) => ({ ...prevTeam2, players: [...prevTeam2.players, newPlayer] }));
+            setTeam2((startState2) => ({ ...startState2, players: [...startState2.players, newPlayer] }));
             // Clear the newPlayerName1 input field by setting it to an empty string
             setNewPlayerName1('');
         }
