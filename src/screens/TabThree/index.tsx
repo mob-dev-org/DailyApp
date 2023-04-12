@@ -1,26 +1,17 @@
 import { StyleSheet } from 'react-native';
+import { Button } from 'react-native';
 
 import { Text, View } from '@/components/atoms/Themed';
+import { reset } from '@/store/appSettings/slice';
+// import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch } from '@/store/hooks';
+import { useAppSelector } from '@/store/hooks';
 
 export default function TabThreeScreen() {
-    const players = [
-        { name: 'Bajram', goal: 5, assists: 0, apear: 5 },
-        { name: 'Ahmet', goal: 2, assists: 3, apear: 5 },
-        { name: 'Irfan', goal: 2, assists: 0, apear: 5 },
-        { name: 'Keno', goal: 1, assists: 0, apear: 4 },
-        { name: 'Harun', goal: 3, assists: 1, apear: 5 },
-    ];
+    const { teamB, teamA } = useAppSelector((state) => state);
+    // const teamB  = useAppSelector((state) => state.);
 
-    const players2 = [
-        { name: 'Malik', goal: 3, assists: 1, apear: 5 },
-        { name: 'Mahir', goal: 2, assists: 4, apear: 5 },
-        { name: 'Adi', goal: 1, assists: 2, apear: 4 },
-        { name: 'Pepa', goal: 1, assists: 2, apear: 5 },
-        { name: 'Mirza', goal: 5, assists: 2, apear: 1 },
-        { name: 'Almo', goal: 5, assists: 2, apear: 0 },
-    ];
-
-    const combinePlayers = [...players, ...players2];
+    const combinePlayers = [...teamA.players, ...teamB.players];
 
     const playersMostGoals = () => {
         const sortedPlayers = combinePlayers.sort((a, b) => b.goal - a.goal);
@@ -46,6 +37,9 @@ export default function TabThreeScreen() {
 
     return (
         <View style={styles.container}>
+            {/* <Button onPress={logout} mode="contained">
+                Log out
+            </Button> */}
             <View style={styles.category}>
                 <Text style={styles.heading}>Players with most goals:</Text>
                 {playersWithMostGoals.map((player) => (
@@ -89,3 +83,20 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
 });
+
+// const players = [
+//     { name: 'Bajram', goal: 5, assists: 0, apear: 5 },
+//     { name: 'Ahmet', goal: 2, assists: 3, apear: 5 },
+//     { name: 'Irfan', goal: 2, assists: 0, apear: 5 },
+//     { name: 'Keno', goal: 1, assists: 0, apear: 4 },
+//     { name: 'Harun', goal: 3, assists: 1, apear: 5 },
+// ];
+
+// const players2 = [
+//     { name: 'Malik', goal: 3, assists: 1, apear: 5 },
+//     { name: 'Mahir', goal: 2, assists: 4, apear: 5 },
+//     { name: 'Adi', goal: 1, assists: 2, apear: 4 },
+//     { name: 'Pepa', goal: 1, assists: 2, apear: 5 },
+//     { name: 'Mirza', goal: 5, assists: 2, apear: 1 },
+//     { name: 'Almo', goal: 5, assists: 2, apear: 0 },
+// ];

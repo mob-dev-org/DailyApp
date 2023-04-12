@@ -6,9 +6,16 @@ import AppIcon from '@/components/atoms/icons/AppIcon';
 import { BottomTabsScreenProps } from '@/navigation/types';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { resetTeamA } from '@/store/teamA/slice';
+import { resetTeamB } from '@/store/teamB/slice';
 
 export default function TabOneScreen({ navigation }: BottomTabsScreenProps<'TabOne'>) {
     navigation;
+
+    const logout = () => {
+        dispatch(resetTeamB());
+        dispatch(resetTeamA());
+    };
 
     const { theme, language } = useAppSelector((state) => state.appSettings);
     const dispatch = useAppDispatch();
@@ -24,6 +31,8 @@ export default function TabOneScreen({ navigation }: BottomTabsScreenProps<'TabO
             <Text style={styles.title}>Tab One</Text>
             <Button title="Change theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
             <Button title="Toggle language" onPress={changeLanguage} />
+            <Button title="Reset state" onPress={logout} />
+
             <AppIcon name="account" />
             <Text>{i18n.language}</Text>
             <Text>{i18n.languages}</Text>
