@@ -3,13 +3,7 @@ import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/atoms/Themed';
 
 export default function TabThreeScreen() {
-    type Player = {
-        name: string;
-        goal: number;
-        assists: number;
-        apear: number;
-    };
-    const players: Player[] = [
+    const players = [
         { name: 'Bajram', goal: 5, assists: 0, apear: 5 },
         { name: 'Ahmet', goal: 2, assists: 3, apear: 5 },
         { name: 'Irfan', goal: 2, assists: 0, apear: 5 },
@@ -17,47 +11,65 @@ export default function TabThreeScreen() {
         { name: 'Harun', goal: 3, assists: 1, apear: 5 },
     ];
 
-    const players2: Player[] = [
+    const players2 = [
         { name: 'Malik', goal: 3, assists: 1, apear: 5 },
-        { name: 'Mahir', goal: 2, assists: 3, apear: 5 },
+        { name: 'Mahir', goal: 2, assists: 4, apear: 5 },
         { name: 'Adi', goal: 1, assists: 2, apear: 4 },
         { name: 'Pepa', goal: 1, assists: 2, apear: 5 },
         { name: 'Mirza', goal: 5, assists: 2, apear: 1 },
-        { name: 'Almo', goal: 7, assists: 2, apear: 0 },
+        { name: 'Almo', goal: 5, assists: 2, apear: 0 },
     ];
 
-    const combinedPlayers: Player[] = [...players, ...players2];
+    const combinePlayers = [...players, ...players2];
 
-    // Find player with most goals
-    const playerWithMostGoals = combinedPlayers.reduce((prevPlayer, currentPlayer) =>
-        prevPlayer.goal > currentPlayer.goal ? prevPlayer : currentPlayer,
-    );
+    const playersMostGoals = () => {
+        const sortedPlayers = combinePlayers.sort((a, b) => b.goal - a.goal);
+        const mostGoals = sortedPlayers[0].goal;
+        return sortedPlayers.filter((a) => a.goal === mostGoals);
+    };
 
-    // Find player with most assits
-    const playerWithMostAssists = combinedPlayers.reduce((prevPlayer, currentPlayer) =>
-        prevPlayer.assists > currentPlayer.assists ? prevPlayer : currentPlayer,
-    );
-    // Find player with most assits
-    const playerWithMostApears = combinedPlayers.reduce((prevPlayer, currentPlayer) =>
-        prevPlayer.apear > currentPlayer.apear ? prevPlayer : currentPlayer,
-    );
-    // Access player details
-    const goalPlayerName = playerWithMostGoals.name;
-    const playerGoals = playerWithMostGoals.goal;
-    const assistsPlayerName = playerWithMostAssists.name;
-    const playerAssists = playerWithMostAssists.assists;
-    const apearPlayerName = playerWithMostApears.name;
-    const playerApear = playerWithMostApears.apear;
+    const playersMostAssists = () => {
+        const sortedPlayers = combinePlayers.sort((a, b) => b.assists - a.assists);
+        const mostAssists = sortedPlayers[0].assists;
+        return sortedPlayers.filter((b) => b.assists === mostAssists);
+    };
 
-    // Render player details in component's UI
+    const playerMost = () => {
+        const sortedPlayers = combinePlayers.sort((a, b) => b.apear - a.apear);
+        const mostAppearances = sortedPlayers[0].apear;
+        return sortedPlayers.filter((c) => c.apear === mostAppearances);
+    };
+
+    const playersWithMostGoals = playersMostGoals();
+    const playersWithMostAssists = playersMostAssists();
+    const playersWithMostAppearances = playerMost();
+
     return (
         <View style={styles.container}>
-            <Text>Player with most goals: {goalPlayerName}</Text>
-            <Text>Goals: {playerGoals}</Text>
-            <Text>Player with most assists: {assistsPlayerName}</Text>
-            <Text>Assists: {playerAssists}</Text>
-            <Text>Player with most apears: {apearPlayerName}</Text>
-            <Text>Apears: {playerApear}</Text>
+            <View style={styles.category}>
+                <Text style={styles.heading}>Players with most goals:</Text>
+                {playersWithMostGoals.map((player) => (
+                    <Text key={player.name}>
+                        {player.name} : {player.goal}
+                    </Text>
+                ))}
+            </View>
+            <View style={styles.category}>
+                <Text style={styles.heading}>Players with most assists:</Text>
+                {playersWithMostAssists.map((player) => (
+                    <Text key={player.name}>
+                        {player.name} : {player.assists}
+                    </Text>
+                ))}
+            </View>
+            <View style={styles.category}>
+                <Text style={styles.heading}>Players with most appearances:</Text>
+                {playersWithMostAppearances.map((player) => (
+                    <Text key={player.name}>
+                        {player.name}: {player.apear}
+                    </Text>
+                ))}
+            </View>
         </View>
     );
 }
@@ -65,16 +77,15 @@ export default function TabThreeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
     },
-    title: {
-        fontSize: 20,
+    category: {
+        marginVertical: 10,
+    },
+    heading: {
+        fontSize: 18,
         fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+        marginBottom: 5,
     },
 });
