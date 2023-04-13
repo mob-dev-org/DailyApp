@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type Player = {
     name: string;
@@ -21,13 +21,19 @@ const initialState = {
 } as teamB;
 
 export const teamBSlice = createSlice({
-    name: 'timB',
+    name: 'teamB',
     initialState,
     reducers: {
+        addPlayerB: (state, { payload }: PayloadAction<Player>) => {
+            state.players.push(payload);
+        },
+        deletePlayerB: (state, { payload }: PayloadAction<number>) => {
+            state.players.splice(payload, 1);
+        },
         resetTeamB: () => initialState,
     },
 });
 
-export const { resetTeamB } = teamBSlice.actions;
+export const { resetTeamB, deletePlayerB, addPlayerB } = teamBSlice.actions;
 
 export default teamBSlice.reducer;

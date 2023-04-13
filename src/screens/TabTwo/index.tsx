@@ -1,9 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+    Button,
+    Keyboard,
+    KeyboardAvoidingView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addPlayerA, deletePlayerA } from '@/store/teamA/slice';
+import { addPlayerB } from '@/store/teamB/slice';
 
 type Player = {
     name: string;
@@ -13,6 +24,7 @@ type Player = {
 };
 
 export default function TabTwoScreen() {
+    // const [text, setText] = useState<string>('');
     const dispatch = useAppDispatch();
     const { teamB, teamA } = useAppSelector((state) => state);
     const [newPlayer, setNewPlayer] = useState<Player>({
@@ -23,54 +35,71 @@ export default function TabTwoScreen() {
     });
     const addPlayerTeamA = () => {
         dispatch(addPlayerA(newPlayer));
+        setNewPlayer({ ...newPlayer, name: '', goal: 0, assists: 0, apear: 0 });
     };
-    const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
+
+    const addPlayerTeamB = () => {
+        dispatch(addPlayerB(newPlayer));
+        setNewPlayer({ ...newPlayer, name: '', goal: 0, assists: 0, apear: 0 });
+    };
+
+    // const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
+    // const delPlayerTeamB = (index: number) => dispatch(deletePlayerB(index));
 
     return (
         <ScrollView>
-            {/* TEAM A */}
-            <View style={styles.container}>
-                <StatusBar backgroundColor="#FFFFFF" />
-                <View style={styles.teamContainer}>
-                    <Text style={styles.teamName}>TEAM Bijeli</Text>
-                    <View style={styles.teamName}>
-                        {teamA.players.map((player, index) => (
-                            <Text key={index} style={styles.playerName}>
-                                {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
-                            </Text>
-                        ))}
-                    </View>
-                </View>
-                {/* TEAM B */}
-                <View style={styles.teamContainer}>
-                    <Text style={styles.teamName}>TEAM Šareni</Text>
+            <KeyboardAvoidingView>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    {/* TEAM A */}
+                    <View style={styles.container}>
+                        <StatusBar backgroundColor="#FFFFFF" />
+                        <View style={styles.teamContainer}>
+                            <Text style={styles.teamName}>TEAM Bijeli</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Player Name"
+                                onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
+                            />
 
-                    <View style={styles.teamName}>
-                        {teamB.players.map((player, index) => (
-                            <Text key={index} style={styles.playerName}>
-                                {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
-                            </Text>
-                        ))}
-                    </View>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Player Name"
-                        onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Goals"
-                        onChangeText={(text) => setNewPlayer({ ...newPlayer, goal: parseInt(text) })}
-                        keyboardType="numeric"
-                    />
+                            <Button
+                                title="Add Player to Bijeli"
+                                onPress={addPlayerTeamA}
+                                disabled={newPlayer.name.trim() === ''}
+                            />
+                            <View style={styles.teamName}>
+                                {teamA.players.map((player, index) => (
+                                    <Text key={index} style={styles.playerName}>
+                                        {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                    </Text>
+                                ))}
+                            </View>
+                        </View>
+                        {/* TEAM B */}
+                        <View style={styles.teamContainer}>
+                            <Text style={styles.teamName}>TEAM Šareni</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Player Name"
+                                onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
+                            />
 
-                    <Button
-                        title="Add Player to Team A"
-                        onPress={addPlayerTeamA}
-                        disabled={newPlayer.name.trim() === ''}
-                    />
-                </View>
-            </View>
+                            <Button
+                                title="Add Player to Šareni"
+                                onPress={addPlayerTeamB}
+                                disabled={newPlayer.name.trim() === ''}
+                            />
+
+                            <View style={styles.teamName}>
+                                {teamB.players.map((player, index) => (
+                                    <Text key={index} style={styles.playerName}>
+                                        {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                    </Text>
+                                ))}
+                            </View>
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
         </ScrollView>
     );
 }
@@ -138,3 +167,12 @@ const styles = StyleSheet.create({
 // const clearTeam2 = () => {
 //     setTeam2((i) => ({ ...i, players: [] }));
 // };
+
+{
+    /* <TextInput
+                        style={styles.input}
+                        placeholder="Goals"
+                        onChangeText={(text) => setNewPlayer({ ...newPlayer, goal: parseInt(text) })}
+                        keyboardType="numeric"
+                    /> */
+}
