@@ -4,6 +4,7 @@ import {
     Button,
     Keyboard,
     KeyboardAvoidingView,
+    Pressable,
     ScrollView,
     StyleSheet,
     Text,
@@ -14,7 +15,7 @@ import {
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addPlayerA, deletePlayerA } from '@/store/teamA/slice';
-import { addPlayerB } from '@/store/teamB/slice';
+import { addPlayerB, deletePlayerB } from '@/store/teamB/slice';
 
 type Player = {
     name: string;
@@ -43,15 +44,15 @@ export default function TabTwoScreen() {
         setNewPlayer({ ...newPlayer, name: '', goal: 0, assists: 0, apear: 0 });
     };
 
-    // const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
-    // const delPlayerTeamB = (index: number) => dispatch(deletePlayerB(index));
+    const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
+    const delPlayerTeamB = (index: number) => dispatch(deletePlayerB(index));
 
     return (
         <ScrollView>
-            <KeyboardAvoidingView>
+            <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     {/* TEAM A */}
-                    <View style={styles.container}>
+                    <View style={styles.teamContainer}>
                         <StatusBar backgroundColor="#FFFFFF" />
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Bijeli</Text>
@@ -59,6 +60,7 @@ export default function TabTwoScreen() {
                                 style={styles.input}
                                 placeholder="Player Name"
                                 onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
+                                value={newPlayer.name}
                             />
 
                             <Button
@@ -68,9 +70,14 @@ export default function TabTwoScreen() {
                             />
                             <View style={styles.teamName}>
                                 {teamA.players.map((player, index) => (
-                                    <Text key={index} style={styles.playerName}>
-                                        {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
-                                    </Text>
+                                    <View key={index} style={styles.playerName}>
+                                        <Text>
+                                            {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                        </Text>
+                                        <Pressable onPress={() => delPlayerTeamA(index)}>
+                                            <Text style={styles.deleteButton}>Delete</Text>
+                                        </Pressable>
+                                    </View>
                                 ))}
                             </View>
                         </View>
@@ -81,6 +88,7 @@ export default function TabTwoScreen() {
                                 style={styles.input}
                                 placeholder="Player Name"
                                 onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
+                                value={newPlayer.name}
                             />
 
                             <Button
@@ -91,9 +99,14 @@ export default function TabTwoScreen() {
 
                             <View style={styles.teamName}>
                                 {teamB.players.map((player, index) => (
-                                    <Text key={index} style={styles.playerName}>
-                                        {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
-                                    </Text>
+                                    <View key={index} style={styles.playerName}>
+                                        <Text>
+                                            {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                        </Text>
+                                        <Pressable onPress={() => delPlayerTeamB(index)}>
+                                            <Text style={styles.deleteButton}>Delete</Text>
+                                        </Pressable>
+                                    </View>
                                 ))}
                             </View>
                         </View>
@@ -105,6 +118,11 @@ export default function TabTwoScreen() {
 }
 
 const styles = StyleSheet.create({
+    deleteButton: {
+        color: 'red',
+        marginLeft: 10,
+        fontWeight: 'bold',
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -132,6 +150,8 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     playerName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         fontSize: 16,
         marginBottom: 4,
         borderWidth: 1,
