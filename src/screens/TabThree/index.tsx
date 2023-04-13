@@ -1,7 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/atoms/Themed';
-// import { useAppDispatch } from '@/store/hooks';
 import { useAppSelector } from '@/store/hooks';
 
 export default function TabThreeScreen() {
@@ -67,13 +66,23 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#FFFFFF',
     },
     category: {
         marginVertical: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        backgroundColor: '#F5F5F5',
+        borderRadius: 8,
+        width: '90%',
     },
     heading: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 5,
+        marginBottom: 8,
+    },
+    playerText: {
+        fontSize: 16,
+        marginBottom: 4,
     },
 });
