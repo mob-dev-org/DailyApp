@@ -21,6 +21,7 @@ export type BottomTabsParamList = {
     TabOne: undefined;
     TabTwo: undefined;
     TabThree: undefined;
+    TabFour: undefined;
 };
 
 export type BottomTabsScreenProps<Screen extends keyof BottomTabsParamList> = CompositeScreenProps<

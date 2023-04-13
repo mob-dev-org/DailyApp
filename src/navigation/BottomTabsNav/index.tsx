@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import Colors from '@/constants/Colors';
 import { BottomTabsParamList } from '@/navigation/types';
+import TabTwoFourScreen from '@/screens/TabFour';
 import TabOneScreen from '@/screens/TabOne';
 import TabThreeScreen from '@/screens/TabThree';
 import TabTwoScreen from '@/screens/TabTwo';
@@ -30,6 +31,7 @@ function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="TabOne"
             screenOptions={{
+                tabBarHideOnKeyboard: true,
                 tabBarActiveTintColor: Colors[theme].tint,
                 headerShown: false,
             }}>
@@ -73,7 +75,16 @@ function BottomTabNavigator() {
                 component={TabThreeScreen}
                 options={{
                     title: 'Summary',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
+                    tabBarIcon: ({ color }) => <TabBarIcon name="bandcamp" color={color} />,
+                }}
+            />
+
+            <BottomTab.Screen
+                name="TabFour"
+                component={TabTwoFourScreen}
+                options={{
+                    title: 'Results',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="address-book" color={color} />,
                 }}
             />
         </BottomTab.Navigator>

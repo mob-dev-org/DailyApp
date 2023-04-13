@@ -10,18 +10,27 @@ export default function TabThreeScreen() {
     const combinePlayers = [...teamA.players, ...teamB.players];
 
     const playersMostGoals = () => {
+        if (combinePlayers.length === 0) {
+            return [];
+        }
         const sortedPlayers = combinePlayers.sort((a, b) => b.goal - a.goal);
         const mostGoals = sortedPlayers[0].goal;
         return sortedPlayers.filter((a) => a.goal === mostGoals);
     };
 
     const playersMostAssists = () => {
+        if (combinePlayers.length === 0) {
+            return [];
+        }
         const sortedPlayers = combinePlayers.sort((a, b) => b.assists - a.assists);
         const mostAssists = sortedPlayers[0].assists;
         return sortedPlayers.filter((b) => b.assists === mostAssists);
     };
 
     const playerMost = () => {
+        if (combinePlayers.length === 0) {
+            return [];
+        }
         const sortedPlayers = combinePlayers.sort((a, b) => b.apear - a.apear);
         const mostAppearances = sortedPlayers[0].apear;
         return sortedPlayers.filter((c) => c.apear === mostAppearances);
