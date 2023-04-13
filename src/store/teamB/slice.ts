@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export type Player = {
     name: string;
@@ -16,6 +16,7 @@ const initialState = {
         { name: 'Irfan', goal: 2, assists: 3, apear: 5 },
         { name: 'Keno', goal: 1, assists: 0, apear: 4 },
         { name: 'Harun', goal: 1, assists: 2, apear: 5 },
+        { name: 'Ahmed', goal: 0, assists: 0, apear: 1 },
     ],
 } as teamB;
 

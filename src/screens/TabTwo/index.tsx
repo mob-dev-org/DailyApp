@@ -2,6 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
+import { useAppSelector } from '@/store/hooks';
+
 type Player = {
     name: string;
     goal?: number;
@@ -15,75 +17,23 @@ type Team = {
 };
 
 export default function TabTwoScreen() {
-    const [team1, setTeam1] = useState<Team>({
-        name: 'Bajro',
-        players: [
-            { name: 'Bajram', goal: 2, assists: 0, apear: 5 },
-            { name: 'Ahmet', goal: 3, assists: 1, apear: 5 },
-            { name: 'Irfan', goal: 2, assists: 0, apear: 5 },
-            { name: 'Keno', goal: 1, assists: 0, apear: 4 },
-            { name: 'Harun', goal: 1, assists: 1, apear: 5 },
-        ],
-    });
-    const [team2, setTeam2] = useState<Team>({
-        name: 'Malik',
-        players: [
-            { name: 'Malik', goal: 3, assists: 1, apear: 5 },
-            { name: 'Mahir', goal: 2, assists: 3, apear: 5 },
-            { name: 'Adi', goal: 1, assists: 2, apear: 4 },
-            { name: 'Pepa', goal: 1, assists: 2, apear: 5 },
-            { name: 'Mirza', goal: 1, assists: 2, apear: 1 },
-            { name: 'Almo', goal: 1, assists: 2, apear: 3 },
-        ],
-    });
+    const { teamB, teamA } = useAppSelector((state) => state);
+
+    const [team1, setTeam1] = useState(teamA.players);
+    const [team2, setTeam2] = useState(teamB.players);
     const [newPlayerName, setNewPlayerName] = useState('');
     const [newPlayerName1, setNewPlayerName1] = useState('');
-    // const [count, setCount] = useState(0);
-    // const [count2, setCount2] = useState(0);
-
-    const addPlayer = (teamId: number) => {
-        // Check if teamId is 1 and newPlayerName is not empty
-        if (teamId === 1 && newPlayerName) {
-            const newPlayer: Player = { name: newPlayerName };
-            // Use the setTeam1 function to update the team1 state
-            // Use the spread operator to create spread copy of the previous team1 state
-            // Update the players property of team1 state with a new array that contains the previous players and the newPlayer
-            setTeam1((startState) => ({ ...startState, players: [...startState.players, newPlayer] }));
-            // Clear the newPlayerName input field by setting it to an empty string
-            setNewPlayerName('');
-        }
-        // Check if teamId is 2 and newPlayerName1 is not empty
-        else if (teamId === 2 && newPlayerName1) {
-            const newPlayer: Player = { name: newPlayerName1 };
-            // Use the setTeam2 function to update the team2 state
-            // Use the spread operator to create a shallow copy of the previous team2 state
-            // Update the players property of team2 state with a new array that contains the previous players and the newPlayer
-            setTeam2((startState2) => ({ ...startState2, players: [...startState2.players, newPlayer] }));
-            // Clear the newPlayerName1 input field by setting it to an empty string
-            setNewPlayerName1('');
-        }
-    };
-
-    //clear all players from Team1
-    const clearTeam1 = () => {
-        setTeam1((i) => ({ ...i, players: [] }));
-    };
-
-    //clear all players from Team2
-    const clearTeam2 = () => {
-        setTeam2((i) => ({ ...i, players: [] }));
-    };
 
     return (
         <ScrollView>
             <View style={styles.container}>
                 <StatusBar backgroundColor="#FFFFFF" />
                 <View style={styles.teamContainer}>
-                    <Text style={styles.teamName}>TEAM {team1.name}</Text>
+                    <Text style={styles.teamName}>TEAM Bijeli</Text>
                     {/* <Button title="Goal" onPress={() => setCount(count + 1)} /> */}
-                    <Button title="Clear Team 1" onPress={clearTeam1} />
+                    {/* <Button title="Clear Team 1" onPress={clearTeam1} /> */}
                     <View style={styles.teamName}>
-                        {team1.players.map((player, index) => (
+                        {teamA.players.map((player, index) => (
                             <Text key={index} style={styles.playerName}>
                                 {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
                             </Text>
@@ -96,18 +46,18 @@ export default function TabTwoScreen() {
                         value={newPlayerName}
                         onChangeText={setNewPlayerName}
                     />
-                    <TouchableOpacity style={styles.button} onPress={() => addPlayer(1)} disabled={!newPlayerName}>
+                    {/* <TouchableOpacity style={styles.button} onPress={() => addPlayer(1)} disabled={!newPlayerName}>
                         <Text style={styles.buttonText}>Add Player</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     {/* </View> */}
                 </View>
                 {/* TEAM2 */}
                 <View style={styles.teamContainer}>
-                    <Text style={styles.teamName}>TEAM {team2.name}</Text>
+                    <Text style={styles.teamName}>TEAM Šareni</Text>
                     {/* <Button title="Goal" onPress={() => setCount2(count2 + 1)} /> */}
-                    <Button title="Clear Team 2" onPress={clearTeam2} />
+                    {/* <Button title="Clear Team 2" onPress={clearTeam2} /> */}
                     <View style={styles.teamName}>
-                        {team2.players.map((player, index) => (
+                        {teamB.players.map((player, index) => (
                             <Text key={index} style={styles.playerName}>
                                 {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
                             </Text>
@@ -120,9 +70,9 @@ export default function TabTwoScreen() {
                         value={newPlayerName1}
                         onChangeText={setNewPlayerName1}
                     />
-                    <TouchableOpacity style={styles.button} onPress={() => addPlayer(2)} disabled={!newPlayerName1}>
+                    {/* <TouchableOpacity style={styles.button} onPress={() => addPlayer(2)} disabled={!newPlayerName1}>
                         <Text style={styles.buttonText}>Add Player</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     {/* </View> */}
                 </View>
             </View>
@@ -244,3 +194,41 @@ const styles = StyleSheet.create({
 //         borderRadius: 8,
 //     },
 // });
+
+// ---------------ADDING PLAYERS--------------------
+
+// const [count, setCount] = useState(0);
+// const [count2, setCount2] = useState(0);
+
+// const addPlayer = (teamId: number) => {
+//     // Check if teamId is 1 and newPlayerName is not empty
+//     if (teamId === 1 && newPlayerName) {
+//         const newPlayer: Player = { name: newPlayerName };
+//         // Use the setTeam1 function to update the team1 state
+//         // Use the spread operator to create spread copy of the previous team1 state
+//         // Update the players property of team1 state with a new array that contains the previous players and the newPlayer
+//         setTeam1((startState) => ({ ...startState, players: [...startState., newPlayer] }));
+//         // Clear the newPlayerName input field by setting it to an empty string
+//         setNewPlayerName('');
+//     }
+//     // Check if teamId is 2 and newPlayerName1 is not empty
+//     else if (teamId === 2 && newPlayerName1) {
+//         const newPlayer: Player = { name: newPlayerName1 };
+//         // Use the setTeam2 function to update the team2 state
+//         // Use the spread operator to create a shallow copy of the previous team2 state
+//         // Update the players property of team2 state with a new array that contains the previous players and the newPlayer
+//         setTeam2((startState2) => ({ ...startState2, players: [...startState2.players, newPlayer] }));
+//         // Clear the newPlayerName1 input field by setting it to an empty string
+//         setNewPlayerName1('');
+//     }
+// };
+
+// //clear all players from Team1
+// const clearTeam1 = () => {
+//     setTeam1((i) => ({ ...i, players: [] }));
+// };
+
+// //clear all players from Team2
+// const clearTeam2 = () => {
+//     setTeam2((i) => ({ ...i, players: [] }));
+// };
