@@ -12,8 +12,10 @@ export default function TabFourScreen() {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Team Bijeli:{teamA.result}</Text>
-            <Text style={styles.title}>Tean Šareni:{teamB.result}</Text>
+            <Text style={styles.title}>REZULATAT</Text>
+            <Text style={styles.title}>
+                Bijeli {teamA.result} : {teamB.result} Šareni
+            </Text>
         </View>
     );
 }
@@ -27,10 +29,5 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-    },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
     },
 });

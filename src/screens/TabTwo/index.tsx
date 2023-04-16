@@ -47,8 +47,8 @@ export default function TabTwoScreen() {
     };
 
     const addPlayerTeamB = () => {
-        dispatch(addPlayerB(newPlayer));
-        setNewPlayer({ ...newPlayer, name: '', goal: 0, assists: 0, apear: 0 });
+        dispatch(addPlayerB(newPlayer1));
+        setNewPlayer({ ...newPlayer1, name: '', goal: 0, assists: 0, apear: 0 });
     };
 
     const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
@@ -94,14 +94,15 @@ export default function TabTwoScreen() {
                             <TextInput
                                 style={styles.input}
                                 placeholder="Player Name"
-                                onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
-                                value={newPlayer.name}
+                                onChangeText={(text) => setNewPlayer1({ ...newPlayer1, name: text })}
+                                value={newPlayer1.name}
+                                editable={true}
                             />
 
                             <Button
                                 title="Add Player to Šareni"
                                 onPress={addPlayerTeamB}
-                                disabled={newPlayer.name.trim() === ''}
+                                disabled={newPlayer1.name.trim() === ''}
                             />
 
                             <View style={styles.teamName}>
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingTop: 16,
     },
+    novitab: {},
     contentContainer: {
         flexGrow: 1,
         justifyContent: 'center',
