@@ -7,9 +7,10 @@ export type Player = {
     apear: number;
 };
 
-export type teamA = { players: Player[] };
+export type teamA = { result: number; players: Player[] };
 
 const initialState = {
+    result: 0,
     players: [
         { name: 'Malik', goal: 3, assists: 2, apear: 5 },
         { name: 'Mahir', goal: 7, assists: 3, apear: 5 },
