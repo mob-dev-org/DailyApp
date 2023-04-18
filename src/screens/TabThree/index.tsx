@@ -5,67 +5,76 @@ import { useAppSelector } from '@/store/hooks';
 
 export default function TabThreeScreen() {
     const { teamB, teamA } = useAppSelector((state) => state);
-    // const teamB  = useAppSelector((state) => state.);
 
-    const combinePlayers = [...teamA.players, ...teamB.players];
+    const combinePlayers: Player[] = [...teamA.players, ...teamB.players];
 
-    const playersMostGoals = () => {
+    type Player = {
+        name: string;
+        goal: number;
+        assists: number;
+        apear: number;
+    };
+
+    const getPlayersWithMost = (property: keyof Player): Player[] => {
         if (combinePlayers.length === 0) {
             return [];
         }
-        const sortedPlayers = combinePlayers.sort((a, b) => b.goal - a.goal);
-        const mostGoals = sortedPlayers[0].goal;
-        return sortedPlayers.filter((a) => a.goal === mostGoals);
+        const sortedPlayers = combinePlayers.sort((a, b) => (b[property] as number) - (a[property] as number));
+        const most = sortedPlayers[0][property] as number;
+        return sortedPlayers.filter((player) => player[property] === most);
     };
 
-    const playersMostAssists = () => {
-        if (combinePlayers.length === 0) {
-            return [];
-        }
-        const sortedPlayers = combinePlayers.sort((a, b) => b.assists - a.assists);
-        const mostAssists = sortedPlayers[0].assists;
-        return sortedPlayers.filter((b) => b.assists === mostAssists);
-    };
+    // const playersMostGoals = () => {
+    //     if (combinePlayers.length === 0) {
+    //         return [];
+    //     }
+    //     const sortedPlayers = combinePlayers.sort((a, b) => b.goal - a.goal);
+    //     const mostGoals = sortedPlayers[0].goal;
+    //     return sortedPlayers.filter((a) => a.goal === mostGoals);
+    // };
 
-    const playerMost = () => {
-        if (combinePlayers.length === 0) {
-            return [];
-        }
-        const sortedPlayers = combinePlayers.sort((a, b) => b.apear - a.apear);
-        const mostAppearances = sortedPlayers[0].apear;
-        return sortedPlayers.filter((c) => c.apear === mostAppearances);
-    };
+    // const playersMostAssists = () => {
+    //     if (combinePlayers.length === 0) {
+    //         return [];
+    //     }
+    //     const sortedPlayers = combinePlayers.sort((a, b) => b.assists - a.assists);
+    //     const mostAssists = sortedPlayers[0].assists;
+    //     return sortedPlayers.filter((b) => b.assists === mostAssists);
+    // };
 
-    const playersWithMostGoals = playersMostGoals();
-    const playersWithMostAssists = playersMostAssists();
-    const playersWithMostAppearances = playerMost();
+    // const playerMostAppear = () => {
+    //     if (combinePlayers.length === 0) {
+    //         return [];
+    //     }
+    //     const sortedPlayers = combinePlayers.sort((a, b) => b.apear - a.apear);
+    //     const mostAppearances = sortedPlayers[0].apear;
+    //     return sortedPlayers.filter((c) => c.apear === mostAppearances);
+    // };
+
+    // const playersWithMostGoals = playersMostGoals();
+    // const playersWithMostAssists = playersMostAssists();
+    // const playersWithMostAppearances = playerMostAppear();
+
+    const playersWithMostGoals = getPlayersWithMost('goal');
+    const playersWithMostAssists = getPlayersWithMost('assists');
+    const playersWithMostAppearances = getPlayersWithMost('apear');
 
     return (
         <View style={styles.container}>
-            <View style={styles.category}>
-                <Text style={styles.heading}>Players with most goals:</Text>
-                {playersWithMostGoals.map((player) => (
-                    <Text key={player.name}>
-                        {player.name} : {player.goal}
-                    </Text>
-                ))}
-            </View>
-            <View style={styles.category}>
-                <Text style={styles.heading}>Players with most assists:</Text>
-                {playersWithMostAssists.map((player) => (
-                    <Text key={player.name}>
-                        {player.name} : {player.assists}
-                    </Text>
-                ))}
-            </View>
-            <View style={styles.category}>
-                <Text style={styles.heading}>Players with most appearances:</Text>
-                {playersWithMostAppearances.map((player) => (
-                    <Text key={player.name}>
-                        {player.name}: {player.apear}
-                    </Text>
-                ))}
-            </View>
+            {[
+                { title: 'Players with most goals:', play: playersWithMostGoals, key: 'goal' },
+                { title: 'Players with most assists:', play: playersWithMostAssists, key: 'assists' },
+                { title: 'Players with most appearances:', play: playersWithMostAppearances, key: 'apear' },
+            ].map((category) => (
+                <View style={styles.category} key={category.title}>
+                    <Text style={styles.heading}>{category.title}</Text>
+                    {category.play.map((player) => (
+                        <Text key={player.name}>
+                            {player.name}: {player[category.key]}
+                        </Text>
+                    ))}
+                </View>
+            ))}
         </View>
     );
 }
