@@ -15,17 +15,17 @@ import {
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addPlayerA, deletePlayerA } from '@/store/teamA/slice';
+import type { Player } from '@/store/teamB/slice';
 import { addPlayerB, deletePlayerB } from '@/store/teamB/slice';
 
-type Player = {
-    name: string;
-    goal: number;
-    assists: number;
-    apear: number;
-};
+// type Player = {
+//     name: string;
+//     goal: number;
+//     assists: number;
+//     apear: number;
+// };
 
 export default function TabTwoScreen() {
-    // const [text, setText] = useState<string>('');
     const dispatch = useAppDispatch();
     const { teamB, teamA } = useAppSelector((state) => state);
     const [newPlayer, setNewPlayer] = useState<Player>({
@@ -48,7 +48,7 @@ export default function TabTwoScreen() {
 
     const addPlayerTeamB = () => {
         dispatch(addPlayerB(newPlayer1));
-        setNewPlayer({ ...newPlayer1, name: '', goal: 0, assists: 0, apear: 0 });
+        setNewPlayer1({ ...newPlayer1, name: '', goal: 0, assists: 0, apear: 0 });
     };
 
     const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
@@ -96,7 +96,6 @@ export default function TabTwoScreen() {
                                 placeholder="Player Name"
                                 onChangeText={(text) => setNewPlayer1({ ...newPlayer1, name: text })}
                                 value={newPlayer1.name}
-                                editable={true}
                             />
 
                             <Button
@@ -137,7 +136,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingTop: 16,
     },
-    novitab: {},
     contentContainer: {
         flexGrow: 1,
         justifyContent: 'center',
@@ -186,22 +184,3 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
-
-// //clear all players from Team1
-// const clearTeam1 = () => {
-//     setTeam1((i) => ({ ...i, players: [] }));
-// };
-
-// //clear all players from Team2
-// const clearTeam2 = () => {
-//     setTeam2((i) => ({ ...i, players: [] }));
-// };
-
-{
-    /* <TextInput
-                        style={styles.input}
-                        placeholder="Goals"
-                        onChangeText={(text) => setNewPlayer({ ...newPlayer, goal: parseInt(text) })}
-                        keyboardType="numeric"
-                    /> */
-}
