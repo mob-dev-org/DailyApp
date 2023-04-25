@@ -13,10 +13,11 @@ import {
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Player, addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/slice';
-import { addPlayerB, deletePlayerB } from '@/store/teamB/slice';
+import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
 
 export default function TabTwoScreen() {
     const dispatch = useAppDispatch();
@@ -41,6 +42,9 @@ export default function TabTwoScreen() {
     const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
     const delPlayerTeamB = (index: number) => dispatch(deletePlayerB(index));
 
+    const updatePlayerTeamB = (index: number, willPlay: boolean) => {
+        dispatch(updatePlayerB({ index, willPlay }));
+    };
     return (
         <ScrollView>
             <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
@@ -102,6 +106,14 @@ export default function TabTwoScreen() {
                                         <Text>
                                             {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
                                         </Text>
+
+                                        <Pressable onPress={() => updatePlayerTeamB(index, !player.willPlay)}>
+                                            {player.willPlay ? (
+                                                <Icon name="check-circle" size={20} color="green" />
+                                            ) : (
+                                                <Icon name="circle-thin" size={20} color="gray" />
+                                            )}
+                                        </Pressable>
                                         <Pressable onPress={() => delPlayerTeamB(index)}>
                                             <Text style={styles.deleteButton}>Delete</Text>
                                         </Pressable>

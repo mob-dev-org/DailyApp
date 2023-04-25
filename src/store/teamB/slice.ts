@@ -32,10 +32,14 @@ export const teamBSlice = createSlice({
         deletePlayerB: (state, { payload }: PayloadAction<number>) => {
             state.players.splice(payload, 1);
         },
+        updatePlayerB: (state, { payload }: PayloadAction<{ index: number; willPlay: boolean }>) => {
+            const { index, willPlay } = payload;
+            state.players[index].willPlay = willPlay;
+        },
         resetTeamB: () => initialState,
     },
 });
 
-export const { resetTeamB, deletePlayerB, addPlayerB } = teamBSlice.actions;
+export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB } = teamBSlice.actions;
 
 export default teamBSlice.reducer;
