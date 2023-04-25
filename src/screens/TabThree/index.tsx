@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/atoms/Themed';
 import { useAppSelector } from '@/store/hooks';
-import type { Player } from '@/store/teamA/slice';
+import { Player } from '@/store/teamA/slice';
 
 export default function TabThreeScreen() {
     const { teamB, teamA } = useAppSelector((state) => state);
@@ -11,21 +11,15 @@ export default function TabThreeScreen() {
 
     type PlayerWithMost = {
         title: string;
-        play: Player[];
+        player: Player[];
         key: string;
     };
-
-    // type Player = {
-    //     name: string;
-    //     goal: number;
-    //     assists: number;
-    //     apear: number;
-    // };
 
     // const getPlayersWithMost = (property: keyof Player): Player[] => {
 
     const getPlayersWithMost = (property: 'goal' | 'assists' | 'apear'): Player[] => {
-        if (combinePlayers.length === 0) {
+        // if (combinePlayers.length === 0) { !logical NOT oeprator give fasly value
+        if (!combinePlayers.length) {
             return [];
         }
         const sortedPlayers = combinePlayers.sort((a, b) => b[property] - a[property]);
@@ -38,9 +32,9 @@ export default function TabThreeScreen() {
     const playersWithMostAppearances = getPlayersWithMost('apear');
 
     const allPlayersWithMost: PlayerWithMost[] = [
-        { title: 'Players with most goals:', play: playersWithMostGoals, key: 'goal' },
-        { title: 'Players with most assists:', play: playersWithMostAssists, key: 'assists' },
-        { title: 'Players with most appearances:', play: playersWithMostAppearances, key: 'apear' },
+        { title: 'Players with most goals:', player: playersWithMostGoals, key: 'goal' },
+        { title: 'Players with most assists:', player: playersWithMostAssists, key: 'assists' },
+        { title: 'Players with most appearances:', player: playersWithMostAppearances, key: 'apear' },
     ];
 
     return (
@@ -48,7 +42,7 @@ export default function TabThreeScreen() {
             {allPlayersWithMost.map((category) => (
                 <View style={styles.category} key={category.title}>
                     <Text style={styles.heading}>{category.title}</Text>
-                    {category.play.map((player) => (
+                    {category.player.map((player) => (
                         <Text key={player.name}>
                             {player.name}: {player[category.key]}
                         </Text>

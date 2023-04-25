@@ -5,6 +5,7 @@ export type Player = {
     goal: number;
     assists: number;
     apear: number;
+    willPlay: boolean;
 };
 
 export type teamB = { result: number; players: Player[] };
@@ -12,12 +13,12 @@ export type teamB = { result: number; players: Player[] };
 const initialState = {
     result: 0,
     players: [
-        { name: 'Bajram', goal: 8, assists: 2, apear: 5 },
-        { name: 'Ahmet', goal: 3, assists: 1, apear: 5 },
-        { name: 'Irfan', goal: 2, assists: 3, apear: 5 },
-        { name: 'Keno', goal: 1, assists: 0, apear: 4 },
-        { name: 'Harun', goal: 1, assists: 2, apear: 5 },
-        { name: 'Ahmed', goal: 0, assists: 0, apear: 1 },
+        { name: 'Bajram', goal: 8, assists: 2, apear: 5, willPlay: true },
+        { name: 'Ahmet', goal: 3, assists: 1, apear: 5, willPlay: true },
+        { name: 'Irfan', goal: 2, assists: 3, apear: 5, willPlay: true },
+        { name: 'Keno', goal: 1, assists: 0, apear: 4, willPlay: true },
+        { name: 'Harun', goal: 1, assists: 2, apear: 5, willPlay: true },
+        { name: 'Ahmed', goal: 0, assists: 0, apear: 1, willPlay: true },
     ],
 } as teamB;
 

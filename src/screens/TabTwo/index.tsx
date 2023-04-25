@@ -7,6 +7,7 @@ import {
     Pressable,
     ScrollView,
     StyleSheet,
+    Switch,
     Text,
     TextInput,
     TouchableWithoutFeedback,
@@ -14,41 +15,27 @@ import {
 } from 'react-native';
 
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { addPlayerA, deletePlayerA } from '@/store/teamA/slice';
-import type { Player } from '@/store/teamB/slice';
+import { Player, addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/slice';
 import { addPlayerB, deletePlayerB } from '@/store/teamB/slice';
-
-// type Player = {
-//     name: string;
-//     goal: number;
-//     assists: number;
-//     apear: number;
-// };
 
 export default function TabTwoScreen() {
     const dispatch = useAppDispatch();
     const { teamB, teamA } = useAppSelector((state) => state);
-    const [newPlayer, setNewPlayer] = useState<Player>({
-        name: '',
-        goal: 0,
-        assists: 0,
-        apear: 0,
-    });
+    const [newPlayer, setNewPlayer] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
 
-    const [newPlayer1, setNewPlayer1] = useState<Player>({
-        name: '',
-        goal: 0,
-        assists: 0,
-        apear: 0,
-    });
+    const [newPlayer1, setNewPlayer1] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
     const addPlayerTeamA = () => {
         dispatch(addPlayerA(newPlayer));
-        setNewPlayer({ ...newPlayer, name: '', goal: 0, assists: 0, apear: 0 });
+        setNewPlayer({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
     };
 
     const addPlayerTeamB = () => {
         dispatch(addPlayerB(newPlayer1));
-        setNewPlayer1({ ...newPlayer1, name: '', goal: 0, assists: 0, apear: 0 });
+        setNewPlayer1({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+    };
+
+    const updatePlayerTeamA = (index: number, willPlay: boolean) => {
+        dispatch(updatePlayerA({ index, willPlay }));
     };
 
     const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
@@ -81,6 +68,11 @@ export default function TabTwoScreen() {
                                         <Text>
                                             {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
                                         </Text>
+                                        <Switch
+                                            value={player.willPlay}
+                                            onValueChange={(value) => updatePlayerTeamA(index, value)}
+                                        />
+
                                         <Pressable onPress={() => delPlayerTeamA(index)}>
                                             <Text style={styles.deleteButton}>Delete</Text>
                                         </Pressable>
@@ -125,6 +117,11 @@ export default function TabTwoScreen() {
 }
 
 const styles = StyleSheet.create({
+    playingButton: {
+        color: 'green',
+        marginLeft: 10,
+        fontWeight: 'bold',
+    },
     deleteButton: {
         color: 'red',
         marginLeft: 10,
