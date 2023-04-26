@@ -41,6 +41,7 @@ export default function TabFourScreen() {
             </Text>
 
             <View style={styles.inputContainer}>
+                <Text style={styles.title}>Bijeli</Text>
                 <TextInput
                     style={styles.input}
                     value={scoreA.toString()}
@@ -51,6 +52,8 @@ export default function TabFourScreen() {
                 <Button title="ADD" onPress={handleSetResultA} />
             </View>
             <View style={styles.inputContainer}>
+                <Text style={styles.title}>Šareni</Text>
+
                 <TextInput
                     style={styles.input}
                     value={scoreB.toString()}
