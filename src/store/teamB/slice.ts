@@ -8,7 +8,10 @@ export type Player = {
     willPlay: boolean;
 };
 
-export type teamB = { result: number; players: Player[] };
+export type teamB = {
+    result: number;
+    players: Player[];
+};
 
 const initialState = {
     result: 0,
@@ -36,10 +39,13 @@ export const teamBSlice = createSlice({
             const { index, willPlay } = payload;
             state.players[index].willPlay = willPlay;
         },
+        updateTeamBResult: (state, { payload }: PayloadAction<number>) => {
+            state.result = payload;
+        },
         resetTeamB: () => initialState,
     },
 });
 
-export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB } = teamBSlice.actions;
+export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB, updateTeamBResult } = teamBSlice.actions;
 
 export default teamBSlice.reducer;

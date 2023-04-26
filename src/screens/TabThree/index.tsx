@@ -4,16 +4,16 @@ import { Text, View } from '@/components/atoms/Themed';
 import { useAppSelector } from '@/store/hooks';
 import { Player } from '@/store/teamA/slice';
 
+export type PlayerWithMost = {
+    title: string;
+    player: Player[];
+    key: string;
+};
+
 export default function TabThreeScreen() {
     const { teamB, teamA } = useAppSelector((state) => state);
 
     const combinePlayers: Player[] = [...teamA.players, ...teamB.players];
-
-    type PlayerWithMost = {
-        title: string;
-        player: Player[];
-        key: string;
-    };
 
     // const getPlayersWithMost = (property: keyof Player): Player[] => {
 

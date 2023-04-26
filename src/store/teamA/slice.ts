@@ -13,7 +13,7 @@ export type teamA = { result: number; players: Player[] };
 const initialState = {
     result: 0,
     players: [
-        { name: 'Malik', goal: 10, assists: 2, apear: 5, willPlay: true },
+        { name: 'Malik', goal: 3, assists: 2, apear: 5, willPlay: true },
         { name: 'Mahir', goal: 7, assists: 3, apear: 5, willPlay: true },
         { name: 'Adi', goal: 1, assists: 2, apear: 4, willPlay: true },
         { name: 'Pepa', goal: 2, assists: 2, apear: 5, willPlay: true },
@@ -36,11 +36,14 @@ export const teamASlice = createSlice({
             const { index, willPlay } = payload;
             state.players[index].willPlay = willPlay;
         },
+        updateTeamAResult: (state, { payload }: PayloadAction<number>) => {
+            state.result = payload;
+        },
 
         resetTeamA: () => initialState,
     },
 });
 
-export const { addPlayerA, resetTeamA, deletePlayerA, updatePlayerA } = teamASlice.actions;
+export const { addPlayerA, resetTeamA, deletePlayerA, updateTeamAResult, updatePlayerA } = teamASlice.actions;
 
 export default teamASlice.reducer;
