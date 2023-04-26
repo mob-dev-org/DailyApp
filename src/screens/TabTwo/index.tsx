@@ -7,7 +7,6 @@ import {
     Pressable,
     ScrollView,
     StyleSheet,
-    Switch,
     Text,
     TextInput,
     TouchableWithoutFeedback,
@@ -72,10 +71,13 @@ export default function TabTwoScreen() {
                                         <Text>
                                             {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
                                         </Text>
-                                        <Switch
-                                            value={player.willPlay}
-                                            onValueChange={(value) => updatePlayerTeamA(index, value)}
-                                        />
+                                        <Pressable onPress={() => updatePlayerTeamA(index, !player.willPlay)}>
+                                            {player.willPlay ? (
+                                                <Icon name="check-circle" size={25} color="green" />
+                                            ) : (
+                                                <Icon name="circle-thin" size={25} color="gray" />
+                                            )}
+                                        </Pressable>
 
                                         <Pressable onPress={() => delPlayerTeamA(index)}>
                                             <Text style={styles.deleteButton}>Delete</Text>
@@ -109,9 +111,9 @@ export default function TabTwoScreen() {
 
                                         <Pressable onPress={() => updatePlayerTeamB(index, !player.willPlay)}>
                                             {player.willPlay ? (
-                                                <Icon name="check-circle" size={20} color="green" />
+                                                <Icon name="check-circle" size={25} color="green" />
                                             ) : (
-                                                <Icon name="circle-thin" size={20} color="gray" />
+                                                <Icon name="circle-thin" size={25} color="gray" />
                                             )}
                                         </Pressable>
                                         <Pressable onPress={() => delPlayerTeamB(index)}>
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
     playerName: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        fontSize: 16,
+        fontSize: 24,
         marginBottom: 4,
         borderWidth: 1,
         padding: 4,
