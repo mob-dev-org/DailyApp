@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet } from 'react-native';
 
 import CurrentDateTime from '@/components/atoms/Date';
-import ScoreInput from '@/components/atoms/Input';
+import ScoreInput from '@/components/atoms/InputScore';
 import { Text, View } from '@/components/atoms/Themed';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { updateTeamAResult } from '@/store/teamA/slice';

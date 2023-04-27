@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import PlayerNameInput from '@/components/atoms/NameInput';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { Player, addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/slice';
 import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
@@ -46,6 +47,14 @@ export default function TabTwoScreen() {
     const updatePlayerTeamB = (index: number, willPlay: boolean) => {
         dispatch(updatePlayerB({ index, willPlay }));
     };
+
+    const handleNameChangeA = (name: string) => {
+        setNewPlayer({ ...newPlayer, name });
+    };
+
+    const handleNameChangeB = (name: string) => {
+        setNewPlayer1({ ...newPlayer1, name });
+    };
     return (
         <ScrollView>
             <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
@@ -55,13 +64,11 @@ export default function TabTwoScreen() {
                         <StatusBar backgroundColor="#FFFFFF" />
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Bijeli</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Player Name"
-                                onChangeText={(text) => setNewPlayer({ ...newPlayer, name: text })}
+                            <PlayerNameInput
                                 value={newPlayer.name}
+                                onChangeText={handleNameChangeA}
+                                placeholder="Player name"
                             />
-
                             <Button
                                 title="Add Player to Bijeli"
                                 onPress={addPlayerTeamA}
@@ -91,11 +98,10 @@ export default function TabTwoScreen() {
                         {/* TEAM B */}
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Šareni</Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholder="Player Name"
-                                onChangeText={(text) => setNewPlayer1({ ...newPlayer1, name: text })}
+                            <PlayerNameInput
                                 value={newPlayer1.name}
+                                onChangeText={handleNameChangeB}
+                                placeholder="Player name"
                             />
 
                             <Button
