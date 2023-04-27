@@ -57,7 +57,7 @@ function BottomTabNavigator() {
                 //     ),
                 // })}
                 options={{
-                    title: 'Home',
+                    title: t('home') ?? 'Tab One',
                     tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
                 }}
             />
@@ -65,7 +65,7 @@ function BottomTabNavigator() {
                 name="TabTwo"
                 component={TabTwoScreen}
                 options={{
-                    title: 'Teams  ',
+                    title: t('teams') ?? 'Tab Two',
                     tabBarIcon: ({ color }) => <TabBarIcon name="shirtsinbulk" color={color} />,
                 }}
             />
@@ -74,7 +74,7 @@ function BottomTabNavigator() {
                 name="TabThree"
                 component={TabThreeScreen}
                 options={{
-                    title: 'Summary',
+                    title: t('summary') ?? 'Tab Three',
                     tabBarIcon: ({ color }) => <TabBarIcon name="bandcamp" color={color} />,
                 }}
             />
@@ -83,7 +83,7 @@ function BottomTabNavigator() {
                 name="TabFour"
                 component={TabTwoFourScreen}
                 options={{
-                    title: 'Results',
+                    title: t('results') ?? 'Tab Four',
                     tabBarIcon: ({ color }) => <TabBarIcon name="address-book" color={color} />,
                 }}
             />
