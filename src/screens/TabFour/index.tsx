@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, StyleSheet, TextInput } from 'react-native';
+import { Button, StyleSheet } from 'react-native';
 
 import CurrentDateTime from '@/components/atoms/Date';
+import ScoreInput from '@/components/atoms/Input';
 import { Text, View } from '@/components/atoms/Themed';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { updateTeamAResult } from '@/store/teamA/slice';
@@ -35,6 +36,14 @@ export default function TabFourScreen() {
             setScoreB(0);
         }
     };
+
+    const handleScoreAChange = (score: string) => {
+        setScoreA(Number(score));
+    };
+
+    const handleScoreBChange = (score: string) => {
+        setScoreB(Number(score));
+    };
     return (
         <View style={styles.container}>
             <CurrentDateTime />
@@ -45,25 +54,14 @@ export default function TabFourScreen() {
 
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Bijeli</Text>
-                <TextInput
-                    style={styles.input}
-                    value={scoreA.toString()}
-                    onChangeText={(score) => setScoreA(Number(score))}
-                    keyboardType="numeric"
-                    maxLength={2}
-                />
+                <ScoreInput value={scoreA} onChangeText={handleScoreAChange} keyboardType="numeric" maxLength={2} />
                 <Button title="ADD" onPress={handleSetResultA} />
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Šareni</Text>
 
-                <TextInput
-                    style={styles.input}
-                    value={scoreB.toString()}
-                    onChangeText={(score) => setScoreB(Number(score))}
-                    keyboardType="numeric"
-                    maxLength={2}
-                />
+                <ScoreInput value={scoreB} onChangeText={handleScoreBChange} keyboardType="numeric" maxLength={2} />
+
                 <Button title="ADD" onPress={handleSetResultB} />
             </View>
         </View>
