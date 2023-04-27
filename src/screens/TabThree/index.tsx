@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet } from 'react-native';
 
 import { Text, View } from '@/components/atoms/Themed';
@@ -6,11 +7,12 @@ import { Player } from '@/store/teamA/slice';
 
 export type PlayerWithMost = {
     title: string;
-    player: Player[];
+    players: Player[];
     key: string;
 };
 
 export default function TabThreeScreen() {
+    const { t } = useTranslation();
     const { teamB, teamA } = useAppSelector((state) => state);
 
     const combinePlayers: Player[] = [...teamA.players, ...teamB.players];
@@ -32,9 +34,9 @@ export default function TabThreeScreen() {
     const playersWithMostAppearances = getPlayersWithMost('apear');
 
     const allPlayersWithMost: PlayerWithMost[] = [
-        { title: 'Players with most goals:', player: playersWithMostGoals, key: 'goal' },
-        { title: 'Players with most assists:', player: playersWithMostAssists, key: 'assists' },
-        { title: 'Players with most appearances:', player: playersWithMostAppearances, key: 'apear' },
+        { title: t('playersWithmostGoals'), players: playersWithMostGoals, key: 'goal' },
+        { title: t('playersWithmostAssists'), players: playersWithMostAssists, key: 'assists' },
+        { title: t('playersWithMostAppearances'), players: playersWithMostAppearances, key: 'apear' },
     ];
 
     return (
@@ -42,7 +44,7 @@ export default function TabThreeScreen() {
             {allPlayersWithMost.map((category) => (
                 <View style={styles.category} key={category.title}>
                     <Text style={styles.heading}>{category.title}</Text>
-                    {category.player.map((player) => (
+                    {category.players.map((player) => (
                         <Text key={player.name}>
                             {player.name}: {player[category.key]}
                         </Text>

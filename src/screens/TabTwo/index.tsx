@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
     Button,
     Keyboard,
@@ -19,6 +20,7 @@ import { Player, addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/
 import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
 
 export default function TabTwoScreen() {
+    const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const { teamB, teamA } = useAppSelector((state) => state);
     const [newPlayer, setNewPlayer] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
@@ -80,7 +82,7 @@ export default function TabTwoScreen() {
                                         </Pressable>
 
                                         <Pressable onPress={() => delPlayerTeamA(index)}>
-                                            <Text style={styles.deleteButton}>Delete</Text>
+                                            <Text style={styles.deleteButton}>{t('delete')}</Text>
                                         </Pressable>
                                     </View>
                                 ))}
@@ -117,7 +119,7 @@ export default function TabTwoScreen() {
                                             )}
                                         </Pressable>
                                         <Pressable onPress={() => delPlayerTeamB(index)}>
-                                            <Text style={styles.deleteButton}>Delete</Text>
+                                            <Text style={styles.deleteButton}>{t('delete')}</Text>
                                         </Pressable>
                                     </View>
                                 ))}
