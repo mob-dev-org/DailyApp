@@ -6,4 +6,5 @@ export default {
     playersWithmostAssists: 'Igraci sa najvise asistencija :',
     playersWithMostAppearances: 'Igraci sa najvise nastupa :',
     delete: 'Ukloni',
+    finalScore: 'REZULTAT',
 };

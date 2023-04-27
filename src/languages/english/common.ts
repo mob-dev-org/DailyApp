@@ -6,4 +6,5 @@ export default {
     playersWithmostAssists: 'Players with most assistence :',
     playersWithMostAppearances: 'Players with most appearances :',
     delete: 'Delete',
+    finalScore: 'SCORE',
 };

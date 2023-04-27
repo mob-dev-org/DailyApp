@@ -38,10 +38,8 @@ export default function TabOneScreen({ navigation }: BottomTabsScreenProps<'TabO
             <Text>{i18n.languages}</Text>
             <Text>{t('common:languageName')}</Text>
             <Text>{t('common:hello')}</Text>
-            <Text>{t('hello')}</Text>
             <Text>{t('languageName')}</Text>
             <Text>{t('navigation:tabOne')}</Text>
-            <Text>{t('tabOne')}</Text>
         </View>
     );
 }

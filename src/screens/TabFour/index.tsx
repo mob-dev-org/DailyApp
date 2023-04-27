@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button, StyleSheet, TextInput } from 'react-native';
 
 import CurrentDateTime from '@/components/atoms/Date';
@@ -10,6 +11,7 @@ import { updateTeamBResult } from '@/store/teamB/slice';
 // Import the Redux action
 
 export default function TabFourScreen() {
+    const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const { teamB, teamA } = useAppSelector((state) => state);
     const [scoreA, setScoreA] = useState<number>(0);
@@ -36,6 +38,7 @@ export default function TabFourScreen() {
     return (
         <View style={styles.container}>
             <CurrentDateTime />
+            <Text style={styles.title}>{t('finalScore')}</Text>
             <Text style={styles.title}>
                 Bijeli {teamA.result} : {teamB.result} Šareni
             </Text>
