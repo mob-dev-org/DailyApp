@@ -12,4 +12,5 @@ export default {
     summary: 'Statistics',
     home: 'Home',
     playerWithMost: 'Player with most  - ',
+    homeScreen: 'Home Screen',
 };

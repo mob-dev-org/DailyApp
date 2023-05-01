@@ -12,4 +12,5 @@ export default {
     summary: 'Statistika',
     home: 'Pocetna',
     playerWithMost: 'Igrač sa najvise - ',
+    homeScreen: 'Početna stranica',
 };

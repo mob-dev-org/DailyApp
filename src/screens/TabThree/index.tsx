@@ -26,7 +26,7 @@ export default function TabThreeScreen() {
         if (combinePlayers.length === 0) {
             return [];
         } else {
-            const sortedPlayers = combinePlayers.sort((a, b) => b[tracker] - a[tracker]);
+            const sortedPlayers = combinePlayers.sort((a, b) => (b[tracker] || 0) - (a[tracker] || 0));
             const most = sortedPlayers[0][tracker];
             return sortedPlayers.filter((player) => player[tracker] === most);
         }

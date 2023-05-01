@@ -28,7 +28,7 @@ export default function TabOneScreen({ navigation }: BottomTabsScreenProps<'TabO
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Tab One</Text>
+            <Text style={styles.title}>{t('homeScreen')}</Text>
             <Button title="Change theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
             <Button title="Toggle language" onPress={changeLanguage} />
             <Button title="Reset state" onPress={logout} />

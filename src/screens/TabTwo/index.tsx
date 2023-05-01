@@ -9,7 +9,6 @@ import {
     ScrollView,
     StyleSheet,
     Text,
-    TextInput,
     TouchableWithoutFeedback,
     View,
 } from 'react-native';
@@ -23,13 +22,18 @@ import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
 export default function TabTwoScreen() {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
+
     const { teamB, teamA } = useAppSelector((state) => state);
+
     const [newPlayer, setNewPlayer] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
 
     const [newPlayer1, setNewPlayer1] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+
     const addPlayerTeamA = () => {
-        dispatch(addPlayerA(newPlayer));
-        setNewPlayer({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+        const { name } = newPlayer;
+        const player = { name };
+        dispatch(addPlayerA(player));
+        setNewPlayer({ ...teamA, name: '' });
     };
 
     const addPlayerTeamB = () => {
@@ -78,7 +82,7 @@ export default function TabTwoScreen() {
                                 {teamA.players.map((player, index) => (
                                     <View key={index} style={styles.playerName}>
                                         <Text>
-                                            {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                            {player.name}- G : {player.goal} - A :{player.assists} - P : {player.apear}
                                         </Text>
                                         <Pressable onPress={() => updatePlayerTeamA(index, !player.willPlay)}>
                                             {player.willPlay ? (

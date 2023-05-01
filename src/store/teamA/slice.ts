@@ -2,10 +2,10 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type Player = {
     name: string;
-    goal: number;
-    assists: number;
-    apear: number;
-    willPlay: boolean;
+    goal?: number;
+    assists?: number;
+    apear?: number;
+    willPlay?: boolean;
 };
 
 export type teamA = { result: number; players: Player[] };
