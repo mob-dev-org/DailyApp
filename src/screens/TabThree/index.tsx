@@ -11,44 +11,36 @@ export type PlayersWithMost = {
     key: string;
 };
 
+export type PlayerStat = {
+    key: 'goal' | 'assists' | 'apear';
+    title: string;
+};
+
 export default function TabThreeScreen() {
     const { t } = useTranslation();
     const { teamB, teamA } = useAppSelector((state) => state);
 
     const combinePlayers: Player[] = [...teamA.players, ...teamB.players];
 
-    // const getPlayersWithMost = (property: keyof Player): Player[] => {
-    //prosljeđivanje objekata u funkciju(parametar)
-    const getPlayersWithMost = (param: 'goal' | 'assists' | 'apear'): Player[] => {
-        // if (combinePlayers.length === 0) { !logical NOT oeprator give fasly value
+    const getPlayersWithMost = (tracker: 'goal' | 'assists' | 'apear'): Player[] => {
         if (combinePlayers.length === 0) {
             return [];
         } else {
-            const sortedPlayers = combinePlayers.sort((a, b) => b[param] - a[param]);
-            const most = sortedPlayers[0][param];
-            return sortedPlayers.filter((player) => player[param] === most);
+            const sortedPlayers = combinePlayers.sort((a, b) => b[tracker] - a[tracker]);
+            const most = sortedPlayers[0][tracker];
+            return sortedPlayers.filter((player) => player[tracker] === most);
         }
     };
 
-    // const playersWithMostGoals = getPlayersWithMost('goal');
-    // const playersWithMostAssists = getPlayersWithMost('assists');
-    // const playersWithMostAppearances = getPlayersWithMost('apear');
-
-    const playersWithMost = [
+    const playersWithMost: PlayerStat[] = [
         { key: 'goal', title: t('playersWithmostGoals') },
         { key: 'assists', title: t('playersWithmostAssists') },
         { key: 'apear', title: t('playersWithMostAppearances') },
     ];
 
-    // const allPlayersWithMost: PlayersWithMost[] = ['goal', 'assists', 'apear'].map((key) => ({
-    //     title: t(`playerWithMost${key}`),
-    //     players: getPlayersWithMost(key as 'goal' | 'assists' | 'apear'),
-    //     key,
-    // }));
-
-    const allPlayersWithMost: PlayersWithMost[] = playersWithMost.map(({ key, title }) => ({
+    const allPlayersWithMost = playersWithMost.map(({ key, title }) => ({
         title,
-        players: getPlayersWithMost(key as 'goal' | 'assists' | 'apear'),
+        players: getPlayersWithMost(key),
         key,
     }));
 
@@ -95,6 +87,19 @@ const styles = StyleSheet.create({
 });
 
 //FOR REVIEW
+
+// const getPlayersWithMost = (property: keyof Player): Player[] => {
+//prosljeđivanje objekata u funkciju(parametar)
+// if (combinePlayers.length === 0) { !logical NOT oeprator give fasly value
+
+// const playersWithMostGoals = getPlayersWithMost('goal');
+// const playersWithMostAssists = getPlayersWithMost('assists');
+// const playersWithMostAppearances = getPlayersWithMost('apear');
+// const allPlayersWithMost: PlayersWithMost[] = ['goal', 'assists', 'apear'].map((key) => ({
+//     title: t(`playerWithMost${key}`),
+//     players: getPlayersWithMost(key as 'goal' | 'assists' | 'apear'),
+//     key,
+// }));
 
 // const playersMostGoals = () => {
 //     if (combinePlayers.length === 0) {

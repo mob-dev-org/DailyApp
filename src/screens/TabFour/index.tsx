@@ -54,13 +54,13 @@ export default function TabFourScreen() {
 
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Bijeli</Text>
-                <ScoreInput value={scoreA} onChangeText={handleScoreAChange} keyboardType="numeric" maxLength={2} />
+                <ScoreInput value={scoreA} onChangeText={handleScoreAChange} keyboardType="numeric" />
                 <Button title="ADD" onPress={handleSetResultA} />
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Šareni</Text>
 
-                <ScoreInput value={scoreB} onChangeText={handleScoreBChange} keyboardType="numeric" maxLength={2} />
+                <ScoreInput value={scoreB} onChangeText={handleScoreBChange} keyboardType="numeric" />
 
                 <Button title="ADD" onPress={handleSetResultB} />
             </View>

@@ -7,11 +7,13 @@ type Input = {
     value: number;
     onChangeText: (value: string) => void;
     keyboardType: string;
-    maxLength: number;
+    maxLength?: number;
 };
 
+const defaultMaxLenght = 2;
+
 export default function ScoreInput(props: Input) {
-    const { onChangeText, value, maxLength } = props;
+    const { onChangeText, value, maxLength = defaultMaxLenght } = props;
 
     return (
         <View style={styles.input}>
