@@ -6,15 +6,17 @@ import CurrentDateTime from '@/components/atoms/Date';
 import ScoreInput from '@/components/atoms/InputScore';
 import { Text, View } from '@/components/atoms/Themed';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { updateTeamAResult } from '@/store/teamA/slice';
-import { updateTeamBResult } from '@/store/teamB/slice';
+import { addGame } from '@/store/score/slice';
+import { updateTeamAResult } from '@/store/score/slice';
+import { updateTeamBResult } from '@/store/score/slice';
 
 // Import the Redux action
 
 export default function TabFourScreen() {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
-    const { teamB, teamA } = useAppSelector((state) => state);
+    const { games, teamScoreA, teamScoreB } = useAppSelector((state) => state.score);
+
     const [scoreA, setScoreA] = useState<number>(0);
     const [scoreB, setScoreB] = useState<number>(0);
 
@@ -49,8 +51,11 @@ export default function TabFourScreen() {
             <CurrentDateTime />
             <Text style={styles.title}>{t('finalScore')}</Text>
             <Text style={styles.title}>
-                Bijeli {teamA.result} : {teamB.result} Šareni
+                Bijeli {teamScoreA} : {teamScoreB} Šareni
             </Text>
+            <Button
+                title="ADD GAME"
+                onPress={() => dispatch(addGame({ resultA: teamScoreA, resultB: teamScoreB }))}></Button>
 
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Bijeli</Text>
@@ -64,11 +69,22 @@ export default function TabFourScreen() {
 
                 <Button title="ADD" onPress={handleSetResultB} />
             </View>
+
+            <Text style={styles.title}>
+                {games.map((game, index) => (
+                    <View style={styles.input} key={index}>
+                        <Text style={styles.title}>Game on date: DATE</Text>
+                        <Text>Team A: {game.resultA}</Text>
+                        <Text>Team B: {game.resultB}</Text>
+                    </View>
+                ))}
+            </Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    lastGame: { fontSize: 16, fontWeight: 'bold' },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -79,12 +95,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     input: {
-        height: 40,
+        height: 50,
         borderColor: 'gray',
         borderWidth: 1,
         marginVertical: 10,
         paddingHorizontal: 10,
-        width: 200,
+        width: 350,
     },
     inputContainer: {
         flexDirection: 'row',

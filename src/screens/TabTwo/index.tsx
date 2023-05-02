@@ -22,23 +22,17 @@ import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
 export default function TabTwoScreen() {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
-
     const { teamB, teamA } = useAppSelector((state) => state);
-
     const [newPlayer, setNewPlayer] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
 
-    const [newPlayer1, setNewPlayer1] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
-
     const addPlayerTeamA = () => {
-        const { name } = newPlayer;
-        const player = { name };
-        dispatch(addPlayerA(player));
-        setNewPlayer({ ...teamA, name: '' });
+        dispatch(addPlayerA(newPlayer));
+        setNewPlayer({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
     };
 
     const addPlayerTeamB = () => {
-        dispatch(addPlayerB(newPlayer1));
-        setNewPlayer1({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+        dispatch(addPlayerB(newPlayer));
+        setNewPlayer({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
     };
 
     const updatePlayerTeamA = (index: number, willPlay: boolean) => {
@@ -57,7 +51,7 @@ export default function TabTwoScreen() {
     };
 
     const handleNameChangeB = (name: string) => {
-        setNewPlayer1({ ...newPlayer1, name });
+        setNewPlayer({ ...newPlayer, name });
     };
     return (
         <ScrollView>
@@ -82,7 +76,7 @@ export default function TabTwoScreen() {
                                 {teamA.players.map((player, index) => (
                                     <View key={index} style={styles.playerName}>
                                         <Text>
-                                            {player.name}- G : {player.goal} - A :{player.assists} - P : {player.apear}
+                                            {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
                                         </Text>
                                         <Pressable onPress={() => updatePlayerTeamA(index, !player.willPlay)}>
                                             {player.willPlay ? (
@@ -103,7 +97,7 @@ export default function TabTwoScreen() {
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Šareni</Text>
                             <PlayerNameInput
-                                value={newPlayer1.name}
+                                value={newPlayer.name}
                                 onChangeText={handleNameChangeB}
                                 placeholder="Player name"
                             />
@@ -111,7 +105,7 @@ export default function TabTwoScreen() {
                             <Button
                                 title="Add Player to Šareni"
                                 onPress={addPlayerTeamB}
-                                disabled={newPlayer1.name.trim() === ''}
+                                disabled={newPlayer.name.trim() === ''}
                             />
 
                             <View style={styles.teamName}>
