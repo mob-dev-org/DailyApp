@@ -10,10 +10,10 @@ type Input = {
     maxLength?: number;
 };
 
-const defaultMaxLenght = 2;
+const defaultMaxLength = 2;
 
 export default function ScoreInput(props: Input) {
-    const { onChangeText, value, maxLength = defaultMaxLenght } = props;
+    const { onChangeText, value, maxLength = defaultMaxLength } = props;
 
     return (
         <View style={styles.input}>
