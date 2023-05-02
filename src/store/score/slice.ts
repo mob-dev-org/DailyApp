@@ -1,9 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type Game = {
-    resultA?: number;
-    resultB?: number;
+    resultA: number;
+    resultB: number;
     date?: Date;
+    teamScoreA?: 0;
+    teamScoreb?: 0;
 };
 
 export type score = { teamScoreB: number; teamScoreA: number; games: Game[] };
