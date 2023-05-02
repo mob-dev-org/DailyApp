@@ -46,6 +46,12 @@ export default function TabFourScreen() {
     const handleScoreBChange = (score: string) => {
         setScoreB(Number(score));
     };
+
+    const handleAddGame = () => {
+        dispatch(addGame({ resultA: teamScoreA, resultB: teamScoreB }));
+        console.log(games);
+    };
+
     return (
         <View style={styles.container}>
             <CurrentDateTime />
@@ -53,9 +59,7 @@ export default function TabFourScreen() {
             <Text style={styles.title}>
                 Bijeli {teamScoreA} : {teamScoreB} Šareni
             </Text>
-            <Button
-                title="ADD GAME"
-                onPress={() => dispatch(addGame({ resultA: teamScoreA, resultB: teamScoreB }))}></Button>
+            <Button title="ADD GAME" onPress={handleAddGame}></Button>
 
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Bijeli</Text>
@@ -64,27 +68,55 @@ export default function TabFourScreen() {
             </View>
             <View style={styles.inputContainer}>
                 <Text style={styles.title}>Šareni</Text>
-
                 <ScoreInput value={scoreB} onChangeText={handleScoreBChange} keyboardType="numeric" />
-
                 <Button title="ADD" onPress={handleSetResultB} />
             </View>
 
             <Text style={styles.title}>
-                {games.map((game, index) => (
-                    <View style={styles.input} key={index}>
-                        <Text style={styles.title}>Game on date: DATE</Text>
-                        <Text>Team A: {game.resultA}</Text>
-                        <Text>Team B: {game.resultB}</Text>
-                    </View>
-                ))}
+                <Text style={styles.title}>
+                    {games.slice(1).map((game, index) => (
+                        <View style={styles.gameContainer} key={index}>
+                            <Text style={styles.gameDate}>Game on date: Date needed</Text>
+                            <View style={styles.gameScores}>
+                                <Text style={styles.gameTeamA}> Bijeli: {game.resultA}</Text>
+                                <Text style={styles.gameTeamB}> Šareni: {game.resultB}</Text>
+                            </View>
+                        </View>
+                    ))}
+                </Text>
             </Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    lastGame: { fontSize: 16, fontWeight: 'bold' },
+    gameContainer: {
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 5,
+        padding: 10,
+        marginVertical: 10,
+        width: '100%',
+    },
+    gameDate: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        marginBottom: 5,
+    },
+    gameScores: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    gameTeamA: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'blue',
+    },
+    gameTeamB: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'red',
+    },
     container: {
         flex: 1,
         alignItems: 'center',
