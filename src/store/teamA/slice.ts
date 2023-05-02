@@ -15,11 +15,9 @@ export type Game = {
     resultB?: number;
 };
 
-export type teamA = { resultB: number; players: Player[]; resultA: number; games: Game[] };
+export type teamA = { players: Player[] };
 
 const initialState = {
-    resultA: 2,
-    resultB: 2,
     players: [
         { name: 'Malik', goal: 3, assists: 2, apear: 5, willPlay: true },
         { name: 'Mahir', goal: 7, assists: 3, apear: 5, willPlay: true },
@@ -44,21 +42,11 @@ export const teamASlice = createSlice({
             const { index, willPlay } = payload;
             state.players[index].willPlay = willPlay;
         },
-        updateTeamAResult: (state, { payload }: PayloadAction<number>) => {
-            state.resultA = payload;
-        },
-        updateTeamBResult: (state, { payload }: PayloadAction<number>) => {
-            state.resultB = payload;
-        },
-        // addGame: (state, { payload }: PayloadAction<Game>) => {
-        //     state.games.push(payload);
-        // },
 
         resetTeamA: () => initialState,
     },
 });
 
-export const { addPlayerA, resetTeamA, deletePlayerA, updateTeamAResult, updatePlayerA, updateTeamBResult } =
-    teamASlice.actions;
+export const { addPlayerA, resetTeamA, deletePlayerA, updatePlayerA } = teamASlice.actions;
 
 export default teamASlice.reducer;

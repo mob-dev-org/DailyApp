@@ -9,12 +9,10 @@ export type Player = {
 };
 
 export type teamB = {
-    result: number;
     players: Player[];
 };
 
 const initialState = {
-    result: 0,
     players: [
         { name: 'Bajram', goal: 8, assists: 2, apear: 5, willPlay: true },
         { name: 'Ahmet', goal: 3, assists: 1, apear: 5, willPlay: true },
@@ -39,13 +37,11 @@ export const teamBSlice = createSlice({
             const { index, willPlay } = payload;
             state.players[index].willPlay = willPlay;
         },
-        updateTeamBResult: (state, { payload }: PayloadAction<number>) => {
-            state.result = payload;
-        },
+
         resetTeamB: () => initialState,
     },
 });
 
-export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB, updateTeamBResult } = teamBSlice.actions;
+export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB } = teamBSlice.actions;
 
 export default teamBSlice.reducer;

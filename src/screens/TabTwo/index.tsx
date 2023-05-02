@@ -16,23 +16,39 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import PlayerNameInput from '@/components/atoms/NameInput';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { Player, addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/slice';
+import { addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/slice';
 import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
 
 export default function TabTwoScreen() {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const { teamB, teamA } = useAppSelector((state) => state);
-    const [newPlayer, setNewPlayer] = useState<Player>({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+    const [newPlayer, setNewPlayer] = useState<string>('');
 
     const addPlayerTeamA = () => {
-        dispatch(addPlayerA(newPlayer));
-        setNewPlayer({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+        dispatch(
+            addPlayerA({
+                name: newPlayer,
+                goal: 0,
+                assists: 0,
+                apear: 0,
+                willPlay: true,
+            }),
+        );
+        setNewPlayer('');
     };
 
     const addPlayerTeamB = () => {
-        dispatch(addPlayerB(newPlayer));
-        setNewPlayer({ name: '', goal: 0, assists: 0, apear: 0, willPlay: true });
+        dispatch(
+            addPlayerB({
+                name: newPlayer,
+                goal: 0,
+                assists: 0,
+                apear: 0,
+                willPlay: true,
+            }),
+        );
+        setNewPlayer('');
     };
 
     const updatePlayerTeamA = (index: number, willPlay: boolean) => {
@@ -46,13 +62,13 @@ export default function TabTwoScreen() {
         dispatch(updatePlayerB({ index, willPlay }));
     };
 
-    const handleNameChangeA = (name: string) => {
-        setNewPlayer({ ...newPlayer, name });
+    const handleNameChange = (name: string) => {
+        setNewPlayer(name);
     };
 
-    const handleNameChangeB = (name: string) => {
-        setNewPlayer({ ...newPlayer, name });
-    };
+    // const handleNameChange = (name: string) => {
+    //     setNewPlayer(name);
+    // };
     return (
         <ScrollView>
             <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
@@ -62,16 +78,8 @@ export default function TabTwoScreen() {
                         <StatusBar backgroundColor="#FFFFFF" />
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Bijeli</Text>
-                            <PlayerNameInput
-                                value={newPlayer.name}
-                                onChangeText={handleNameChangeA}
-                                placeholder="Player name"
-                            />
-                            <Button
-                                title="Add Player to Bijeli"
-                                onPress={addPlayerTeamA}
-                                disabled={newPlayer.name.trim() === ''}
-                            />
+
+                            <Button title="Add Player to Bijeli" onPress={addPlayerTeamA} disabled={newPlayer === ''} />
                             <View style={styles.teamName}>
                                 {teamA.players.map((player, index) => (
                                     <View key={index} style={styles.playerName}>
@@ -93,20 +101,13 @@ export default function TabTwoScreen() {
                                 ))}
                             </View>
                         </View>
+
+                        <PlayerNameInput value={newPlayer} onChangeText={handleNameChange} placeholder="Player name" />
                         {/* TEAM B */}
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Šareni</Text>
-                            <PlayerNameInput
-                                value={newPlayer.name}
-                                onChangeText={handleNameChangeB}
-                                placeholder="Player name"
-                            />
 
-                            <Button
-                                title="Add Player to Šareni"
-                                onPress={addPlayerTeamB}
-                                disabled={newPlayer.name.trim() === ''}
-                            />
+                            <Button title="Add Player to Šareni" onPress={addPlayerTeamB} disabled={newPlayer === ''} />
 
                             <View style={styles.teamName}>
                                 {teamB.players.map((player, index) => (
