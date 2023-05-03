@@ -62,13 +62,10 @@ export default function TabTwoScreen() {
         dispatch(updatePlayerB({ index, willPlay }));
     };
 
-    const handleNameChange = (name: string) => {
-        setNewPlayer(name);
-    };
-
     // const handleNameChange = (name: string) => {
     //     setNewPlayer(name);
     // };
+
     return (
         <ScrollView>
             <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
@@ -102,7 +99,7 @@ export default function TabTwoScreen() {
                             </View>
                         </View>
 
-                        <PlayerNameInput value={newPlayer} onChangeText={handleNameChange} placeholder="Player name" />
+                        <PlayerNameInput value={newPlayer} onChangeText={setNewPlayer} placeholder="Player name" />
                         {/* TEAM B */}
                         <View style={styles.teamContainer}>
                             <Text style={styles.teamName}>TEAM Šareni</Text>
