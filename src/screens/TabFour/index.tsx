@@ -117,6 +117,8 @@ export default function TabFourScreen() {
     );
 }
 
+//For each game to add who scored, assisted, ..
+
 const styles = StyleSheet.create({
     gameContainer: {
         borderWidth: 1,
