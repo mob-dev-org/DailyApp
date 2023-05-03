@@ -26,20 +26,12 @@ export default function TabTwoScreen() {
     const [newPlayer, setNewPlayer] = useState<string>('');
 
     const addPlayerTeamA = () => {
-        dispatch(
-            addPlayerA({
-                name: newPlayer,
-            }),
-        );
+        dispatch(addPlayerA(newPlayer));
         setNewPlayer('');
     };
 
     const addPlayerTeamB = () => {
-        dispatch(
-            addPlayerB({
-                name: newPlayer,
-            }),
-        );
+        dispatch(addPlayerB(newPlayer));
         setNewPlayer('');
     };
 

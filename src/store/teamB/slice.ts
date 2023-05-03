@@ -27,8 +27,8 @@ export const teamBSlice = createSlice({
     name: 'teamB',
     initialState,
     reducers: {
-        addPlayerB: (state, { payload }: PayloadAction<Player>) => {
-            state.players.push(payload);
+        addPlayerB: (state, { payload }: PayloadAction<string>) => {
+            state.players.push({ name: payload, goal: 0, assists: 0, apear: 0, willPlay: false });
         },
         deletePlayerB: (state, { payload }: PayloadAction<number>) => {
             state.players.splice(payload, 1);
