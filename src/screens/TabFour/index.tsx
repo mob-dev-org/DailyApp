@@ -11,7 +11,6 @@ import { addGame } from '@/store/score/slice';
 import { updateTeamAResult } from '@/store/score/slice';
 import { updateTeamBResult } from '@/store/score/slice';
 import { setTeamA } from '@/store/teamA/slice';
-import { setTeamB } from '@/store/teamB/slice';
 
 export default function TabFourScreen() {
     const { t } = useTranslation();
@@ -58,6 +57,23 @@ export default function TabFourScreen() {
         console.log(games);
     };
 
+    const handleAssistChangeA = (index: number) => {
+        const updatedPlayers = [...teamA.players];
+        // updatedPlayers[index].assists += 1;
+        updatedPlayers[index] = { ...updatedPlayers[index], assists: updatedPlayers[index].assists + 1 };
+        dispatch(setTeamA({ ...teamA, players: updatedPlayers }));
+        console.log('WILL PLAY', playingPlayersA);
+        console.log('ALL PLAYERS', teamA.players);
+    };
+    const handleGoalChangeA = (index: number) => {
+        const updatedPlayers = [...teamA.players];
+        // updatedPlayers[index].assists += 1;
+        updatedPlayers[index] = { ...updatedPlayers[index], goal: updatedPlayers[index].goal + 1 };
+        dispatch(setTeamA({ ...teamA, players: updatedPlayers }));
+        console.log('WILL PLAY', playingPlayersA);
+        console.log('ALL PLAYERS', teamA.players);
+    };
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -98,13 +114,13 @@ export default function TabFourScreen() {
                         <View key={index} style={styles.gameScores}>
                             <Text>{player.name}</Text>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleGoalChangeA(index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>G: {player.goal}</Text>
                             </View>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleAssistChangeA(index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>A: {player.assists}</Text>
@@ -113,6 +129,8 @@ export default function TabFourScreen() {
                         </View>
                     ))}
                 </View>
+
+                {/* .....TEAM B.... */}
                 <View style={styles.gameContainer}>
                     <Text style={styles.gameTeamA}>TEAM B</Text>
                     {playingPlayersB.map((player, index) => (
