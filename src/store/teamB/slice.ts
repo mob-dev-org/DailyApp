@@ -2,8 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type Player = {
     name: string;
-    goal?: number;
-    assists?: number;
+    goal: number;
+    assists: number;
     apear?: number;
     willPlay?: boolean;
 };
@@ -37,11 +37,14 @@ export const teamBSlice = createSlice({
             const { index, willPlay } = payload;
             state.players[index].willPlay = willPlay;
         },
+        setTeamB: (state, { payload }: PayloadAction<teamB>) => {
+            state.players = payload.players;
+        },
 
         resetTeamB: () => initialState,
     },
 });
 
-export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB } = teamBSlice.actions;
+export const { resetTeamB, deletePlayerB, addPlayerB, updatePlayerB, setTeamB } = teamBSlice.actions;
 
 export default teamBSlice.reducer;
