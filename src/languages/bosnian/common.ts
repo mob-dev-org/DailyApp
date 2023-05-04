@@ -1,5 +1,16 @@
 export default {
     languageName: 'Bosanski',
-    hello: 'Haloo',
+    hello: 'Hej ba',
     languageSelector: 'Odaberite jezik',
+    playersWithmostGoals: 'Igraci sa najvise golova',
+    playersWithmostAssists: 'Igraci sa najvise asistencija',
+    playersWithMostAppearances: 'Igraci sa najvise nastupa',
+    delete: 'Ukloni',
+    finalScore: 'REZULTAT',
+    results: 'Rezultati',
+    teams: 'Timovi',
+    summary: 'Statistika',
+    home: 'Pocetna',
+    playerWithMost: 'Igrač sa najvise - ',
+    homeScreen: 'Početna stranica',
 };

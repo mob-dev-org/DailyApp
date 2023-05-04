@@ -1,29 +1,181 @@
-import { StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+    Button,
+    Keyboard,
+    KeyboardAvoidingView,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableWithoutFeedback,
+    View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { Text, View } from '@/components/atoms/Themed';
+import PlayerNameInput from '@/components/atoms/NameInput';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { addPlayerA, deletePlayerA, updatePlayerA } from '@/store/teamA/slice';
+import { addPlayerB, deletePlayerB, updatePlayerB } from '@/store/teamB/slice';
 
 export default function TabTwoScreen() {
+    const { t } = useTranslation();
+    const dispatch = useAppDispatch();
+    const { teamB, teamA } = useAppSelector((state) => state);
+    const [newPlayer, setNewPlayer] = useState<string>('');
+
+    const addPlayerTeamA = () => {
+        dispatch(addPlayerA(newPlayer));
+        setNewPlayer('');
+    };
+
+    const addPlayerTeamB = () => {
+        dispatch(addPlayerB(newPlayer));
+        setNewPlayer('');
+    };
+
+    const updatePlayerTeamA = (index: number, willPlay: boolean) => {
+        dispatch(updatePlayerA({ index, willPlay }));
+    };
+
+    const delPlayerTeamA = (index: number) => dispatch(deletePlayerA(index));
+    const delPlayerTeamB = (index: number) => dispatch(deletePlayerB(index));
+
+    const updatePlayerTeamB = (index: number, willPlay: boolean) => {
+        dispatch(updatePlayerB({ index, willPlay }));
+    };
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Tab Two</Text>
-            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-        </View>
+        <ScrollView>
+            <KeyboardAvoidingView style={styles.container} behavior="height" enabled>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    {/* TEAM A */}
+                    <View style={styles.teamContainer}>
+                        <StatusBar backgroundColor="#FFFFFF" />
+                        <View style={styles.teamContainer}>
+                            <Text style={styles.teamName}>TEAM Bijeli</Text>
+
+                            <Button title="Add Player to Bijeli" onPress={addPlayerTeamA} disabled={newPlayer === ''} />
+                            <View style={styles.teamName}>
+                                {teamA.players.map((player, index) => (
+                                    <View key={index} style={styles.playerName}>
+                                        <Text>
+                                            {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                        </Text>
+                                        <Pressable onPress={() => updatePlayerTeamA(index, !player.willPlay)}>
+                                            {player.willPlay ? (
+                                                <Icon name="check-circle" size={25} color="green" />
+                                            ) : (
+                                                <Icon name="circle-thin" size={25} color="gray" />
+                                            )}
+                                        </Pressable>
+
+                                        <Pressable onPress={() => delPlayerTeamA(index)}>
+                                            <Text style={styles.deleteButton}>{t('delete')}</Text>
+                                        </Pressable>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+
+                        <PlayerNameInput value={newPlayer} onChangeText={setNewPlayer} placeholder="Player name" />
+                        {/* TEAM B */}
+                        <View style={styles.teamContainer}>
+                            <Text style={styles.teamName}>TEAM Šareni</Text>
+
+                            <Button title="Add Player to Šareni" onPress={addPlayerTeamB} disabled={newPlayer === ''} />
+
+                            <View style={styles.teamName}>
+                                {teamB.players.map((player, index) => (
+                                    <View key={index} style={styles.playerName}>
+                                        <Text>
+                                            {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
+                                        </Text>
+
+                                        <Pressable onPress={() => updatePlayerTeamB(index, !player.willPlay)}>
+                                            {player.willPlay ? (
+                                                <Icon name="check-circle" size={25} color="green" />
+                                            ) : (
+                                                <Icon name="circle-thin" size={25} color="gray" />
+                                            )}
+                                        </Pressable>
+                                        <Pressable onPress={() => delPlayerTeamB(index)}>
+                                            <Text style={styles.deleteButton}>{t('delete')}</Text>
+                                        </Pressable>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+                    </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        fontSize: 20,
+    playingButton: {
+        color: 'green',
+        marginLeft: 10,
         fontWeight: 'bold',
     },
-    separator: {
-        marginVertical: 30,
-        height: 1,
-        width: '80%',
+    deleteButton: {
+        color: 'red',
+        marginLeft: 10,
+        fontWeight: 'bold',
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        paddingHorizontal: 16,
+        paddingTop: 16,
+    },
+    contentContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+    },
+    teamContainer: {
+        flex: 1,
+        marginBottom: 16,
+        paddingTop: 24,
+    },
+    team: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        padding: 16,
+    },
+    teamName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 8,
+    },
+    playerName: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        fontSize: 24,
+        marginBottom: 4,
+        borderWidth: 1,
+        padding: 4,
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        marginBottom: 8,
+    },
+    button: {
+        backgroundColor: 'blue',
+        borderRadius: 8,
+        padding: 12,
+        alignItems: 'center',
+    },
+    buttonText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 });

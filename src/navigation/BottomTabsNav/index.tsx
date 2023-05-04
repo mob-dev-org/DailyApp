@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import Colors from '@/constants/Colors';
 import { BottomTabsParamList } from '@/navigation/types';
+import TabTwoFourScreen from '@/screens/TabFour';
 import TabOneScreen from '@/screens/TabOne';
 import TabThreeScreen from '@/screens/TabThree';
 import TabTwoScreen from '@/screens/TabTwo';
@@ -30,32 +31,15 @@ function BottomTabNavigator() {
         <BottomTab.Navigator
             initialRouteName="TabOne"
             screenOptions={{
+                tabBarHideOnKeyboard: true,
                 tabBarActiveTintColor: Colors[theme].tint,
                 headerShown: false,
             }}>
             <BottomTab.Screen
                 name={'TabOne'}
                 component={TabOneScreen}
-                // options={({ navigation }: BottomTabsScreenProps<'TabOne'>) => ({
-                //     title: 'Tab One',
-                //     tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-                //     headerRight: () => (
-                //         <Pressable
-                //             onPress={() => navigation.navigate('Modal')}
-                //             style={({ pressed }) => ({
-                //                 opacity: pressed ? 0.5 : 1,
-                //             })}>
-                //             <FontAwesome
-                //                 name="info-circle"
-                //                 size={25}
-                //                 color={Colors[theme].text}
-                //                 style={{ marginRight: 15 }}
-                //             />
-                //         </Pressable>
-                //     ),
-                // })}
                 options={{
-                    title: 'Home',
+                    title: t('home') ?? 'Tab One',
                     tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
                 }}
             />
@@ -63,7 +47,7 @@ function BottomTabNavigator() {
                 name="TabTwo"
                 component={TabTwoScreen}
                 options={{
-                    title: 'Teams  ',
+                    title: t('teams') ?? 'Tab Two',
                     tabBarIcon: ({ color }) => <TabBarIcon name="shirtsinbulk" color={color} />,
                 }}
             />
@@ -72,8 +56,17 @@ function BottomTabNavigator() {
                 name="TabThree"
                 component={TabThreeScreen}
                 options={{
-                    title: 'Summary',
-                    tabBarIcon: ({ color }) => <TabBarIcon name="circle" color={color} />,
+                    title: t('summary') ?? 'Tab Three',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="bandcamp" color={color} />,
+                }}
+            />
+
+            <BottomTab.Screen
+                name="TabFour"
+                component={TabTwoFourScreen}
+                options={{
+                    title: t('results') ?? 'Tab Four',
+                    tabBarIcon: ({ color }) => <TabBarIcon name="address-book" color={color} />,
                 }}
             />
         </BottomTab.Navigator>
