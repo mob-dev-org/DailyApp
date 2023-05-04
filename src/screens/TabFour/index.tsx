@@ -11,6 +11,7 @@ import { addGame } from '@/store/score/slice';
 import { updateTeamAResult } from '@/store/score/slice';
 import { updateTeamBResult } from '@/store/score/slice';
 import { setTeamA } from '@/store/teamA/slice';
+import { setTeamB } from '@/store/teamB/slice';
 
 export default function TabFourScreen() {
     const { t } = useTranslation();
@@ -57,21 +58,25 @@ export default function TabFourScreen() {
         console.log(games);
     };
 
-    const handleAssistChangeA = (index: number) => {
+    const handlePlayerStatChange = (type: string, index: number) => {
         const updatedPlayers = [...teamA.players];
-        // updatedPlayers[index].assists += 1;
-        updatedPlayers[index] = { ...updatedPlayers[index], assists: updatedPlayers[index].assists + 1 };
+        if (type === 'goal') {
+            updatedPlayers[index] = { ...updatedPlayers[index], goal: updatedPlayers[index].goal + 1 };
+        } else if (type === 'assist') {
+            updatedPlayers[index] = { ...updatedPlayers[index], assists: updatedPlayers[index].assists + 1 };
+        }
         dispatch(setTeamA({ ...teamA, players: updatedPlayers }));
-        console.log('WILL PLAY', playingPlayersA);
-        console.log('ALL PLAYERS', teamA.players);
     };
-    const handleGoalChangeA = (index: number) => {
-        const updatedPlayers = [...teamA.players];
-        // updatedPlayers[index].assists += 1;
+
+    const handleGoalChangeB = (index: number) => {
+        const updatedPlayers = [...teamB.players];
         updatedPlayers[index] = { ...updatedPlayers[index], goal: updatedPlayers[index].goal + 1 };
-        dispatch(setTeamA({ ...teamA, players: updatedPlayers }));
-        console.log('WILL PLAY', playingPlayersA);
-        console.log('ALL PLAYERS', teamA.players);
+        dispatch(setTeamB({ ...teamB, players: updatedPlayers }));
+    };
+    const handleAssistChangeB = (index: number) => {
+        const updatedPlayers = [...teamB.players];
+        updatedPlayers[index] = { ...updatedPlayers[index], assists: updatedPlayers[index].assists + 1 };
+        dispatch(setTeamB({ ...teamB, players: updatedPlayers }));
     };
 
     return (
@@ -99,6 +104,7 @@ export default function TabFourScreen() {
                     <Text style={styles.title}>
                         {games.slice(1).map((game, index) => (
                             <View style={styles.gameContainer} key={index}>
+                                {/* Add Date //TODO  */}
                                 <Text style={styles.gameDate}>Game on date: Date needed</Text>
                                 <View style={styles.gameScores}>
                                     <Text style={styles.gameTeamA}> Bijeli: {game.resultA}</Text>
@@ -109,18 +115,18 @@ export default function TabFourScreen() {
                     </Text>
                 </Text>
                 <View style={styles.gameContainer}>
-                    <Text style={styles.gameTeamA}>TEAM A</Text>
+                    <Text style={styles.gameTeamA}>BIJELI</Text>
                     {playingPlayersA.map((player, index) => (
                         <View key={index} style={styles.gameScores}>
                             <Text>{player.name}</Text>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity onPress={() => handleGoalChangeA(index)}>
+                                <TouchableOpacity onPress={() => handlePlayerStatChange('goal', index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>G: {player.goal}</Text>
                             </View>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity onPress={() => handleAssistChangeA(index)}>
+                                <TouchableOpacity onPress={() => handlePlayerStatChange('assist', index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>A: {player.assists}</Text>
@@ -132,18 +138,18 @@ export default function TabFourScreen() {
 
                 {/* .....TEAM B.... */}
                 <View style={styles.gameContainer}>
-                    <Text style={styles.gameTeamA}>TEAM B</Text>
+                    <Text style={styles.gameTeamA}>ŠARENI</Text>
                     {playingPlayersB.map((player, index) => (
                         <View key={index} style={styles.gameScores}>
                             <Text>{player.name}</Text>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleGoalChangeB(index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>G: {player.goal}</Text>
                             </View>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleAssistChangeB(index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>A: {player.assists}</Text>
