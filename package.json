@@ -8,6 +8,7 @@
         "android": "expo run:android",
         "android:installToDevice": "yarn reverse && npx expo run:android --device",
         "android:releaseToExpo": "eas build -p android --profile preview",
+        "android:createDevClientInExpo": "eas build -p android --profile development",
         "android:releaseForGooglePlay": "eas build -p android --profile release",
         "android:update": "eas update",
         "ios": "expo run:ios --device",
