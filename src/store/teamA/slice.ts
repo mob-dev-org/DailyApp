@@ -18,6 +18,7 @@ export type Game = {
 export type teamA = { players: Player[] };
 
 const initialState = {
+    //TODO teamAname: 'STRING', add team name
     players: [
         { name: 'Malik', goal: 3, assists: 2, apear: 5, willPlay: true },
         { name: 'Mahir', goal: 7, assists: 3, apear: 5, willPlay: true },

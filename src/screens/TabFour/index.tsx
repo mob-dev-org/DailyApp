@@ -58,7 +58,7 @@ export default function TabFourScreen() {
         console.log(games);
     };
 
-    const handlePlayerStatChange = (type: string, index: number) => {
+    const handlePlayerStatChangeA = (type: string, index: number) => {
         const updatedPlayers = [...teamA.players];
         if (type === 'goal') {
             updatedPlayers[index] = { ...updatedPlayers[index], goal: updatedPlayers[index].goal + 1 };
@@ -120,13 +120,13 @@ export default function TabFourScreen() {
                         <View key={index} style={styles.gameScores}>
                             <Text>{player.name}</Text>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity onPress={() => handlePlayerStatChange('goal', index)}>
+                                <TouchableOpacity onPress={() => handlePlayerStatChangeA('goal', index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>G: {player.goal}</Text>
                             </View>
                             <View style={styles.goalAssistContainer}>
-                                <TouchableOpacity onPress={() => handlePlayerStatChange('assist', index)}>
+                                <TouchableOpacity onPress={() => handlePlayerStatChangeA('assist', index)}>
                                     <Text style={styles.goalAssistButton}>+</Text>
                                 </TouchableOpacity>
                                 <Text style={styles.goalAssistText}>A: {player.assists}</Text>
