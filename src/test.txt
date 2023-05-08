@@ -3,5 +3,6 @@ Add drawer to navigation (i need to fix my previous project not showing in drawe
 I need to add function to 
 -add new tasks, when user input text in textinput field it should be added in task list 
 -delete single tasks, when user click on del button it should remove that single task 
--edit tasks, 
+-edit tasks, when user click on EDIT button it should show two new buttons, SAVE and CANCEL,
+SAVE button should save edited text, and CANCEL should stop editing poroces
 -check if task is done 
