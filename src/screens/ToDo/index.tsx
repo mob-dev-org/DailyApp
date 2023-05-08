@@ -4,12 +4,9 @@ import { Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native
 import { Divider } from 'react-native-paper';
 
 import { Text, View } from '@/components/atoms/Themed';
+import { Task } from '@/constants/Types';
 
 export default function TabThreeScreen() {
-    type Task = {
-        text: string;
-        isEditing: boolean;
-    };
     //useState hook for array of tasks
     const [tasks, setTasks] = useState<Task[]>([
         { text: 'one', isEditing: false },
@@ -18,8 +15,9 @@ export default function TabThreeScreen() {
     ]);
     //useState hook for adding task
     const [newTask, setNewTask] = useState<string>('');
-    //
+    //useState for editing
     const [editedTask, setEditedTask] = useState<string>('');
+    //useState for user to display the task is it editable or not
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     //function for adding task in the list
@@ -76,7 +74,12 @@ export default function TabThreeScreen() {
                     <View style={styles.taskItem} key={index}>
                         {editingIndex === index ? (
                             <>
-                                <TextInput style={styles.taskText} value={editedTask} onChangeText={setEditedTask} />
+                                <TextInput
+                                    style={styles.taskInput}
+                                    placeholder="...."
+                                    value={editedTask}
+                                    onChangeText={setEditedTask}
+                                />
                                 <View style={styles.taskItemButtons}>
                                     <TouchableOpacity onPress={() => handleSaveEditing(index)}>
                                         <View style={styles.actionIcon}>
@@ -94,6 +97,7 @@ export default function TabThreeScreen() {
                             <>
                                 <Text style={styles.taskText}>{task.text}</Text>
                                 <Divider />
+
                                 <View style={styles.taskItemButtons}>
                                     <TouchableOpacity onPress={() => clearSingleTask(index)}>
                                         <View style={styles.actionIcon}>
