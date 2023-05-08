@@ -1,133 +1,156 @@
-import { useTranslation } from 'react-i18next';
-import { StyleSheet } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { useState } from 'react';
+import { Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 
 import { Text, View } from '@/components/atoms/Themed';
-import { useAppSelector } from '@/store/hooks';
-import { Player } from '@/store/teamA/slice';
-
-export type PlayersWithMost = {
-    title: string;
-    players: Player[];
-    key: string;
-};
-
-export type PlayerStat = {
-    key: 'goal' | 'assists' | 'apear';
-    title: string;
-};
 
 export default function TabThreeScreen() {
-    const { t } = useTranslation();
-    const { teamB, teamA } = useAppSelector((state) => state);
+    type Task = {
+        text: string;
+    };
+    //useState hook for array of tasks
+    const [tasks, setTasks] = useState<Task[]>([{ text: 'one' }, { text: 'two' }, { text: 'three' }]);
+    //useState hook for adding task
+    const [newTask, setNewTask] = useState<string>('');
 
-    const combinePlayers: Player[] = [...teamA.players, ...teamB.players];
-
-    const getPlayersWithMost = (tracker: 'goal' | 'assists' | 'apear'): Player[] => {
-        if (combinePlayers.length === 0) {
-            return [];
+    //function for adding task in the list
+    const addTask = () => {
+        if (newTask === '') {
+            alert('No task to add');
         } else {
-            const sortedPlayers = combinePlayers.sort((a, b) => (b[tracker] || 0) - (a[tracker] || 0));
-            const most = sortedPlayers[0][tracker];
-            return sortedPlayers.filter((player) => player[tracker] === most);
+            const newTasks = [...tasks, { text: newTask }];
+            setTasks(newTasks);
+
+            setNewTask('');
         }
     };
 
-    const playersWithMost: PlayerStat[] = [
-        { key: 'goal', title: t('playersWithmostGoals') },
-        { key: 'assists', title: t('playersWithmostAssists') },
-        { key: 'apear', title: t('playersWithMostAppearances') },
-    ];
-
-    const allPlayersWithMost = playersWithMost.map(({ key, title }) => ({
-        title,
-        players: getPlayersWithMost(key),
-        key,
-    }));
-
     return (
         <View style={styles.container}>
-            {allPlayersWithMost.map((category) => (
-                <View style={styles.category} key={category.title}>
-                    <Text style={styles.heading}>{category.title}</Text>
-                    {category.players.map((player) => (
-                        <Text key={player.name}>
-                            {player.name}: {player[category.key]}
-                        </Text>
-                    ))}
-                </View>
-            ))}
+            {/* HEAD */}
+            <View>
+                <Text style={styles.title}>Add Tasks</Text>
+                <TextInput
+                    style={{ textAlign: 'center', fontSize: 16, borderBottomWidth: 1 }}
+                    placeholder="Add task"
+                    value={newTask}
+                    onChangeText={setNewTask}
+                />
+                <Pressable disabled={!tasks} style={{ width: 100, alignSelf: 'center' }} onPress={addTask}>
+                    <Text style={styles.addButton}>ADD</Text>
+                </Pressable>
+            </View>
+            <Text style={styles.title}>Task List</Text>
+
+            {/* BODY */}
+            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+
+            <View>
+                {tasks.map((task, index) => (
+                    <View style={styles.taskItem} key={index}>
+                        <Text style={styles.taskText}>{task.text}</Text>
+                        <View style={styles.taskItemButtons}>
+                            <TouchableOpacity>
+                                <View style={styles.actionIcon}>
+                                    <Text style={styles.actionIconText}>DEL</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity>
+                                <View style={styles.actionIcon}>
+                                    <Text style={styles.actionIconText}>EDIT</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                ))}
+            </View>
+            {/* BOTTOM */}
+            <Pressable style={styles.clear}>
+                <Text>
+                    <AntDesign name="delete" size={35} color="black" />
+                </Text>
+            </Pressable>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    addButton: {
+        backgroundColor: '#acdc',
+        fontSize: 16,
+        borderWidth: 1,
+        padding: 4,
+        margin: 8,
+        justifyContent: 'center',
+        textAlign: 'center',
+    },
+    actionIconText: {
+        fontSize: 12,
+    },
+
+    taskItemButtons: {
+        flexDirection: 'row',
+    },
+    actionIcon: {
         flex: 1,
+        height: 24,
+        width: 40,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#ccfc',
+        marginLeft: 5,
+        borderRadius: 3,
+        borderWidth: 1,
     },
-    category: {
-        marginVertical: 10,
-        paddingHorizontal: 16,
-        paddingVertical: 8,
-        backgroundColor: '#F5F5F5',
-        borderRadius: 8,
-        width: '90%',
+    clear: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 'auto',
     },
-    heading: {
-        fontSize: 18,
+
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#fff',
+    },
+    title: {
+        fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 8,
+        marginBottom: 20,
+        textAlign: 'center',
     },
-    playerText: {
+    addTask: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    taskInput: {
+        flex: 1,
+        marginRight: 10,
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
         fontSize: 16,
-        marginBottom: 4,
+    },
+    taskItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#f2f2f2',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#ccc',
+    },
+    taskText: {
+        fontSize: 16,
+    },
+    separator: {
+        marginVertical: 8,
+        height: 1,
+        width: '80%',
     },
 });
-
-//FOR REVIEW
-
-// const getPlayersWithMost = (property: keyof Player): Player[] => {
-//prosljeđivanje objekata u funkciju(parametar)
-// if (combinePlayers.length === 0) { !logical NOT oeprator give fasly value
-
-// const playersWithMostGoals = getPlayersWithMost('goal');
-// const playersWithMostAssists = getPlayersWithMost('assists');
-// const playersWithMostAppearances = getPlayersWithMost('apear');
-// const allPlayersWithMost: PlayersWithMost[] = ['goal', 'assists', 'apear'].map((key) => ({
-//     title: t(`playerWithMost${key}`),
-//     players: getPlayersWithMost(key as 'goal' | 'assists' | 'apear'),
-//     key,
-// }));
-
-// const playersMostGoals = () => {
-//     if (combinePlayers.length === 0) {
-//         return [];
-//     }
-//     const sortedPlayers = combinePlayers.sort((a, b) => b.goal - a.goal);
-//     const mostGoals = sortedPlayers[0].goal;
-//     return sortedPlayers.filter((a) => a.goal === mostGoals);
-// };
-
-// const playersMostAssists = () => {
-//     if (combinePlayers.length === 0) {
-//         return [];
-//     }
-//     const sortedPlayers = combinePlayers.sort((a, b) => b.assists - a.assists);
-//     const mostAssists = sortedPlayers[0].assists;
-//     return sortedPlayers.filter((b) => b.assists === mostAssists);
-// };
-
-// const playerMostAppear = () => {
-//     if (combinePlayers.length === 0) {
-//         return [];
-//     }
-//     const sortedPlayers = combinePlayers.sort((a, b) => b.apear - a.apear);
-//     const mostAppearances = sortedPlayers[0].apear;
-//     return sortedPlayers.filter((c) => c.apear === mostAppearances);
-// };
-
-// const playersWithMostGoals = playersMostGoals();
-// const playersWithMostAssists = playersMostAssists();
-// const playersWithMostAppearances = playerMostAppear();
