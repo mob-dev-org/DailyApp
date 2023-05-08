@@ -15,14 +15,22 @@ export default function TabThreeScreen() {
 
     //function for adding task in the list
     const addTask = () => {
-        if (newTask === '') {
-            alert('No task to add');
-        } else {
-            const newTasks = [...tasks, { text: newTask }];
-            setTasks(newTasks);
+        const newTasks = [...tasks, { text: newTask }];
+        setTasks(newTasks);
+        setNewTask('');
+    };
 
-            setNewTask('');
-        }
+    console.log('taskovi', tasks);
+    //function for clearin all tasks
+    const clearAll = () => {
+        setTasks([]);
+    };
+
+    //function for clearing signgle task on certiain index
+    const clearSingleTask = (index: number) => {
+        const newTasks = [...tasks];
+        newTasks.splice(index, 1);
+        setTasks(newTasks);
     };
 
     return (
@@ -30,27 +38,21 @@ export default function TabThreeScreen() {
             {/* HEAD */}
             <View>
                 <Text style={styles.title}>Add Tasks</Text>
-                <TextInput
-                    style={{ textAlign: 'center', fontSize: 16, borderBottomWidth: 1 }}
-                    placeholder="Add task"
-                    value={newTask}
-                    onChangeText={setNewTask}
-                />
-                <Pressable disabled={!tasks} style={{ width: 100, alignSelf: 'center' }} onPress={addTask}>
+                <TextInput style={styles.taskInput} placeholder="Add task" value={newTask} onChangeText={setNewTask} />
+                <Pressable style={styles.pressableAdd} onPress={addTask} disabled={newTask === ''}>
                     <Text style={styles.addButton}>ADD</Text>
                 </Pressable>
             </View>
             <Text style={styles.title}>Task List</Text>
 
             {/* BODY */}
-            <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
             <View>
                 {tasks.map((task, index) => (
                     <View style={styles.taskItem} key={index}>
                         <Text style={styles.taskText}>{task.text}</Text>
                         <View style={styles.taskItemButtons}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => clearSingleTask(index)}>
                                 <View style={styles.actionIcon}>
                                     <Text style={styles.actionIconText}>DEL</Text>
                                 </View>
@@ -65,7 +67,7 @@ export default function TabThreeScreen() {
                 ))}
             </View>
             {/* BOTTOM */}
-            <Pressable style={styles.clear}>
+            <Pressable style={styles.clear} onPress={clearAll}>
                 <Text>
                     <AntDesign name="delete" size={35} color="black" />
                 </Text>
@@ -75,6 +77,15 @@ export default function TabThreeScreen() {
 }
 
 const styles = StyleSheet.create({
+    taskInput: {
+        textAlign: 'center',
+        fontSize: 16,
+        borderBottomWidth: 1,
+    },
+    pressableAdd: {
+        width: 100,
+        alignSelf: 'center',
+    },
     addButton: {
         backgroundColor: '#acdc',
         fontSize: 16,
@@ -87,7 +98,6 @@ const styles = StyleSheet.create({
     actionIconText: {
         fontSize: 12,
     },
-
     taskItemButtons: {
         flexDirection: 'row',
     },
@@ -125,16 +135,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 20,
     },
-    taskInput: {
-        flex: 1,
-        marginRight: 10,
-        backgroundColor: '#fff',
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        fontSize: 16,
-    },
     taskItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -147,10 +147,5 @@ const styles = StyleSheet.create({
     },
     taskText: {
         fontSize: 16,
-    },
-    separator: {
-        marginVertical: 8,
-        height: 1,
-        width: '80%',
     },
 });
