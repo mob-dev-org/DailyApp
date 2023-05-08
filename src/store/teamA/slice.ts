@@ -2,8 +2,8 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export type Player = {
     name: string;
-    goal?: number;
-    assists?: number;
+    goal: number;
+    assists: number;
     apear?: number;
     willPlay?: boolean;
 };
@@ -18,6 +18,7 @@ export type Game = {
 export type teamA = { players: Player[] };
 
 const initialState = {
+    //TODO teamAname: 'STRING', add team name
     players: [
         { name: 'Malik', goal: 3, assists: 2, apear: 5, willPlay: true },
         { name: 'Mahir', goal: 7, assists: 3, apear: 5, willPlay: true },
@@ -42,11 +43,14 @@ export const teamASlice = createSlice({
             const { index, willPlay } = payload;
             state.players[index].willPlay = willPlay;
         },
+        setTeamA: (state, { payload }: PayloadAction<teamA>) => {
+            state.players = payload.players;
+        },
 
         resetTeamA: () => initialState,
     },
 });
 
-export const { addPlayerA, resetTeamA, deletePlayerA, updatePlayerA } = teamASlice.actions;
+export const { addPlayerA, resetTeamA, deletePlayerA, updatePlayerA, setTeamA } = teamASlice.actions;
 
 export default teamASlice.reducer;

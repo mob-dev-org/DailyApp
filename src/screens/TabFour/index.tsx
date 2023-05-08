@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, StyleSheet } from 'react-native';
+import { Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 
 import CurrentDateTime from '@/components/atoms/Date';
@@ -10,8 +10,8 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addGame } from '@/store/score/slice';
 import { updateTeamAResult } from '@/store/score/slice';
 import { updateTeamBResult } from '@/store/score/slice';
-
-// Import the Redux action
+import { setTeamA } from '@/store/teamA/slice';
+import { setTeamB } from '@/store/teamB/slice';
 
 export default function TabFourScreen() {
     const { t } = useTranslation();
@@ -58,6 +58,27 @@ export default function TabFourScreen() {
         console.log(games);
     };
 
+    const handlePlayerStatChangeA = (type: string, index: number) => {
+        const updatedPlayers = [...teamA.players];
+        if (type === 'goal') {
+            updatedPlayers[index] = { ...updatedPlayers[index], goal: updatedPlayers[index].goal + 1 };
+        } else if (type === 'assist') {
+            updatedPlayers[index] = { ...updatedPlayers[index], assists: updatedPlayers[index].assists + 1 };
+        }
+        dispatch(setTeamA({ ...teamA, players: updatedPlayers }));
+    };
+
+    const handleGoalChangeB = (index: number) => {
+        const updatedPlayers = [...teamB.players];
+        updatedPlayers[index] = { ...updatedPlayers[index], goal: updatedPlayers[index].goal + 1 };
+        dispatch(setTeamB({ ...teamB, players: updatedPlayers }));
+    };
+    const handleAssistChangeB = (index: number) => {
+        const updatedPlayers = [...teamB.players];
+        updatedPlayers[index] = { ...updatedPlayers[index], assists: updatedPlayers[index].assists + 1 };
+        dispatch(setTeamB({ ...teamB, players: updatedPlayers }));
+    };
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -83,6 +104,7 @@ export default function TabFourScreen() {
                     <Text style={styles.title}>
                         {games.slice(1).map((game, index) => (
                             <View style={styles.gameContainer} key={index}>
+                                {/* Add Date //TODO  */}
                                 <Text style={styles.gameDate}>Game on date: Date needed</Text>
                                 <View style={styles.gameScores}>
                                     <Text style={styles.gameTeamA}> Bijeli: {game.resultA}</Text>
@@ -93,22 +115,46 @@ export default function TabFourScreen() {
                     </Text>
                 </Text>
                 <View style={styles.gameContainer}>
-                    <Text style={styles.gameTeamA}>TEAM A</Text>
+                    <Text style={styles.gameTeamA}>BIJELI</Text>
                     {playingPlayersA.map((player, index) => (
                         <View key={index} style={styles.gameScores}>
-                            <Text>
-                                {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
-                            </Text>
+                            <Text>{player.name}</Text>
+                            <View style={styles.goalAssistContainer}>
+                                <TouchableOpacity onPress={() => handlePlayerStatChangeA('goal', index)}>
+                                    <Text style={styles.goalAssistButton}>+</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.goalAssistText}>G: {player.goal}</Text>
+                            </View>
+                            <View style={styles.goalAssistContainer}>
+                                <TouchableOpacity onPress={() => handlePlayerStatChangeA('assist', index)}>
+                                    <Text style={styles.goalAssistButton}>+</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.goalAssistText}>A: {player.assists}</Text>
+                            </View>
+                            <Text style={styles.goalAssistText}>P: {player.apear}</Text>
                         </View>
                     ))}
                 </View>
+
+                {/* .....TEAM B.... */}
                 <View style={styles.gameContainer}>
-                    <Text style={styles.gameTeamA}>TEAM B</Text>
+                    <Text style={styles.gameTeamA}>ŠARENI</Text>
                     {playingPlayersB.map((player, index) => (
                         <View key={index} style={styles.gameScores}>
-                            <Text>
-                                {player.name}- G : {player.goal} - A : {player.assists} - P : {player.apear}
-                            </Text>
+                            <Text>{player.name}</Text>
+                            <View style={styles.goalAssistContainer}>
+                                <TouchableOpacity onPress={() => handleGoalChangeB(index)}>
+                                    <Text style={styles.goalAssistButton}>+</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.goalAssistText}>G: {player.goal}</Text>
+                            </View>
+                            <View style={styles.goalAssistContainer}>
+                                <TouchableOpacity onPress={() => handleAssistChangeB(index)}>
+                                    <Text style={styles.goalAssistButton}>+</Text>
+                                </TouchableOpacity>
+                                <Text style={styles.goalAssistText}>A: {player.assists}</Text>
+                            </View>
+                            <Text style={styles.goalAssistText}>P: {player.apear}</Text>
                         </View>
                     ))}
                 </View>
@@ -120,6 +166,17 @@ export default function TabFourScreen() {
 //For each game to add who scored, assisted, ..
 
 const styles = StyleSheet.create({
+    goalAssistButton: {
+        fontSize: 24,
+        paddingHorizontal: 10,
+    },
+    goalAssistText: {
+        marginHorizontal: 10,
+    },
+    goalAssistContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     gameContainer: {
         borderWidth: 1,
         borderColor: 'gray',

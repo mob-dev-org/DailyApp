@@ -1,7 +1,7 @@
 {
     "expo": {
-        "name": "DailyApps",
-        "slug": "DailyApps",
+        "name": "Harun Apps",
+        "slug": "harun-daily-apps",
         "version": "1.0.0",
         "orientation": "portrait",
         "icon": "./src/assets/images/icon.png",
@@ -21,14 +21,14 @@
             "config": {
                 "usesNonExemptEncryption": false
             },
-            "bundleIdentifier": "com.mob.dev.expo-template"
+            "bundleIdentifier": "com.mob.dev.harun-daily-apps"
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./src/assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
             },
-            "package": "com.mob_dev.expotemplate"
+            "package": "com.mob_dev.harundailyapps"
         },
         "web": {
             "favicon": "./src/assets/images/favicon.png"
@@ -36,7 +36,7 @@
         "plugins": ["expo-community-flipper", "./plugins/disableForcedDarkModeAndroid.js", "expo-localization"],
         "extra": {
             "eas": {
-                "projectId": "59d72699-699f-4342-9b6a-8d903088fa0a"
+                "projectId": "7253c64e-8572-4c7a-9c54-79d556b7684c"
             }
         },
         "owner": "mob_dev"
