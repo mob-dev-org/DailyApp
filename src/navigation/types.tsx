@@ -10,6 +10,7 @@ export type StackNavParamList = {
     Root: NavigatorScreenParams<BottomTabsParamList> | undefined;
     Modal: undefined;
     NotFound: undefined;
+    ToDo: undefined;
 };
 
 export type StackNavScreenProps<Screen extends keyof StackNavParamList> = NativeStackScreenProps<

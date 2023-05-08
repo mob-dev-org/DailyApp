@@ -5,6 +5,7 @@
  */
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import MyDrawer from '../Drawer';
 import { StackNavParamList } from '../types';
 
 import BottomTabNavigator from '@/navigation/BottomTabsNav';
@@ -20,6 +21,7 @@ const Stack = createNativeStackNavigator<StackNavParamList>();
 function StackNavigator() {
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="ToDo" component={MyDrawer} options={{ headerShown: true }} />
             <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
