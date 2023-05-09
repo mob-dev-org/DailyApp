@@ -97,8 +97,12 @@ export default function TabThreeScreen() {
                                 <Text style={styles.addButton}>{t('add')}</Text>
                             </Pressable>
                         </View>
-                        <Text style={styles.title}>{t('listOfTasks')}</Text>
-
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text style={styles.title}>{t('listOfTasks')}</Text>
+                            <Pressable style={styles.clear} onPress={clearAll}>
+                                <AntDesign name="delete" size={40} color="black" />
+                            </Pressable>
+                        </View>
                         {/* BODY */}
 
                         <View>
@@ -147,9 +151,6 @@ export default function TabThreeScreen() {
                             ))}
                         </View>
                         {/* BOTTOM */}
-                        <Pressable style={styles.clear} onPress={clearAll}>
-                            <AntDesign name="delete" size={35} color="black" />
-                        </Pressable>
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 'auto',
+        marginBottom: 20,
     },
 
     container: {
@@ -218,6 +219,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        justifyContent: 'center',
     },
 
     taskItem: {
