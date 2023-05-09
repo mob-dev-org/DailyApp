@@ -1,7 +1,17 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import {
+    Button,
+    Keyboard,
+    KeyboardAvoidingView,
+    Pressable,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    TouchableWithoutFeedback,
+} from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
 
 import { Text, View } from '@/components/atoms/Themed';
@@ -21,13 +31,9 @@ export default function TabThreeScreen() {
     };
 
     //useState hook for array of tasks
-    const [tasks, setTasks] = useState<Task[]>([
-        { text: 'one', isEditing: false },
-        { text: 'two', isEditing: false },
-        { text: 'three', isEditing: false },
-    ]);
+    const [tasks, setTasks] = useState<Task[]>([{ text: 'one' }, { text: 'two' }, { text: 'three' }]);
     //useState hook for adding task
-    const [newTask, setNewTask] = useState<string>('');
+    const [newTaskName, setNewTaskName] = useState<string>('');
     //useState for editing
     const [editedTask, setEditedTask] = useState<string>('');
     //useState for user to display the task is it editable or not
@@ -35,9 +41,9 @@ export default function TabThreeScreen() {
 
     //function for adding task in the list
     const addTask = () => {
-        const newTasks = [...tasks, { text: newTask, isEditing: false }];
+        const newTasks = [...tasks, { text: newTaskName }];
         setTasks(newTasks);
-        setNewTask('');
+        setNewTaskName('');
     };
 
     console.log('Tasks', tasks);
@@ -56,8 +62,6 @@ export default function TabThreeScreen() {
     const handleStartEditing = (index: number) => {
         setEditedTask(tasks[index].text);
         setEditingIndex(index);
-        console.log('EDIT', editedTask);
-        console.log('Index', editingIndex);
     };
 
     const handleSaveEditing = (index: number) => {
@@ -65,89 +69,103 @@ export default function TabThreeScreen() {
         newTasks[index].text = editedTask;
         setTasks(newTasks);
         setEditingIndex(null);
+        // setEditedTask('');
     };
+
     const handleCancelEditing = () => {
         setEditingIndex(null);
+        // setEditedTask('');
     };
 
     return (
-        <View style={styles.container}>
-            <Button title="Change theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
-            <Button title="Toggle language" onPress={changeLanguage} />
-            {/* HEAD */}
-            <View>
-                <Text style={styles.title}>{t('addTasks')}</Text>
-                <TextInput style={styles.taskInput} placeholder="Add task" value={newTask} onChangeText={setNewTask} />
-                <Pressable style={styles.pressableAdd} onPress={addTask} disabled={!newTask}>
-                    <Text style={styles.addButton}>{t('add')}</Text>
-                </Pressable>
-            </View>
-            <Text style={styles.title}>{t('listOfTasks')}</Text>
+        <ScrollView style={styles.container}>
+            <KeyboardAvoidingView behavior="height" enabled>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View>
+                        <Button title="Change theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
+                        <Button title="Toggle language" onPress={changeLanguage} />
+                        {/* HEAD */}
+                        <View>
+                            <Text style={styles.title}>{t('addTasks')}</Text>
+                            <TextInput
+                                style={styles.taskInput}
+                                placeholder="Add task"
+                                value={newTaskName}
+                                onChangeText={setNewTaskName}
+                            />
+                            <Pressable style={styles.pressableAdd} onPress={addTask} disabled={!newTaskName}>
+                                <Text style={styles.addButton}>{t('add')}</Text>
+                            </Pressable>
+                        </View>
+                        <Text style={styles.title}>{t('listOfTasks')}</Text>
 
-            {/* BODY */}
+                        {/* BODY */}
 
-            <View>
-                {tasks.map((task, index) => (
-                    <View style={styles.taskItem} key={index}>
-                        {editingIndex === index ? (
-                            <>
-                                <TextInput
-                                    style={styles.taskInput2}
-                                    placeholder="...."
-                                    value={editedTask}
-                                    onChangeText={setEditedTask}
-                                />
-                                <View style={styles.taskItemButtons}>
-                                    <TouchableOpacity onPress={() => handleSaveEditing(index)}>
-                                        <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>{t('save')}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={handleCancelEditing}>
-                                        <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>{t('cancel')}</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                        <View>
+                            {tasks.map((task, index) => (
+                                <View style={styles.taskItem} key={index}>
+                                    {editingIndex === index ? (
+                                        <>
+                                            <TextInput
+                                                style={styles.taskInput2}
+                                                value={editedTask}
+                                                onChangeText={setEditedTask}
+                                            />
+                                            <View style={styles.taskItemButtons}>
+                                                <TouchableOpacity onPress={() => handleSaveEditing(index)}>
+                                                    <View style={styles.actionIcon}>
+                                                        <Text style={styles.actionIconText}>{t('save')}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={handleCancelEditing}>
+                                                    <View style={styles.actionIcon}>
+                                                        <Text style={styles.actionIconText}>{t('cancel')}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Text style={styles.taskText}>{task.text}</Text>
+                                            <Divider />
+
+                                            <View style={styles.taskItemButtons}>
+                                                <TouchableOpacity onPress={() => clearSingleTask(index)}>
+                                                    <View style={styles.actionIcon}>
+                                                        <Text style={styles.actionIconText}>{t('del')}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={() => handleStartEditing(index)}>
+                                                    <View style={styles.actionIcon}>
+                                                        <Text style={styles.actionIconText}>{t('edit')}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </>
+                                    )}
                                 </View>
-                            </>
-                        ) : (
-                            <>
-                                <Text style={styles.taskText}>{task.text}</Text>
-                                <Divider />
-
-                                <View style={styles.taskItemButtons}>
-                                    <TouchableOpacity onPress={() => clearSingleTask(index)}>
-                                        <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>{t('del')}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => handleStartEditing(index)}>
-                                        <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>{t('edit')}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </>
-                        )}
+                            ))}
+                        </View>
+                        {/* BOTTOM */}
+                        <Pressable style={styles.clear} onPress={clearAll}>
+                            <AntDesign name="delete" size={35} color="black" />
+                        </Pressable>
                     </View>
-                ))}
-            </View>
-            {/* BOTTOM */}
-            <Pressable style={styles.clear} onPress={clearAll}>
-                <AntDesign name="delete" size={35} color="black" />
-            </Pressable>
-        </View>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
     taskInput2: {
         height: 40,
-        borderColor: 'gray',
+        borderColor: 'white',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         marginTop: 10,
+        backgroundColor: '#acdc',
     },
     taskInput: {
         textAlign: 'center',
