@@ -20,4 +20,5 @@ export default {
     del: 'OBRISI',
     edit: 'UREDI',
     add: 'DODAJ',
+    addTaskPlaceholder: 'Dodaj zadatak...',
 };

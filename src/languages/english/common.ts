@@ -20,4 +20,5 @@ export default {
     del: 'DEL',
     edit: 'EDIT',
     add: 'ADD',
+    addTaskPlaceholder: 'Add task...',
 };

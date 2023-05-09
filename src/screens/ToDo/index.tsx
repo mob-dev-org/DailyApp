@@ -32,7 +32,11 @@ export default function TabThreeScreen() {
     };
 
     //useState hook for array of tasks
-    const [tasks, setTasks] = useState<Task[]>([{ text: 'one' }, { text: 'two' }, { text: 'three' }]);
+    const [tasks, setTasks] = useState<Task[]>([
+        { text: 'one', done: false },
+        { text: 'two', done: false },
+        { text: 'three', done: false },
+    ]);
     //useState hook for adding task
     const [newTaskName, setNewTaskName] = useState<string>('');
     //useState for editing
@@ -42,7 +46,7 @@ export default function TabThreeScreen() {
 
     //function for adding task in the list
     const addTask = () => {
-        const newTasks = [...tasks, { text: newTaskName }];
+        const newTasks = [...tasks, { text: newTaskName, done: false }];
         setTasks(newTasks);
         setNewTaskName('');
     };
@@ -104,6 +108,8 @@ export default function TabThreeScreen() {
         // setEditedTask('');
     };
 
+    const addTaskPlaceholder = t('addTaskPlaceholder');
+
     return (
         <ScrollView style={styles.container}>
             <KeyboardAvoidingView behavior="height" enabled>
@@ -121,7 +127,7 @@ export default function TabThreeScreen() {
                             <Text style={styles.title}>{t('addTasks')}</Text>
                             <TextInput
                                 style={styles.taskInput}
-                                placeholder="Add task"
+                                placeholder={addTaskPlaceholder}
                                 value={newTaskName}
                                 onChangeText={setNewTaskName}
                             />
@@ -163,6 +169,7 @@ export default function TabThreeScreen() {
                                     ) : (
                                         <>
                                             <Text style={styles.taskText}>{task.text}</Text>
+
                                             <Divider />
 
                                             <View style={styles.taskItemButtons}>
