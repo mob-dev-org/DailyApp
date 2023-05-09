@@ -1,5 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-paper';
 
@@ -7,6 +8,8 @@ import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
 
 export default function TabThreeScreen() {
+    const { t } = useTranslation();
+
     //useState hook for array of tasks
     const [tasks, setTasks] = useState<Task[]>([
         { text: 'one', isEditing: false },
@@ -27,7 +30,7 @@ export default function TabThreeScreen() {
         setNewTask('');
     };
 
-    console.log('taskovi', tasks);
+    console.log('Tasks', tasks);
     //function for clearing all tasks
     const clearAll = () => {
         setTasks([]);
@@ -43,6 +46,8 @@ export default function TabThreeScreen() {
     const handleStartEditing = (index: number) => {
         setEditedTask(tasks[index].text);
         setEditingIndex(index);
+        console.log('EDIT', editedTask);
+        console.log('Index', editingIndex);
     };
 
     const handleSaveEditing = (index: number) => {
@@ -75,7 +80,7 @@ export default function TabThreeScreen() {
                         {editingIndex === index ? (
                             <>
                                 <TextInput
-                                    style={styles.taskInput}
+                                    style={styles.taskInput2}
                                     placeholder="...."
                                     value={editedTask}
                                     onChangeText={setEditedTask}
@@ -124,6 +129,14 @@ export default function TabThreeScreen() {
 }
 
 const styles = StyleSheet.create({
+    taskInput2: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginTop: 10,
+    },
     taskInput: {
         textAlign: 'center',
         fontSize: 16,
