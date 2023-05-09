@@ -1,14 +1,24 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Button, Pressable, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Divider } from 'react-native-paper';
 
 import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
+import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 export default function TabThreeScreen() {
+    //Translation and theme
     const { t } = useTranslation();
+    const { theme, language } = useAppSelector((state) => state.appSettings);
+    const dispatch = useAppDispatch();
+    const changeTheme = (theme: Theme) => dispatch(setTheme(theme));
+    const changeLanguage = () => {
+        console.log('Changing language', language);
+        dispatch(setLanguage(language === 'en-US' ? 'bs-BA' : 'en-US'));
+    };
 
     //useState hook for array of tasks
     const [tasks, setTasks] = useState<Task[]>([
@@ -62,15 +72,17 @@ export default function TabThreeScreen() {
 
     return (
         <View style={styles.container}>
+            <Button title="Change theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
+            <Button title="Toggle language" onPress={changeLanguage} />
             {/* HEAD */}
             <View>
-                <Text style={styles.title}>Add Tasks</Text>
+                <Text style={styles.title}>{t('addTasks')}</Text>
                 <TextInput style={styles.taskInput} placeholder="Add task" value={newTask} onChangeText={setNewTask} />
                 <Pressable style={styles.pressableAdd} onPress={addTask} disabled={!newTask}>
-                    <Text style={styles.addButton}>ADD</Text>
+                    <Text style={styles.addButton}>{t('add')}</Text>
                 </Pressable>
             </View>
-            <Text style={styles.title}>Task List</Text>
+            <Text style={styles.title}>{t('listOfTasks')}</Text>
 
             {/* BODY */}
 
@@ -88,12 +100,12 @@ export default function TabThreeScreen() {
                                 <View style={styles.taskItemButtons}>
                                     <TouchableOpacity onPress={() => handleSaveEditing(index)}>
                                         <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>SAVE</Text>
+                                            <Text style={styles.actionIconText}>{t('save')}</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={handleCancelEditing}>
                                         <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>CANCEL</Text>
+                                            <Text style={styles.actionIconText}>{t('cancel')}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>
@@ -106,12 +118,12 @@ export default function TabThreeScreen() {
                                 <View style={styles.taskItemButtons}>
                                     <TouchableOpacity onPress={() => clearSingleTask(index)}>
                                         <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>DEL</Text>
+                                            <Text style={styles.actionIconText}>{t('del')}</Text>
                                         </View>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={() => handleStartEditing(index)}>
                                         <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>EDIT</Text>
+                                            <Text style={styles.actionIconText}>{t('edit')}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 </View>

@@ -13,4 +13,11 @@ export default {
     home: 'Home',
     playerWithMost: 'Player with most  - ',
     homeScreen: 'Home Screen',
+    addTasks: 'Add Tasks',
+    listOfTasks: 'List of tasks',
+    save: 'SAVE',
+    cancel: 'CANCEL',
+    del: 'DEL',
+    edit: 'EDIT',
+    add: 'ADD',
 };

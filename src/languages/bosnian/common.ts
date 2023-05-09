@@ -13,4 +13,11 @@ export default {
     home: 'Pocetna',
     playerWithMost: 'Igrač sa najvise - ',
     homeScreen: 'Početna stranica',
+    addTasks: 'Dodaj zadatke',
+    listOfTasks: 'Lista zadataka',
+    save: 'SNIMI',
+    cancel: 'ODUSTANI',
+    del: 'OBRISI',
+    edit: 'UREDI',
+    add: 'DODAJ',
 };
