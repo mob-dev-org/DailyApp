@@ -175,7 +175,9 @@ export default function TabThreeScreen() {
                                         </>
                                     ) : (
                                         <>
-                                            <Text style={styles.taskText}>{task.text}</Text>
+                                            <Text style={[styles.taskText, task.done && styles.taskDone]}>
+                                                {task.text}
+                                            </Text>
 
                                             <Divider />
                                             <Pressable onPress={() => toggleTaskDone(index)}>
@@ -211,6 +213,9 @@ export default function TabThreeScreen() {
 }
 
 const styles = StyleSheet.create({
+    taskDone: {
+        textDecorationLine: 'line-through',
+    },
     taskButtonWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
