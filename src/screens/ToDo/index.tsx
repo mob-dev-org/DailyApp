@@ -109,6 +109,12 @@ export default function TabThreeScreen() {
         // setEditedTask('');
     };
 
+    const toggleTaskDone = (index: number) => {
+        const newTasks = [...tasks];
+        newTasks[index].done = !newTasks[index].done;
+        setTasks(newTasks);
+    };
+
     const addTaskPlaceholder = t('addTaskPlaceholder');
 
     return (
@@ -172,7 +178,7 @@ export default function TabThreeScreen() {
                                             <Text style={styles.taskText}>{task.text}</Text>
 
                                             <Divider />
-                                            <Pressable>
+                                            <Pressable onPress={() => toggleTaskDone(index)}>
                                                 {task.done ? (
                                                     <Icon name="check-circle" size={25} color="green" />
                                                 ) : (
