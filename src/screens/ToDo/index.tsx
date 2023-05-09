@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
@@ -171,7 +172,13 @@ export default function TabThreeScreen() {
                                             <Text style={styles.taskText}>{task.text}</Text>
 
                                             <Divider />
-
+                                            <Pressable>
+                                                {task.done ? (
+                                                    <Icon name="check-circle" size={25} color="green" />
+                                                ) : (
+                                                    <Icon name="circle-thin" size={25} color="gray" />
+                                                )}
+                                            </Pressable>
                                             <View style={styles.taskItemButtons}>
                                                 <TouchableOpacity onPress={() => clearSingleTask(index)}>
                                                     <View style={styles.actionIcon}>
@@ -198,6 +205,10 @@ export default function TabThreeScreen() {
 }
 
 const styles = StyleSheet.create({
+    taskButtonWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     rowItems: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     taskInput2: {
         height: 40,
@@ -272,7 +283,5 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
     },
-    taskText: {
-        fontSize: 16,
-    },
+    taskText: { flex: 1, fontSize: 16, maxWidth: 200 },
 });
