@@ -2,6 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
+    Alert,
     Button,
     Keyboard,
     KeyboardAvoidingView,
@@ -48,15 +49,41 @@ export default function TabThreeScreen() {
 
     console.log('Tasks', tasks);
     //function for clearing all tasks
+
     const clearAll = () => {
-        setTasks([]);
+        Alert.alert('DELETE', 'Delete all tasks!?', [
+            {
+                text: 'DELETE',
+                onPress: () => {
+                    setTasks([]);
+                },
+                style: 'destructive',
+            },
+            {
+                text: 'Cancel',
+                style: 'default',
+            },
+        ]);
     };
 
     //function for clearing single task on certiain index
+
     const clearSingleTask = (index: number) => {
-        const newTasks = [...tasks];
-        newTasks.splice(index, 1);
-        setTasks(newTasks);
+        Alert.alert('DELETE', 'You want to delete this task!?', [
+            {
+                text: 'DELETE',
+                onPress: () => {
+                    const newList = [...tasks];
+                    newList.splice(index, 1);
+                    setTasks(newList);
+                },
+                style: 'destructive',
+            },
+            {
+                text: 'Cancel',
+                style: 'default',
+            },
+        ]);
     };
 
     const handleStartEditing = (index: number) => {
@@ -82,8 +109,13 @@ export default function TabThreeScreen() {
             <KeyboardAvoidingView behavior="height" enabled>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <Button title="Change theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
-                        <Button title="Toggle language" onPress={changeLanguage} />
+                        <View style={styles.rowItems}>
+                            <Button
+                                title="Change theme"
+                                onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
+                            />
+                            <Button title="Toggle language" onPress={changeLanguage} />
+                        </View>
                         {/* HEAD */}
                         <View>
                             <Text style={styles.title}>{t('addTasks')}</Text>
@@ -97,7 +129,7 @@ export default function TabThreeScreen() {
                                 <Text style={styles.addButton}>{t('add')}</Text>
                             </Pressable>
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
                             <Pressable style={styles.clear} onPress={clearAll}>
                                 <AntDesign name="delete" size={40} color="black" />
@@ -159,6 +191,7 @@ export default function TabThreeScreen() {
 }
 
 const styles = StyleSheet.create({
+    rowItems: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
     taskInput2: {
         height: 40,
         borderColor: 'white',
