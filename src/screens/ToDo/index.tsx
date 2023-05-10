@@ -172,31 +172,18 @@ export default function TabThreeScreen() {
                             </Pressable>
                         </View>
                         {/* BODY */}
-
                         <View>
                             {tasks.map((task, index) => (
                                 <View style={styles.taskItem} key={index}>
                                     {editingIndex === index ? (
                                         <>
-                                            <View style={styles.taskItemButtons}>
-                                                <TouchableOpacity onPress={() => handleSaveEditing(index)}>
-                                                    <View style={styles.actionIcon}>
-                                                        <Text style={styles.actionIconText}>{t('save')}</Text>
-                                                    </View>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity onPress={handleCancelEditing}>
-                                                    <View style={styles.actionIcon}>
-                                                        <Text style={styles.actionIconText}>{t('cancel')}</Text>
-                                                    </View>
-                                                </TouchableOpacity>
-                                            </View>
+                                            <Text>TASK IS BEING EDITING </Text>
                                         </>
                                     ) : (
                                         <>
                                             <Text style={[styles.taskText, task.done && styles.taskDone]}>
                                                 {task.text}
                                             </Text>
-
                                             <Divider />
                                             <Pressable onPress={() => toggleTaskDone(index)}>
                                                 {task.done ? (
