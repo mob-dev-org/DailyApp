@@ -15,7 +15,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import TaskActionButton from '@/components/atoms/ActionButton';
+import AlertMessage from '@/components/atoms/AlertMessage';
+import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
@@ -56,19 +57,7 @@ export default function TabThreeScreen() {
     //function for clearing all tasks
 
     const clearAll = () => {
-        Alert.alert('DELETE', 'Delete all tasks!?', [
-            {
-                text: 'DELETE',
-                onPress: () => {
-                    setTasks([]);
-                },
-                style: 'destructive',
-            },
-            {
-                text: 'Cancel',
-                style: 'default',
-            },
-        ]);
+        setTasks([]);
     };
 
     //function for clearing single task on certiain index
@@ -158,7 +147,7 @@ export default function TabThreeScreen() {
                         </View>
                         <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
-                            <Pressable style={styles.clear} onPress={clearAll}>
+                            <Pressable style={styles.clear} onPress={() => AlertMessage({ onPress: clearAll })}>
                                 <AntDesign name="delete" size={40} color="black" />
                             </Pressable>
                         </View>
@@ -288,5 +277,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
     },
-    taskText: { flex: 1, fontSize: 16, maxWidth: 200 },
+    taskText: {
+        flex: 1,
+        fontSize: 16,
+        maxWidth: 200,
+    },
 });
