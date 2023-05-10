@@ -63,21 +63,9 @@ export default function TabThreeScreen() {
     //function for clearing single task on certiain index
 
     const clearSingleTask = (index: number) => {
-        Alert.alert('DELETE', 'You want to delete this task!?', [
-            {
-                text: 'DELETE',
-                onPress: () => {
-                    const newList = [...tasks];
-                    newList.splice(index, 1);
-                    setTasks(newList);
-                },
-                style: 'destructive',
-            },
-            {
-                text: 'Cancel',
-                style: 'default',
-            },
-        ]);
+        const newList = [...tasks];
+        newList.splice(index, 1);
+        setTasks(newList);
     };
 
     const toggleTaskDone = (index: number) => {
@@ -173,11 +161,18 @@ export default function TabThreeScreen() {
                                                 )}
                                             </Pressable>
                                             <View style={styles.taskItemButtons}>
-                                                <TaskActionButton onPress={() => clearSingleTask(index)} text="del" />
                                                 <TaskActionButton
-                                                    onPress={() => handleStartEditing(index)}
-                                                    text="edit"
+                                                    onPress={() =>
+                                                        AlertMessage({ onPress: () => clearSingleTask(index) })
+                                                    }
+                                                    text="del"
                                                 />
+                                                {!task.done && (
+                                                    <TaskActionButton
+                                                        onPress={() => handleStartEditing(index)}
+                                                        text="edit"
+                                                    />
+                                                )}
                                             </View>
                                         </>
                                     )}
