@@ -9,13 +9,13 @@ import {
     Pressable,
     StyleSheet,
     TextInput,
-    TouchableOpacity,
     TouchableWithoutFeedback,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import TaskActionButton from '@/components/atoms/ActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
@@ -135,7 +135,6 @@ export default function TabThreeScreen() {
                         {/* HEAD */}
                         <View>
                             <Text style={styles.title}>{t('addTasks')}</Text>
-
                             {editingIndex === null ? (
                                 <TextInput
                                     style={styles.taskInput}
@@ -152,16 +151,8 @@ export default function TabThreeScreen() {
                                 </Pressable>
                             ) : (
                                 <View style={styles.taskItemButtons}>
-                                    <TouchableOpacity onPress={() => handleSaveEditing(editingIndex)}>
-                                        <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>{t('save')}</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={handleCancelEditing}>
-                                        <View style={styles.actionIcon}>
-                                            <Text style={styles.actionIconText}>{t('cancel')}</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                                    <TaskActionButton onPress={() => handleSaveEditing(editingIndex)} text="save" />
+                                    <TaskActionButton onPress={handleCancelEditing} text="cancel" />
                                 </View>
                             )}
                         </View>
@@ -177,7 +168,7 @@ export default function TabThreeScreen() {
                                 <View style={styles.taskItem} key={index}>
                                     {editingIndex === index ? (
                                         <>
-                                            <Text>TASK IS BEING EDITING </Text>
+                                            <Text>{t('editingTask')}</Text>
                                         </>
                                     ) : (
                                         <>
@@ -193,16 +184,11 @@ export default function TabThreeScreen() {
                                                 )}
                                             </Pressable>
                                             <View style={styles.taskItemButtons}>
-                                                <TouchableOpacity onPress={() => clearSingleTask(index)}>
-                                                    <View style={styles.actionIcon}>
-                                                        <Text style={styles.actionIconText}>{t('del')}</Text>
-                                                    </View>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity onPress={() => handleStartEditing(index)}>
-                                                    <View style={styles.actionIcon}>
-                                                        <Text style={styles.actionIconText}>{t('edit')}</Text>
-                                                    </View>
-                                                </TouchableOpacity>
+                                                <TaskActionButton onPress={() => clearSingleTask(index)} text="del" />
+                                                <TaskActionButton
+                                                    onPress={() => handleStartEditing(index)}
+                                                    text="edit"
+                                                />
                                             </View>
                                         </>
                                     )}
@@ -224,7 +210,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
     },
-    rowItems: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+    rowItems: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
     taskInput2: {
         height: 40,
         borderColor: 'white',

@@ -21,4 +21,5 @@ export default {
     edit: 'EDIT',
     add: 'ADD',
     addTaskPlaceholder: 'Add task...',
+    editingTask: 'The task is being edited...',
 };

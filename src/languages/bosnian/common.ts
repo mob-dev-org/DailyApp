@@ -21,4 +21,5 @@ export default {
     edit: 'UREDI',
     add: 'DODAJ',
     addTaskPlaceholder: 'Dodaj zadatak...',
+    editingTask: 'Zadatak se edituje...',
 };
