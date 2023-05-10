@@ -135,9 +135,11 @@ export default function TabThreeScreen() {
                         </View>
                         <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
-                            <Pressable style={styles.clear} onPress={() => AlertMessage({ onPress: clearAll })}>
-                                <AntDesign name="delete" size={40} color="black" />
-                            </Pressable>
+                            {editingIndex === null && (
+                                <Pressable style={styles.clear} onPress={() => AlertMessage({ onPress: clearAll })}>
+                                    <AntDesign name="delete" size={40} color="black" />
+                                </Pressable>
+                            )}
                         </View>
                         {/* BODY */}
                         <View>
