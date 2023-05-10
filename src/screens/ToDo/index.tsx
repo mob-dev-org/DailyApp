@@ -91,24 +91,6 @@ export default function TabThreeScreen() {
         ]);
     };
 
-    const handleStartEditing = (index: number) => {
-        setEditedTask(tasks[index].text);
-        setEditingIndex(index);
-    };
-
-    const handleSaveEditing = (index: number) => {
-        const newTasks = [...tasks];
-        newTasks[index].text = editedTask;
-        setTasks(newTasks);
-        setEditingIndex(null);
-        // setEditedTask('');
-    };
-
-    const handleCancelEditing = () => {
-        setEditingIndex(null);
-        // setEditedTask('');
-    };
-
     const toggleTaskDone = (index: number) => {
         const newTasks = [...tasks];
         newTasks[index].done = !newTasks[index].done;
@@ -116,6 +98,27 @@ export default function TabThreeScreen() {
     };
 
     const addTaskPlaceholder = t('addTaskPlaceholder');
+
+    const handleStartEditing = (index: number) => {
+        setEditedTask(tasks[index].text);
+        setEditingIndex(index);
+    };
+
+    const handleSaveEditing = (index: number) => {
+        if (editedTask.trim() === '') {
+            Alert.alert('Error', 'You cannot save an empty task.');
+            return;
+        }
+
+        const newTasks = [...tasks];
+        newTasks[index].text = editedTask;
+        setTasks(newTasks);
+        setEditingIndex(null);
+    };
+
+    const handleCancelEditing = () => {
+        setEditingIndex(null);
+    };
 
     return (
         <ScrollView style={styles.container}>
@@ -132,15 +135,35 @@ export default function TabThreeScreen() {
                         {/* HEAD */}
                         <View>
                             <Text style={styles.title}>{t('addTasks')}</Text>
-                            <TextInput
-                                style={styles.taskInput}
-                                placeholder={addTaskPlaceholder}
-                                value={newTaskName}
-                                onChangeText={setNewTaskName}
-                            />
-                            <Pressable style={styles.pressableAdd} onPress={addTask} disabled={!newTaskName}>
-                                <Text style={styles.addButton}>{t('add')}</Text>
-                            </Pressable>
+
+                            {editingIndex === null ? (
+                                <TextInput
+                                    style={styles.taskInput}
+                                    placeholder={addTaskPlaceholder}
+                                    value={newTaskName}
+                                    onChangeText={setNewTaskName}
+                                />
+                            ) : (
+                                <TextInput style={styles.taskInput} value={editedTask} onChangeText={setEditedTask} />
+                            )}
+                            {editingIndex === null ? (
+                                <Pressable style={styles.pressableAdd} onPress={addTask} disabled={!newTaskName}>
+                                    <Text style={styles.addButton}>{t('add')}</Text>
+                                </Pressable>
+                            ) : (
+                                <View style={styles.taskItemButtons}>
+                                    <TouchableOpacity onPress={() => handleSaveEditing(editingIndex)}>
+                                        <View style={styles.actionIcon}>
+                                            <Text style={styles.actionIconText}>{t('save')}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={handleCancelEditing}>
+                                        <View style={styles.actionIcon}>
+                                            <Text style={styles.actionIconText}>{t('cancel')}</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
                         </View>
                         <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
@@ -155,11 +178,6 @@ export default function TabThreeScreen() {
                                 <View style={styles.taskItem} key={index}>
                                     {editingIndex === index ? (
                                         <>
-                                            <TextInput
-                                                style={styles.taskInput2}
-                                                value={editedTask}
-                                                onChangeText={setEditedTask}
-                                            />
                                             <View style={styles.taskItemButtons}>
                                                 <TouchableOpacity onPress={() => handleSaveEditing(index)}>
                                                     <View style={styles.actionIcon}>
@@ -204,7 +222,6 @@ export default function TabThreeScreen() {
                                 </View>
                             ))}
                         </View>
-                        {/* BOTTOM */}
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
