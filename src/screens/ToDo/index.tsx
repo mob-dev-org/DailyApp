@@ -21,10 +21,16 @@ import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { addNewTask, deleteSingleTask, resetTasks } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
     //Translation and theme
+
     const { t } = useTranslation();
+
+    // import inital state from redux store
+    const { initialTasks } = useAppSelector((state) => state.toDo);
+
     const { theme, language } = useAppSelector((state) => state.appSettings);
     const dispatch = useAppDispatch();
     const changeTheme = (theme: Theme) => dispatch(setTheme(theme));
@@ -33,12 +39,11 @@ export default function TabThreeScreen() {
         dispatch(setLanguage(language === 'en-US' ? 'bs-BA' : 'en-US'));
     };
 
-    //useState hook for array of tasks
-    const [tasks, setTasks] = useState<Task[]>([
-        { text: 'one', done: false },
-        { text: 'two', done: false },
-        { text: 'three', done: false },
-    ]);
+    const resetStats = () => {
+        dispatch(resetTasks());
+    };
+
+    const [tasks, setTasks] = useState<Task[]>(initialTasks);
     //useState hook for adding task
     const [newTaskName, setNewTaskName] = useState<string>('');
     //useState for editing
@@ -48,8 +53,8 @@ export default function TabThreeScreen() {
 
     //function for adding task in the list
     const addTask = () => {
-        const newTasks = [...tasks, { text: newTaskName, done: false }];
-        setTasks(newTasks);
+        const newTask = { text: newTaskName, done: false };
+        dispatch(addNewTask(newTask));
         setNewTaskName('');
     };
 
@@ -62,11 +67,13 @@ export default function TabThreeScreen() {
 
     //function for clearing single task on certiain index
 
-    const clearSingleTask = (index: number) => {
-        const newList = [...tasks];
-        newList.splice(index, 1);
-        setTasks(newList);
-    };
+    // const clearSingleTask = (index: number) => {
+    //     const newList = [...tasks];
+    //     newList.splice(index, 1);
+    //     setTasks(newList);
+    // };
+
+    const clearSingleTask = (index: number) => dispatch(deleteSingleTask(index));
 
     const toggleTaskDone = (index: number) => {
         const newTasks = [...tasks];
@@ -103,11 +110,10 @@ export default function TabThreeScreen() {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <View style={styles.rowItems}>
-                            <Button
-                                title="Change theme"
-                                onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')}
-                            />
-                            <Button title="Toggle language" onPress={changeLanguage} />
+                            <Button title="Reset state" onPress={resetStats} />
+
+                            <Button title="Theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
+                            <Button title="Language" onPress={changeLanguage} />
                         </View>
                         {/* HEAD */}
                         <View>
@@ -143,7 +149,7 @@ export default function TabThreeScreen() {
                         </View>
                         {/* BODY */}
                         <View>
-                            {tasks.map((task, index) => (
+                            {initialTasks.map((task, index) => (
                                 <View style={styles.taskItem} key={index}>
                                     {editingIndex === index ? (
                                         <>
