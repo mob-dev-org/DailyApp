@@ -21,7 +21,7 @@ import { Text, View } from '@/components/atoms/Themed';
 import { Task } from '@/constants/Types';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { addNewTask, deleteSingleTask, resetTasks } from '@/store/toDo/slice';
+import { addNewTask, clearAllTasks, deleteSingleTask, resetTasks, taskIsDone } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
     //Translation and theme
@@ -52,6 +52,13 @@ export default function TabThreeScreen() {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     //function for adding task in the list
+
+    // const addTask = () => {
+    //     const newTasks = [...tasks, { text: newTaskName, done: false }];
+    //     setTasks(newTasks);
+    //     setNewTaskName('');
+    // };
+
     const addTask = () => {
         const newTask = { text: newTaskName, done: false };
         dispatch(addNewTask(newTask));
@@ -62,7 +69,7 @@ export default function TabThreeScreen() {
     //function for clearing all tasks
 
     const clearAll = () => {
-        setTasks([]);
+        dispatch(clearAllTasks());
     };
 
     //function for clearing single task on certiain index
@@ -75,10 +82,14 @@ export default function TabThreeScreen() {
 
     const clearSingleTask = (index: number) => dispatch(deleteSingleTask(index));
 
-    const toggleTaskDone = (index: number) => {
-        const newTasks = [...tasks];
-        newTasks[index].done = !newTasks[index].done;
-        setTasks(newTasks);
+    // const toggleTaskDone = (index: number) => {
+    //     const newTasks = [...tasks];
+    //     newTasks[index].done = !newTasks[index].done;
+    //     setTasks(newTasks);
+    // };
+
+    const toggleTaskDone = (index: number, done: boolean) => {
+        dispatch(taskIsDone({ index, done }));
     };
 
     const addTaskPlaceholder = t('addTaskPlaceholder');
@@ -161,7 +172,7 @@ export default function TabThreeScreen() {
                                                 {task.text}
                                             </Text>
                                             <Divider />
-                                            <Pressable onPress={() => toggleTaskDone(index)}>
+                                            <Pressable onPress={() => toggleTaskDone(index, !task.done)}>
                                                 {task.done ? (
                                                     <Icon name="check-circle" size={25} color="green" />
                                                 ) : (

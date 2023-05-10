@@ -31,11 +31,14 @@ export const toDoSlice = createSlice({
             const { index, done } = payload;
             state.initialTasks[index].done = done;
         },
+        clearAllTasks: (state) => {
+            state.initialTasks = [];
+        },
 
         resetTasks: () => initialState,
     },
 });
 
-export const { addNewTask, resetTasks, deleteSingleTask, taskIsDone } = toDoSlice.actions;
+export const { addNewTask, resetTasks, deleteSingleTask, taskIsDone, clearAllTasks } = toDoSlice.actions;
 
 export default toDoSlice.reducer;
