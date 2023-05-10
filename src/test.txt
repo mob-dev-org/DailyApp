@@ -1,5 +1,5 @@
 TEST file
-Add a drawer to navigation (I need to fix my previous project not showing in drawer section)
+Add a drawer to navigation (i need to fix my previous project not showing in drawer section)
 I need to add function to 
 
 -add new tasks, when user input text in textinput field it should be added in task list
@@ -7,9 +7,9 @@ I need to add function to
 -delete single tasks, when user click on "DEL" button it should it should display dialog box 
 to ask user if he want to remove that task,
 same thing goes for when user click on "BIN" icon next to "TASK LIST" it should display dialog box 
-to ask user if he want to remove all 
+to ask user if he want to remove all
 
--edit tasks, when user click on the EDIT button it should show two new buttons, SAVE(will take place of DEL ) and 
+-edit tasks, when user click on EDIT button it should show two new buttons, SAVE(will take place of DEL ) and 
 CANCEL(will take place of EDIT),
 SAVE button should save edited text, and CANCEL should stop editing poroces
 Editing proces will start in task input field,
