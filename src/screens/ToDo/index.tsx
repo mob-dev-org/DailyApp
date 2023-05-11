@@ -1,4 +1,3 @@
-import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -53,6 +52,10 @@ export default function TabThreeScreen() {
 
     //function for adding task in the list
     const addTask = () => {
+        if (newTaskName.trim() === '') {
+            Alert.alert('Error', 'You cannot add an empty task.');
+            return;
+        }
         dispatch(addNewTask(newTaskName));
         setNewTaskName('');
     };
@@ -115,9 +118,7 @@ export default function TabThreeScreen() {
                                 <TextInput style={styles.taskInput} value={editedTask} onChangeText={setEditedTask} />
                             )}
                             {editingIndex === null ? (
-                                <Pressable style={styles.pressableAdd} onPress={addTask} disabled={!newTaskName}>
-                                    <Text style={styles.addButton}>{t('add')}</Text>
-                                </Pressable>
+                                <TaskActionButton onPress={addTask} text="add" />
                             ) : (
                                 <View style={styles.taskItemButtons}>
                                     <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
@@ -128,9 +129,7 @@ export default function TabThreeScreen() {
                         <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
                             {editingIndex === null && (
-                                <Pressable style={styles.clear} onPress={() => AlertMessage({ onPress: clearAll })}>
-                                    <AntDesign name="delete" size={40} color="black" />
-                                </Pressable>
+                                <TaskActionButton onPress={() => AlertMessage({ onPress: clearAll })} text="delAll" />
                             )}
                         </View>
                         {/* BODY */}
@@ -152,7 +151,6 @@ export default function TabThreeScreen() {
                                                 {task.text}
                                             </Text>
                                             <Divider />
-
                                             <View style={styles.taskItemButtons}>
                                                 {editingIndex === null && (
                                                     <TaskActionButton
@@ -190,6 +188,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginBottom: 20,
     },
     taskInput2: {
         height: 40,
@@ -249,7 +248,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 20,
+        fontStyle: 'italic',
+        marginBottom: 10,
         textAlign: 'center',
         justifyContent: 'center',
     },

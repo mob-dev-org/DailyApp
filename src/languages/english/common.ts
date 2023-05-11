@@ -22,4 +22,5 @@ export default {
     add: 'ADD',
     addTaskPlaceholder: 'Add task...',
     editingTask: 'The task is being edited...',
+    delAll: 'DEL ALL',
 };
