@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     Alert,
-    Button,
     Keyboard,
     KeyboardAvoidingView,
     Pressable,
@@ -14,13 +13,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-import AlertMessage from '@/components/atoms/AlertMessage';
+import alertMessage from '@/components/atoms/AlertMessage';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
-import { Task } from '@/constants/Types';
+import MainButtons from '@/components/molecules/AppearanceButtons';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { addNewTask, clearAllTasks, deleteSingleTask, resetTasks, taskIsDone } from '@/store/toDo/slice';
+import { addNewTask, clearTasks, deleteTask, resetTasks, taskIsDone } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
     //Translation and theme
@@ -28,7 +27,7 @@ export default function TabThreeScreen() {
     const { t } = useTranslation();
 
     // import inital state from redux store
-    const { initialTasks } = useAppSelector((state) => state.toDo);
+    const { tasks } = useAppSelector((state) => state.toDo);
 
     const { theme, language } = useAppSelector((state) => state.appSettings);
     const dispatch = useAppDispatch();
@@ -38,59 +37,53 @@ export default function TabThreeScreen() {
         dispatch(setLanguage(language === 'en-US' ? 'bs-BA' : 'en-US'));
     };
 
-    const resetStats = () => {
+    const ThemeChange = () => {
+        changeTheme(theme === 'dark' ? 'light' : 'dark');
+    };
+    const resetState = () => {
         dispatch(resetTasks());
     };
-
-    const [tasks, setTasks] = useState<Task[]>(initialTasks);
     //useState hook for adding task
     const [newTaskName, setNewTaskName] = useState<string>('');
     //useState for editing
     const [editedTask, setEditedTask] = useState<string>('');
     //useState for user to display the task is it editable or not
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
-
     //function for adding task in the list
     const addTask = () => {
-        if (newTaskName.trim() === '') {
+        if (!newTaskName) {
             Alert.alert('Error', 'You cannot add an empty task.');
             return;
         }
         dispatch(addNewTask(newTaskName));
         setNewTaskName('');
     };
-
     console.log('Tasks', tasks);
-    //function for clearing all tasks
-
     const clearAll = () => {
-        dispatch(clearAllTasks());
+        dispatch(clearTasks());
     };
+    const clearTask = (index: number) => dispatch(deleteTask(index));
 
-    const clearTask = (index: number) => dispatch(deleteSingleTask(index));
-
-    const toggleTaskDone = (index: number, done: boolean) => {
-        dispatch(taskIsDone({ index, done }));
+    const toggleTaskDone = (index: number) => {
+        dispatch(taskIsDone({ index }));
     };
 
     const editTask = (index: number) => {
-        setEditedTask(initialTasks[index].text);
+        setEditedTask(tasks[index].text);
         setEditingIndex(index);
     };
-
     const saveEditing = (index: number) => {
-        if (editedTask.trim() === '') {
+        if (editedTask) {
             Alert.alert('Error', 'You cannot save an empty task.');
             return;
         }
-
-        const newTasks = [...initialTasks];
+        const newTasks = [...tasks];
         newTasks[index].text = editedTask;
-        setTasks(newTasks);
+        // setNewTaskName(newTasks);
         setEditingIndex(null);
     };
 
-    const handleCancelEditing = () => {
+    const cancelEdit = () => {
         setEditingIndex(null);
     };
 
@@ -99,18 +92,18 @@ export default function TabThreeScreen() {
             <KeyboardAvoidingView behavior="height" enabled>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <View style={styles.rowItems}>
-                            <Button title="Reset state" onPress={resetStats} />
-                            <Button title="Theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
-                            <Button title="Language" onPress={changeLanguage} />
-                        </View>
+                        <MainButtons
+                            changeLanguage={changeLanguage}
+                            handleThemeChange={ThemeChange}
+                            resetState={resetState}
+                        />
                         {/* HEAD */}
                         <View>
                             <Text style={styles.title}>{t('addTasks')}</Text>
                             {editingIndex === null ? (
                                 <TextInput
                                     style={styles.taskInput}
-                                    placeholder={String(t('addTaskPlaceholder'))}
+                                    placeholder={t('addTaskPlaceholder') || ''}
                                     value={newTaskName}
                                     onChangeText={setNewTaskName}
                                 />
@@ -122,26 +115,29 @@ export default function TabThreeScreen() {
                             ) : (
                                 <View style={styles.taskItemButtons}>
                                     <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
-                                    <TaskActionButton onPress={handleCancelEditing} text="cancel" />
+                                    <TaskActionButton onPress={cancelEdit} text="cancel" />
                                 </View>
                             )}
                         </View>
                         <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
                             {editingIndex === null && (
-                                <TaskActionButton onPress={() => AlertMessage({ onPress: clearAll })} text="delAll" />
+                                <TaskActionButton
+                                    onPress={() => alertMessage({ onPress: clearAll })}
+                                    text="deleteAll"
+                                />
                             )}
                         </View>
                         {/* BODY */}
                         <View>
-                            {initialTasks.map((task, index) => (
+                            {tasks.map((task, index) => (
                                 <View style={styles.taskItem} key={index}>
                                     {editingIndex === index ? (
                                         <Text>{t('editingTask')}</Text>
                                     ) : (
                                         <>
-                                            <Pressable onPress={() => toggleTaskDone(index, !task.done)}>
-                                                {task.done ? (
+                                            <Pressable onPress={() => toggleTaskDone(index)}>
+                                                {tasks[index].done ? (
                                                     <Icon name="check-circle" size={25} color="green" />
                                                 ) : (
                                                     <Icon name="circle-thin" size={25} color="gray" />
@@ -155,7 +151,7 @@ export default function TabThreeScreen() {
                                                 {editingIndex === null && (
                                                     <TaskActionButton
                                                         onPress={() =>
-                                                            AlertMessage({ onPress: () => clearTask(index) })
+                                                            alertMessage({ onPress: () => clearTask(index) })
                                                         }
                                                         text="del"
                                                     />

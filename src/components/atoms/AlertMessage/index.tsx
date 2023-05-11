@@ -6,7 +6,7 @@ type Alerts = {
     style?: 'destructive' | 'default' | 'cancel' | undefined;
 };
 
-const AlertMessage = (props: Alerts) => {
+const alertMessage = (props: Alerts) => {
     const { onPress } = props;
 
     return Alert.alert('Delete', 'Are you sure!?', [
@@ -23,4 +23,4 @@ const AlertMessage = (props: Alerts) => {
     ]);
 };
 
-export default AlertMessage;
+export default alertMessage;
