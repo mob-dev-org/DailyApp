@@ -52,16 +52,8 @@ export default function TabThreeScreen() {
     const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
     //function for adding task in the list
-
-    // const addTask = () => {
-    //     const newTasks = [...tasks, { text: newTaskName, done: false }];
-    //     setTasks(newTasks);
-    //     setNewTaskName('');
-    // };
-
     const addTask = () => {
-        const newTask = { text: newTaskName, done: false };
-        dispatch(addNewTask(newTask));
+        dispatch(addNewTask(newTaskName));
         setNewTaskName('');
     };
 
@@ -72,40 +64,24 @@ export default function TabThreeScreen() {
         dispatch(clearAllTasks());
     };
 
-    //function for clearing single task on certiain index
-
-    // const clearSingleTask = (index: number) => {
-    //     const newList = [...tasks];
-    //     newList.splice(index, 1);
-    //     setTasks(newList);
-    // };
-
-    const clearSingleTask = (index: number) => dispatch(deleteSingleTask(index));
-
-    // const toggleTaskDone = (index: number) => {
-    //     const newTasks = [...tasks];
-    //     newTasks[index].done = !newTasks[index].done;
-    //     setTasks(newTasks);
-    // };
+    const clearTask = (index: number) => dispatch(deleteSingleTask(index));
 
     const toggleTaskDone = (index: number, done: boolean) => {
         dispatch(taskIsDone({ index, done }));
     };
 
-    const addTaskPlaceholder = t('addTaskPlaceholder');
-
-    const handleStartEditing = (index: number) => {
-        setEditedTask(tasks[index].text);
+    const editTask = (index: number) => {
+        setEditedTask(initialTasks[index].text);
         setEditingIndex(index);
     };
 
-    const handleSaveEditing = (index: number) => {
+    const saveEditing = (index: number) => {
         if (editedTask.trim() === '') {
             Alert.alert('Error', 'You cannot save an empty task.');
             return;
         }
 
-        const newTasks = [...tasks];
+        const newTasks = [...initialTasks];
         newTasks[index].text = editedTask;
         setTasks(newTasks);
         setEditingIndex(null);
@@ -122,7 +98,6 @@ export default function TabThreeScreen() {
                     <View>
                         <View style={styles.rowItems}>
                             <Button title="Reset state" onPress={resetStats} />
-
                             <Button title="Theme" onPress={() => changeTheme(theme === 'dark' ? 'light' : 'dark')} />
                             <Button title="Language" onPress={changeLanguage} />
                         </View>
@@ -132,7 +107,7 @@ export default function TabThreeScreen() {
                             {editingIndex === null ? (
                                 <TextInput
                                     style={styles.taskInput}
-                                    placeholder={addTaskPlaceholder}
+                                    placeholder={String(t('addTaskPlaceholder'))}
                                     value={newTaskName}
                                     onChangeText={setNewTaskName}
                                 />
@@ -145,7 +120,7 @@ export default function TabThreeScreen() {
                                 </Pressable>
                             ) : (
                                 <View style={styles.taskItemButtons}>
-                                    <TaskActionButton onPress={() => handleSaveEditing(editingIndex)} text="save" />
+                                    <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
                                     <TaskActionButton onPress={handleCancelEditing} text="cancel" />
                                 </View>
                             )}
@@ -163,15 +138,9 @@ export default function TabThreeScreen() {
                             {initialTasks.map((task, index) => (
                                 <View style={styles.taskItem} key={index}>
                                     {editingIndex === index ? (
-                                        <>
-                                            <Text>{t('editingTask')}</Text>
-                                        </>
+                                        <Text>{t('editingTask')}</Text>
                                     ) : (
                                         <>
-                                            <Text style={[styles.taskText, task.done && styles.taskDone]}>
-                                                {task.text}
-                                            </Text>
-                                            <Divider />
                                             <Pressable onPress={() => toggleTaskDone(index, !task.done)}>
                                                 {task.done ? (
                                                     <Icon name="check-circle" size={25} color="green" />
@@ -179,18 +148,22 @@ export default function TabThreeScreen() {
                                                     <Icon name="circle-thin" size={25} color="gray" />
                                                 )}
                                             </Pressable>
+                                            <Text style={[styles.taskText, task.done && styles.taskDone]}>
+                                                {task.text}
+                                            </Text>
+                                            <Divider />
+
                                             <View style={styles.taskItemButtons}>
-                                                <TaskActionButton
-                                                    onPress={() =>
-                                                        AlertMessage({ onPress: () => clearSingleTask(index) })
-                                                    }
-                                                    text="del"
-                                                />
-                                                {!task.done && (
+                                                {editingIndex === null && (
                                                     <TaskActionButton
-                                                        onPress={() => handleStartEditing(index)}
-                                                        text="edit"
+                                                        onPress={() =>
+                                                            AlertMessage({ onPress: () => clearTask(index) })
+                                                        }
+                                                        text="del"
                                                     />
+                                                )}
+                                                {!task.done && (
+                                                    <TaskActionButton onPress={() => editTask(index)} text="edit" />
                                                 )}
                                             </View>
                                         </>
