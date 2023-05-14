@@ -19,7 +19,17 @@ import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { addNewTask, clearTasks, deleteTask, resetTasks, taskIsDone } from '@/store/toDo/slice';
+import {
+    addNewTask,
+    cancelEdit,
+    clearTasks,
+    deleteTask,
+    editTask,
+    resetTasks,
+    saveEditedTask,
+    setEditedText,
+    taskIsDone,
+} from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
     //Translation and theme
@@ -27,7 +37,7 @@ export default function TabThreeScreen() {
     const { t } = useTranslation();
 
     // import inital state from redux store
-    const { tasks } = useAppSelector((state) => state.toDo);
+    const { tasks, editingIndex, editedTask } = useAppSelector((state) => state.toDo);
 
     const { theme, language } = useAppSelector((state) => state.appSettings);
     const dispatch = useAppDispatch();
@@ -46,9 +56,8 @@ export default function TabThreeScreen() {
     //useState hook for adding task
     const [newTaskName, setNewTaskName] = useState<string>('');
     //useState for editing
-    const [editedTask, setEditedTask] = useState<string>('');
     //useState for user to display the task is it editable or not
-    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
     //function for adding task in the list
     const addTask = () => {
         if (!newTaskName) {
@@ -68,23 +77,26 @@ export default function TabThreeScreen() {
         dispatch(taskIsDone({ index }));
     };
 
-    const editTask = (index: number) => {
-        setEditedTask(tasks[index].text);
-        setEditingIndex(index);
-    };
     const saveEditing = (index: number) => {
-        if (editedTask) {
+        if (!editedTask) {
             Alert.alert('Error', 'You cannot save an empty task.');
             return;
         }
-        const newTasks = [...tasks];
-        newTasks[index].text = editedTask;
-        // setNewTaskName(newTasks);
-        setEditingIndex(null);
+        dispatch(saveEditedTask({ index, editedTask }));
+    };
+    // Dispatching the editTask action
+    const handleEdit = (index: number) => {
+        dispatch(editTask(index));
+        console.log('press', tasks);
     };
 
-    const cancelEdit = () => {
-        setEditingIndex(null);
+    // Dispatching the cancelEdit action
+    const handleCancelEdit = () => {
+        dispatch(cancelEdit());
+    };
+
+    const updateEditedTask = (text: string) => {
+        dispatch(setEditedText(text));
     };
 
     return (
@@ -108,14 +120,18 @@ export default function TabThreeScreen() {
                                     onChangeText={setNewTaskName}
                                 />
                             ) : (
-                                <TextInput style={styles.taskInput} value={editedTask} onChangeText={setEditedTask} />
+                                <TextInput
+                                    style={styles.taskInput}
+                                    value={editedTask}
+                                    onChangeText={updateEditedTask}
+                                />
                             )}
                             {editingIndex === null ? (
                                 <TaskActionButton onPress={addTask} text="add" />
                             ) : (
                                 <View style={styles.taskItemButtons}>
                                     <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
-                                    <TaskActionButton onPress={cancelEdit} text="cancel" />
+                                    <TaskActionButton onPress={handleCancelEdit} text="cancel" />
                                 </View>
                             )}
                         </View>
@@ -123,7 +139,15 @@ export default function TabThreeScreen() {
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
                             {editingIndex === null && (
                                 <TaskActionButton
-                                    onPress={() => alertMessage({ onPress: clearAll })}
+                                    onPress={() =>
+                                        alertMessage({
+                                            title: 'DELETE',
+                                            message: 'Delete all tasks!?',
+                                            onPress: clearAll,
+                                            buttonText: 'DELETE',
+                                            buttonStyle: 'destructive',
+                                        })
+                                    }
                                     text="deleteAll"
                                 />
                             )}
@@ -151,13 +175,19 @@ export default function TabThreeScreen() {
                                                 {editingIndex === null && (
                                                     <TaskActionButton
                                                         onPress={() =>
-                                                            alertMessage({ onPress: () => clearTask(index) })
+                                                            alertMessage({
+                                                                title: 'DELETE',
+                                                                message: 'Delete all tasks!?',
+                                                                onPress: () => clearTask(index),
+                                                                buttonText: 'DELETE',
+                                                                buttonStyle: 'destructive',
+                                                            })
                                                         }
                                                         text="del"
                                                     />
                                                 )}
                                                 {!task.done && (
-                                                    <TaskActionButton onPress={() => editTask(index)} text="edit" />
+                                                    <TaskActionButton onPress={() => handleEdit(index)} text="edit" />
                                                 )}
                                             </View>
                                         </>
@@ -266,3 +296,20 @@ const styles = StyleSheet.create({
         maxWidth: 200,
     },
 });
+// const edit = (index: number) => {
+//     setEditedTask(tasks[index].text);
+//     setEditingIndex(index);
+// };
+
+// const saveEdit = (index: number) => {
+//     if (editedTask) {
+//         Alert.alert('Error', 'You cannot save an empty task.');
+//         return;
+//     }
+//     const newTasks = [...tasks];
+//     newTasks[index].text = editedTask;
+//     setEditingIndex(null);
+// };
+// const editCancel = () => {
+//     setEditingIndex(null);
+// };

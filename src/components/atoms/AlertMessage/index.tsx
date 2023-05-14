@@ -1,23 +1,24 @@
 import { Alert } from 'react-native';
 
-type Alerts = {
-    text?: string;
+type AlertMessageProps = {
+    title: string;
+    message: string;
     onPress: () => void;
-    style?: 'destructive' | 'default' | 'cancel' | undefined;
+    buttonText: string;
+    buttonStyle: 'destructive' | 'default' | 'cancel';
 };
 
-const alertMessage = (props: Alerts) => {
-    const { onPress } = props;
+const alertMessage = (props: AlertMessageProps) => {
+    const { title, message, onPress, buttonText, buttonStyle } = props;
 
-    return Alert.alert('Delete', 'Are you sure!?', [
+    return Alert.alert(title, message, [
         {
-            text: 'DELETE',
-            onPress: onPress,
-
-            style: 'default',
+            text: buttonText,
+            onPress,
+            style: buttonStyle,
         },
         {
-            text: 'CANCEL',
+            text: 'Cancel',
             style: 'default',
         },
     ]);

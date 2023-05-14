@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Task } from '@/constants/Types';
 
-export type toDo = { tasks: Task[] };
+export type toDo = { tasks: Task[]; editingIndex: number | null; editedTask: string };
 
 const initialState = {
     tasks: [
@@ -11,6 +11,8 @@ const initialState = {
         { text: '3', done: false },
         { text: '3', done: false },
     ],
+    editingIndex: null,
+    editedTask: '',
 } as toDo;
 
 export const toDoSlice = createSlice({
@@ -30,11 +32,38 @@ export const toDoSlice = createSlice({
         clearTasks: (state) => {
             state.tasks = [];
         },
+        saveEditedTask: (state, { payload }: PayloadAction<{ index: number; editedTask: string }>) => {
+            const { index, editedTask } = payload;
+            state.tasks[index].text = editedTask;
+            state.editingIndex = null;
+        },
+        editTask: (state, { payload }: PayloadAction<number>) => {
+            const index = payload;
+            state.editingIndex = index;
+            state.editedTask = state.tasks[index].text;
+        },
+        cancelEdit: (state) => {
+            state.editingIndex = null;
+            state.editedTask = '';
+        },
+        setEditedText: (state, { payload }: PayloadAction<string>) => {
+            state.editedTask = payload;
+        },
 
         resetTasks: () => initialState,
     },
 });
 
-export const { addNewTask, resetTasks, deleteTask, taskIsDone, clearTasks } = toDoSlice.actions;
+export const {
+    addNewTask,
+    resetTasks,
+    deleteTask,
+    taskIsDone,
+    setEditedText,
+    clearTasks,
+    saveEditedTask,
+    cancelEdit,
+    editTask,
+} = toDoSlice.actions;
 
 export default toDoSlice.reducer;
