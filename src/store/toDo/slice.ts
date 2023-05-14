@@ -11,8 +11,6 @@ const initialState = {
         { text: '3', done: false },
         { text: '3', done: false },
     ],
-    editingIndex: null,
-    editedTask: '',
 } as toDo;
 
 export const toDoSlice = createSlice({

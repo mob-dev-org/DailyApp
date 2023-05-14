@@ -54,18 +54,15 @@ export default function TabThreeScreen() {
         dispatch(resetTasks());
     };
     //useState hook for adding task
-    const [newTaskName, setNewTaskName] = useState<string>('');
-    //useState for editing
-    //useState for user to display the task is it editable or not
+    const [taskName, setTaskName] = useState<string>('');
 
-    //function for adding task in the list
     const addTask = () => {
-        if (!newTaskName) {
+        if (!taskName) {
             Alert.alert('Error', 'You cannot add an empty task.');
             return;
         }
-        dispatch(addNewTask(newTaskName));
-        setNewTaskName('');
+        dispatch(addNewTask(taskName));
+        setTaskName('');
     };
     console.log('Tasks', tasks);
     const clearAll = () => {
@@ -84,18 +81,16 @@ export default function TabThreeScreen() {
         }
         dispatch(saveEditedTask({ index, editedTask }));
     };
-    // Dispatching the editTask action
-    const handleEdit = (index: number) => {
+    const taskEdit = (index: number) => {
         dispatch(editTask(index));
         console.log('press', tasks);
     };
 
-    // Dispatching the cancelEdit action
-    const handleCancelEdit = () => {
+    const editCancel = () => {
         dispatch(cancelEdit());
     };
 
-    const updateEditedTask = (text: string) => {
+    const updateEdit = (text: string) => {
         dispatch(setEditedText(text));
     };
 
@@ -116,22 +111,18 @@ export default function TabThreeScreen() {
                                 <TextInput
                                     style={styles.taskInput}
                                     placeholder={t('addTaskPlaceholder') || ''}
-                                    value={newTaskName}
-                                    onChangeText={setNewTaskName}
+                                    value={taskName}
+                                    onChangeText={setTaskName}
                                 />
                             ) : (
-                                <TextInput
-                                    style={styles.taskInput}
-                                    value={editedTask}
-                                    onChangeText={updateEditedTask}
-                                />
+                                <TextInput style={styles.taskInput} value={editedTask} onChangeText={updateEdit} />
                             )}
                             {editingIndex === null ? (
                                 <TaskActionButton onPress={addTask} text="add" />
                             ) : (
                                 <View style={styles.taskItemButtons}>
                                     <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
-                                    <TaskActionButton onPress={handleCancelEdit} text="cancel" />
+                                    <TaskActionButton onPress={editCancel} text="cancel" />
                                 </View>
                             )}
                         </View>
@@ -187,7 +178,7 @@ export default function TabThreeScreen() {
                                                     />
                                                 )}
                                                 {!task.done && (
-                                                    <TaskActionButton onPress={() => handleEdit(index)} text="edit" />
+                                                    <TaskActionButton onPress={() => taskEdit(index)} text="edit" />
                                                 )}
                                             </View>
                                         </>
