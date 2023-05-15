@@ -259,20 +259,3 @@ const styles = StyleSheet.create({
         maxWidth: 200,
     },
 });
-// const edit = (index: number) => {
-//     setEditedTask(tasks[index].text);
-//     setEditingIndex(index);
-// };
-
-// const saveEdit = (index: number) => {
-//     if (editedTask) {
-//         Alert.alert('Error', 'You cannot save an empty task.');
-//         return;
-//     }
-//     const newTasks = [...tasks];
-//     newTasks[index].text = editedTask;
-//     setEditingIndex(null);
-// };
-// const editCancel = () => {
-//     setEditingIndex(null);
-// };
