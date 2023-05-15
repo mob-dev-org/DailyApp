@@ -37,12 +37,12 @@ export const toDoSlice = createSlice({
             state.tasks[index].text = editingTask;
             state.editingIndex = null;
         },
-        editTask: (state, { payload }: PayloadAction<number>) => {
+        toggleEditTask: (state, { payload }: PayloadAction<number>) => {
             const index = payload;
             state.editingIndex = index;
             state.editingTask = state.tasks[index].text;
         },
-        cancelEdit: (state) => {
+        toggleCancelEdit: (state) => {
             state.editingIndex = null;
             state.editingTask = '';
         },
@@ -62,8 +62,8 @@ export const {
     setEditedText,
     clearTasks,
     saveEditedTask,
-    cancelEdit,
-    editTask,
+    toggleCancelEdit,
+    toggleEditTask,
 } = toDoSlice.actions;
 
 export default toDoSlice.reducer;

@@ -20,13 +20,13 @@ import MainButtons from '@/components/molecules/AppearanceButtons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
     addNewTask,
-    cancelEdit,
     clearTasks,
     deleteTask,
-    editTask,
     saveEditedTask,
     setEditedText,
     taskIsDone,
+    toggleCancelEdit,
+    toggleEditTask,
 } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
@@ -58,12 +58,12 @@ export default function TabThreeScreen() {
         }
         dispatch(saveEditedTask({ index, editingTask }));
     };
-    const taskEdit = (index: number) => {
-        dispatch(editTask(index));
+    const editTask = (index: number) => {
+        dispatch(toggleEditTask(index));
         console.log('press', tasks);
     };
-    const editCancel = () => {
-        dispatch(cancelEdit());
+    const cancelEdit = () => {
+        dispatch(toggleCancelEdit());
     };
     const updateEdit = (text: string) => {
         dispatch(setEditedText(text));
@@ -93,7 +93,7 @@ export default function TabThreeScreen() {
                             ) : (
                                 <View style={styles.taskItemButtons}>
                                     <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
-                                    <TaskActionButton onPress={editCancel} text="cancel" />
+                                    <TaskActionButton onPress={cancelEdit} text="cancel" />
                                 </View>
                             )}
                         </View>
@@ -150,7 +150,7 @@ export default function TabThreeScreen() {
                                                     />
                                                 )}
                                                 {!task.done && (
-                                                    <TaskActionButton onPress={() => taskEdit(index)} text="edit" />
+                                                    <TaskActionButton onPress={() => editTask(index)} text="edit" />
                                                 )}
                                             </View>
                                         </>
