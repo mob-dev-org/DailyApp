@@ -17,7 +17,6 @@ import alertMessage from '@/components/atoms/AlertMessage';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
-import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
     addNewTask,
@@ -25,7 +24,6 @@ import {
     clearTasks,
     deleteTask,
     editTask,
-    resetTasks,
     saveEditedTask,
     setEditedText,
     taskIsDone,
@@ -37,22 +35,10 @@ export default function TabThreeScreen() {
     const { t } = useTranslation();
 
     // import inital state from redux store
-    const { tasks, editingIndex, editedTask } = useAppSelector((state) => state.toDo);
+    const { tasks, editingIndex, editingTask } = useAppSelector((state) => state.toDo);
 
-    const { theme, language } = useAppSelector((state) => state.appSettings);
     const dispatch = useAppDispatch();
-    const changeTheme = (theme: Theme) => dispatch(setTheme(theme));
-    const changeLanguage = () => {
-        console.log('Changing language', language);
-        dispatch(setLanguage(language === 'en-US' ? 'bs-BA' : 'en-US'));
-    };
 
-    const ThemeChange = () => {
-        changeTheme(theme === 'dark' ? 'light' : 'dark');
-    };
-    const resetState = () => {
-        dispatch(resetTasks());
-    };
     //useState hook for adding task
     const [taskName, setTaskName] = useState<string>('');
 
@@ -75,11 +61,11 @@ export default function TabThreeScreen() {
     };
 
     const saveEditing = (index: number) => {
-        if (!editedTask) {
+        if (!editingTask) {
             Alert.alert('Error', 'You cannot save an empty task.');
             return;
         }
-        dispatch(saveEditedTask({ index, editedTask }));
+        dispatch(saveEditedTask({ index, editingTask }));
     };
     const taskEdit = (index: number) => {
         dispatch(editTask(index));
@@ -99,11 +85,7 @@ export default function TabThreeScreen() {
             <KeyboardAvoidingView behavior="height" enabled>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <MainButtons
-                            changeLanguage={changeLanguage}
-                            handleThemeChange={ThemeChange}
-                            resetState={resetState}
-                        />
+                        <MainButtons />
                         {/* HEAD */}
                         <View>
                             <Text style={styles.title}>{t('addTasks')}</Text>
@@ -115,7 +97,7 @@ export default function TabThreeScreen() {
                                     onChangeText={setTaskName}
                                 />
                             ) : (
-                                <TextInput style={styles.taskInput} value={editedTask} onChangeText={updateEdit} />
+                                <TextInput style={styles.taskInput} value={editingTask} onChangeText={updateEdit} />
                             )}
                             {editingIndex === null ? (
                                 <TaskActionButton onPress={addTask} text="add" />
