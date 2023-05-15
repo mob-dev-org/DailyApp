@@ -30,18 +30,11 @@ import {
 } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
-    //Translation and theme
-
-    const { t } = useTranslation();
-
-    // import inital state from redux store
     const { tasks, editingIndex, editingTask } = useAppSelector((state) => state.toDo);
-
+    const isEditing = editingIndex === null;
+    const { t } = useTranslation();
     const dispatch = useAppDispatch();
-
-    //useState hook for adding task
     const [taskName, setTaskName] = useState<string>('');
-
     const addTask = () => {
         if (!taskName) {
             Alert.alert('Error', 'You cannot add an empty task.');
@@ -55,11 +48,9 @@ export default function TabThreeScreen() {
         dispatch(clearTasks());
     };
     const clearTask = (index: number) => dispatch(deleteTask(index));
-
     const toggleTaskDone = (index: number) => {
         dispatch(taskIsDone({ index }));
     };
-
     const saveEditing = (index: number) => {
         if (!editingTask) {
             Alert.alert('Error', 'You cannot save an empty task.');
@@ -71,25 +62,22 @@ export default function TabThreeScreen() {
         dispatch(editTask(index));
         console.log('press', tasks);
     };
-
     const editCancel = () => {
         dispatch(cancelEdit());
     };
-
     const updateEdit = (text: string) => {
         dispatch(setEditedText(text));
     };
-
     return (
         <ScrollView style={styles.container}>
             <KeyboardAvoidingView behavior="height" enabled>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <MainButtons />
-                        {/* HEAD */}
+                        {/* HEAD input */}
                         <View>
                             <Text style={styles.title}>{t('addTasks')}</Text>
-                            {editingIndex === null ? (
+                            {isEditing ? (
                                 <TextInput
                                     style={styles.taskInput}
                                     placeholder={t('addTaskPlaceholder') || ''}
@@ -99,7 +87,8 @@ export default function TabThreeScreen() {
                             ) : (
                                 <TextInput style={styles.taskInput} value={editingTask} onChangeText={updateEdit} />
                             )}
-                            {editingIndex === null ? (
+                            {/* Buttons add / save,cancel/ */}
+                            {isEditing ? (
                                 <TaskActionButton onPress={addTask} text="add" />
                             ) : (
                                 <View style={styles.taskItemButtons}>
@@ -108,9 +97,10 @@ export default function TabThreeScreen() {
                                 </View>
                             )}
                         </View>
+                        {/* dell all button */}
                         <View style={styles.rowItems}>
                             <Text style={styles.title}>{t('listOfTasks')}</Text>
-                            {editingIndex === null && (
+                            {isEditing && (
                                 <TaskActionButton
                                     onPress={() =>
                                         alertMessage({
@@ -125,7 +115,7 @@ export default function TabThreeScreen() {
                                 />
                             )}
                         </View>
-                        {/* BODY */}
+                        {/* list of tasks*/}
                         <View>
                             {tasks.map((task, index) => (
                                 <View style={styles.taskItem} key={index}>
@@ -145,7 +135,7 @@ export default function TabThreeScreen() {
                                             </Text>
                                             <Divider />
                                             <View style={styles.taskItemButtons}>
-                                                {editingIndex === null && (
+                                                {isEditing && (
                                                     <TaskActionButton
                                                         onPress={() =>
                                                             alertMessage({
