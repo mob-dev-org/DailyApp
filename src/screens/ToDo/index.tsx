@@ -1,20 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-    Alert,
-    Keyboard,
-    KeyboardAvoidingView,
-    Pressable,
-    StyleSheet,
-    TextInput,
-    TouchableWithoutFeedback,
-} from 'react-native';
+import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import alertMessage from '@/components/atoms/AlertMessage';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
+import TaskDone from '@/components/atoms/TaskDone';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -123,13 +115,7 @@ export default function TabThreeScreen() {
                                         <Text>{t('editingTask')}</Text>
                                     ) : (
                                         <>
-                                            <Pressable onPress={() => toggleTaskDone(index)}>
-                                                {tasks[index].done ? (
-                                                    <Icon name="check-circle" size={25} color="green" />
-                                                ) : (
-                                                    <Icon name="circle-thin" size={25} color="gray" />
-                                                )}
-                                            </Pressable>
+                                            <TaskDone done={task.done} onPress={() => toggleTaskDone(index)} />
                                             <Text style={[styles.taskText, task.done && styles.taskDone]}>
                                                 {task.text}
                                             </Text>
