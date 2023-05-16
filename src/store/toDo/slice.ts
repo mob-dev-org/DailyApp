@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Task } from '@/constants/Types';
 
-export type toDo = { tasks: Task[]; editingIndex: number | null; newText: string };
+export type ToDo = { tasks: Task[]; editingIndex: number | null; newText: string };
 
 const initialState = {
     tasks: [
@@ -13,7 +13,7 @@ const initialState = {
     ],
     editingIndex: null,
     newText: '',
-} as toDo;
+} as ToDo;
 
 export const toDoSlice = createSlice({
     name: 'toDo',

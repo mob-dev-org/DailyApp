@@ -5,8 +5,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Divider } from 'react-native-paper';
 
 import alertMessage from '@/components/atoms/AlertMessage';
+import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-import Checkbox from '@/components/atoms/TaskDone';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
@@ -36,13 +36,11 @@ export default function TabThreeScreen() {
         setTaskName('');
     };
     console.log('Tasks', tasks);
-    const clearAll = () => {
-        dispatch(clearTasks());
-    };
+    const clearAll = () => dispatch(clearTasks());
+
     const clearTask = (index: number) => dispatch(deleteTask(index));
-    const toggleTaskDone = (index: number) => {
-        dispatch(taskIsDone({ index }));
-    };
+    const toggleTaskDone = (index: number) => dispatch(taskIsDone({ index }));
+
     const saveEditing = () => {
         if (!newText) {
             Alert.alert('Error', 'You cannot save an empty task.');
@@ -50,16 +48,12 @@ export default function TabThreeScreen() {
         }
         dispatch(saveEditedTask(newText));
     };
-    const editTask = (index: number) => {
-        dispatch(toggleEditTask(index));
-        console.log('press', tasks);
-    };
-    const cancelEdit = () => {
-        dispatch(cancelEditing());
-    };
-    const updateEdit = (text: string) => {
-        dispatch(setEditedText(text));
-    };
+    const editTask = (index: number) => dispatch(toggleEditTask(index));
+
+    const cancelEdit = () => dispatch(cancelEditing());
+
+    const updateEdit = (text: string) => dispatch(setEditedText(text));
+
     return (
         <ScrollView style={styles.container}>
             <KeyboardAvoidingView behavior="height" enabled>
