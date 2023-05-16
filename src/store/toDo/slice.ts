@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Task } from '@/constants/Types';
 
-export type toDo = { tasks: Task[]; editingIndex: number | null; editingTask: string };
+export type toDo = { tasks: Task[]; editingIndex: number | null; newText: string };
 
 const initialState = {
     tasks: [
@@ -12,7 +12,7 @@ const initialState = {
         { text: 'test4', done: false },
     ],
     editingIndex: null,
-    editingTask: '',
+    newText: '',
 } as toDo;
 
 export const toDoSlice = createSlice({
@@ -32,22 +32,30 @@ export const toDoSlice = createSlice({
         clearTasks: (state) => {
             state.tasks = [];
         },
-        saveEditedTask: (state, { payload }: PayloadAction<{ index: number; editingTask: string }>) => {
-            const { index, editingTask } = payload;
-            state.tasks[index].text = editingTask;
-            state.editingIndex = null;
+        // saveEditedTask: (state, { payload }: PayloadAction<{ index: number; newText: string }>) => {
+        //     const { index, newText } = payload;
+        //     state.tasks[index].text = newText;
+        //     state.editingIndex = null;
+        // },
+        saveEditedTask: (state, { payload }: PayloadAction<string>) => {
+            const index = state.editingIndex;
+            const newText = payload;
+            if (index !== null) {
+                state.tasks[index].text = newText;
+                state.editingIndex = null;
+            }
         },
         toggleEditTask: (state, { payload }: PayloadAction<number>) => {
             const index = payload;
             state.editingIndex = index;
-            state.editingTask = state.tasks[index].text;
+            state.newText = state.tasks[index].text;
         },
-        toggleCancelEdit: (state) => {
+        cancelEditing: (state) => {
             state.editingIndex = null;
-            state.editingTask = '';
+            state.newText = '';
         },
         setEditedText: (state, { payload }: PayloadAction<string>) => {
-            state.editingTask = payload;
+            state.newText = payload;
         },
 
         resetToDoState: () => initialState,
@@ -62,7 +70,7 @@ export const {
     setEditedText,
     clearTasks,
     saveEditedTask,
-    toggleCancelEdit,
+    cancelEditing,
     toggleEditTask,
 } = toDoSlice.actions;
 

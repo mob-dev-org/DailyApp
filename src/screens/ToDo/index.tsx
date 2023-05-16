@@ -6,23 +6,23 @@ import { Divider } from 'react-native-paper';
 
 import alertMessage from '@/components/atoms/AlertMessage';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-import TaskDone from '@/components/atoms/TaskDone';
+import Checkbox from '@/components/atoms/TaskDone';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
     addNewTask,
+    cancelEditing,
     clearTasks,
     deleteTask,
     saveEditedTask,
     setEditedText,
     taskIsDone,
-    toggleCancelEdit,
     toggleEditTask,
 } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
-    const { tasks, editingIndex, editingTask } = useAppSelector((state) => state.toDo);
+    const { tasks, editingIndex, newText } = useAppSelector((state) => state.toDo);
     const isEditing = editingIndex === null;
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
@@ -43,19 +43,19 @@ export default function TabThreeScreen() {
     const toggleTaskDone = (index: number) => {
         dispatch(taskIsDone({ index }));
     };
-    const saveEditing = (index: number) => {
-        if (!editingTask) {
+    const saveEditing = () => {
+        if (!newText) {
             Alert.alert('Error', 'You cannot save an empty task.');
             return;
         }
-        dispatch(saveEditedTask({ index, editingTask }));
+        dispatch(saveEditedTask(newText));
     };
     const editTask = (index: number) => {
         dispatch(toggleEditTask(index));
         console.log('press', tasks);
     };
     const cancelEdit = () => {
-        dispatch(toggleCancelEdit());
+        dispatch(cancelEditing());
     };
     const updateEdit = (text: string) => {
         dispatch(setEditedText(text));
@@ -77,14 +77,14 @@ export default function TabThreeScreen() {
                                     onChangeText={setTaskName}
                                 />
                             ) : (
-                                <TextInput style={styles.taskInput} value={editingTask} onChangeText={updateEdit} />
+                                <TextInput style={styles.taskInput} value={newText} onChangeText={updateEdit} />
                             )}
                             {/* Buttons add / save,cancel/ */}
                             {isEditing ? (
                                 <TaskActionButton onPress={addTask} text="add" />
                             ) : (
                                 <View style={styles.taskItemButtons}>
-                                    <TaskActionButton onPress={() => saveEditing(editingIndex)} text="save" />
+                                    <TaskActionButton onPress={saveEditing} text="save" />
                                     <TaskActionButton onPress={cancelEdit} text="cancel" />
                                 </View>
                             )}
@@ -115,7 +115,7 @@ export default function TabThreeScreen() {
                                         <Text>{t('editingTask')}</Text>
                                     ) : (
                                         <>
-                                            <TaskDone done={task.done} onPress={() => toggleTaskDone(index)} />
+                                            <Checkbox done={task.done} onPress={() => toggleTaskDone(index)} />
                                             <Text style={[styles.taskText, task.done && styles.taskDone]}>
                                                 {task.text}
                                             </Text>
