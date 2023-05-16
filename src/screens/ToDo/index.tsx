@@ -2,27 +2,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Divider } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import alertMessage from '@/components/atoms/AlertMessage';
-import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
+import Tasks from '@/components/molecules/ListOfTasks';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import {
-    addNewTask,
-    cancelEditing,
-    clearTasks,
-    deleteTask,
-    saveEditedTask,
-    setEditedText,
-    taskIsDone,
-    toggleEditTask,
-} from '@/store/toDo/slice';
+import { addNewTask, cancelEditing, clearTasks, saveEditedTask, setEditedText } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
-    const { tasks, editingIndex, newText } = useAppSelector((state) => state.toDo);
+    const { editingIndex, newText } = useAppSelector((state) => state.toDo);
     const isEditing = editingIndex === null;
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
@@ -35,11 +26,7 @@ export default function TabThreeScreen() {
         dispatch(addNewTask(taskName));
         setTaskName('');
     };
-    console.log('Tasks', tasks);
     const clearAll = () => dispatch(clearTasks());
-
-    const clearTask = (index: number) => dispatch(deleteTask(index));
-    const toggleTaskDone = (index: number) => dispatch(taskIsDone({ index }));
 
     const saveEditing = () => {
         if (!newText) {
@@ -48,107 +35,70 @@ export default function TabThreeScreen() {
         }
         dispatch(saveEditedTask(newText));
     };
-    const editTask = (index: number) => dispatch(toggleEditTask(index));
 
     const cancelEdit = () => dispatch(cancelEditing());
 
     const updateEdit = (text: string) => dispatch(setEditedText(text));
 
     return (
-        <ScrollView style={styles.container}>
-            <KeyboardAvoidingView behavior="height" enabled>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View>
-                        <MainButtons />
-                        {/* HEAD input */}
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                <KeyboardAvoidingView behavior="height" enabled>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                         <View>
-                            <Text style={styles.title}>{t('addTasks')}</Text>
-                            {isEditing ? (
-                                <TextInput
-                                    style={styles.taskInput}
-                                    placeholder={t('addTaskPlaceholder') || ''}
-                                    value={taskName}
-                                    onChangeText={setTaskName}
-                                />
-                            ) : (
-                                <TextInput style={styles.taskInput} value={newText} onChangeText={updateEdit} />
-                            )}
-                            {/* Buttons add / save,cancel/ */}
-                            {isEditing ? (
-                                <TaskActionButton onPress={addTask} text="add" />
-                            ) : (
-                                <View style={styles.taskItemButtons}>
-                                    <TaskActionButton onPress={saveEditing} text="save" />
-                                    <TaskActionButton onPress={cancelEdit} text="cancel" />
-                                </View>
-                            )}
+                            <MainButtons />
+                            {/* HEAD input */}
+                            <View>
+                                <Text style={styles.title}>{t('addTasks')}</Text>
+                                {isEditing ? (
+                                    <TextInput
+                                        style={styles.taskInput}
+                                        placeholder={t('addTaskPlaceholder') || ''}
+                                        value={taskName}
+                                        onChangeText={setTaskName}
+                                    />
+                                ) : (
+                                    <TextInput style={styles.taskInput} value={newText} onChangeText={updateEdit} />
+                                )}
+                                {/* Buttons add / save,cancel/ */}
+                                {isEditing ? (
+                                    <TaskActionButton onPress={addTask} text="add" />
+                                ) : (
+                                    <View style={styles.taskItemButtons}>
+                                        <TaskActionButton onPress={saveEditing} text="save" />
+                                        <TaskActionButton onPress={cancelEdit} text="cancel" />
+                                    </View>
+                                )}
+                            </View>
+                            {/* dell all button */}
+                            <View style={styles.rowItems}>
+                                <Text style={styles.title}>{t('listOfTasks')}</Text>
+                                {isEditing && (
+                                    <TaskActionButton
+                                        onPress={() =>
+                                            alertMessage({
+                                                title: 'DELETE',
+                                                message: 'Delete all tasks!?',
+                                                onPress: clearAll,
+                                                buttonText: 'DELETE',
+                                                buttonStyle: 'destructive',
+                                            })
+                                        }
+                                        text="deleteAll"
+                                    />
+                                )}
+                            </View>
+                            {/* List of tasks*/}
+                            <Tasks />
                         </View>
-                        {/* dell all button */}
-                        <View style={styles.rowItems}>
-                            <Text style={styles.title}>{t('listOfTasks')}</Text>
-                            {isEditing && (
-                                <TaskActionButton
-                                    onPress={() =>
-                                        alertMessage({
-                                            title: 'DELETE',
-                                            message: 'Delete all tasks!?',
-                                            onPress: clearAll,
-                                            buttonText: 'DELETE',
-                                            buttonStyle: 'destructive',
-                                        })
-                                    }
-                                    text="deleteAll"
-                                />
-                            )}
-                        </View>
-                        {/* list of tasks*/}
-                        <View>
-                            {tasks.map((task, index) => (
-                                <View style={styles.taskItem} key={index}>
-                                    {editingIndex === index ? (
-                                        <Text>{t('editingTask')}</Text>
-                                    ) : (
-                                        <>
-                                            <Checkbox done={task.done} onPress={() => toggleTaskDone(index)} />
-                                            <Text style={[styles.taskText, task.done && styles.taskDone]}>
-                                                {task.text}
-                                            </Text>
-                                            <Divider />
-                                            <View style={styles.taskItemButtons}>
-                                                {isEditing && (
-                                                    <TaskActionButton
-                                                        onPress={() =>
-                                                            alertMessage({
-                                                                title: 'DELETE',
-                                                                message: 'Delete all tasks!?',
-                                                                onPress: () => clearTask(index),
-                                                                buttonText: 'DELETE',
-                                                                buttonStyle: 'destructive',
-                                                            })
-                                                        }
-                                                        text="del"
-                                                    />
-                                                )}
-                                                {!task.done && (
-                                                    <TaskActionButton onPress={() => editTask(index)} text="edit" />
-                                                )}
-                                            </View>
-                                        </>
-                                    )}
-                                </View>
-                            ))}
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </ScrollView>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    taskDone: {
-        textDecorationLine: 'line-through',
-    },
     taskButtonWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -221,21 +171,5 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
         justifyContent: 'center',
-    },
-
-    taskItem: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#f2f2f2',
-        padding: 10,
-        marginBottom: 10,
-        borderRadius: 4,
-        borderWidth: 1,
-        borderColor: '#ccc',
-    },
-    taskText: {
-        flex: 1,
-        fontSize: 16,
-        maxWidth: 200,
     },
 });
