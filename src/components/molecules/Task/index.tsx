@@ -2,49 +2,47 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 
-import alertMessages from '@/components/atoms/AlertMessage';
 import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-import { Task } from '@/constants/Types';
+import { Tasks } from '@/constants/Types';
+import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask, taskIsDone, toggleEditTask } from '@/store/toDo/slice';
 
-type TaskProps = {
-    task: Task;
+type TaskType = {
+    task: Tasks;
     index: number;
 };
 
-export default function SingleTask({ task, index }: TaskProps) {
+export default function Task({ task, index }: TaskType) {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
 
     const { editingIndex } = useAppSelector((state) => state.toDo);
 
     const isEditing = editingIndex !== null;
-    const clearTask = (index: number) => dispatch(deleteTask(index));
-    const toggleTaskDone = (index: number) => dispatch(taskIsDone({ index }));
-    const editTask = (index: number) => dispatch(toggleEditTask(index));
-    const alertMessage = () =>
+    const toggleTaskDone = () => dispatch(taskIsDone({ index }));
+    const confirmDelete = () =>
         alertMessages({
             title: 'DELETE',
-            message: 'Delete all tasks!?',
-            onPress: () => clearTask(index),
+            message: 'Delete this tasks!?',
+            onPress: () => dispatch(deleteTask(index)),
             buttonText: 'DELETE',
             buttonStyle: 'destructive',
         });
 
     return (
         <View style={styles.taskItem}>
-            {editingIndex === index ? (
+            {isEditing ? (
                 <Text>{t('editingTask')}</Text>
             ) : (
                 <>
-                    <Checkbox done={task.done} onPress={() => toggleTaskDone(index)} />
+                    <Checkbox done={task.done} onPress={toggleTaskDone} />
                     <Text style={[styles.taskText, task.done && styles.taskDone]}>{task.text}</Text>
                     <Divider />
                     <View style={styles.taskItemButtons}>
-                        {!isEditing && <TaskActionButton onPress={alertMessage} text="del" />}
-                        {!task.done && <TaskActionButton onPress={() => editTask(index)} text="edit" />}
+                        {!isEditing && <TaskActionButton onPress={confirmDelete} text="del" />}
+                        {!task.done && <TaskActionButton onPress={() => dispatch(toggleEditTask(index))} text="edit" />}
                     </View>
                 </>
             )}

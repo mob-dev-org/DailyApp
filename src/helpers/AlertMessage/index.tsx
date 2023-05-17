@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
 
-type AlertMessageProps = {
+type AlertMessage = {
     title: string;
     message: string;
     onPress: () => void;
@@ -8,9 +8,7 @@ type AlertMessageProps = {
     buttonStyle: 'destructive' | 'default' | 'cancel';
 };
 
-const alertMessages = (props: AlertMessageProps) => {
-    const { title, message, onPress, buttonText, buttonStyle } = props;
-
+const alertMessages = ({ title, message, onPress, buttonText, buttonStyle }: AlertMessage) => {
     return Alert.alert(title, message, [
         {
             text: buttonText,

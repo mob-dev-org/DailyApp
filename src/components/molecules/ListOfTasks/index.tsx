@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 
-import SingleTask from '../Task';
+import Task from '../Task';
 
 import { useAppSelector } from '@/store/hooks';
 
@@ -10,7 +10,7 @@ export default function Tasks() {
     return (
         <View>
             {tasks.map((task, index) => (
-                <SingleTask key={index} index={index} task={task} />
+                <Task key={index} index={index} task={task} />
             ))}
         </View>
     );

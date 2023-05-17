@@ -4,17 +4,18 @@ import { Alert, Keyboard, StyleSheet, TextInput, TouchableWithoutFeedback } from
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import alertMessages from '@/components/atoms/AlertMessage';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
 import Tasks from '@/components/molecules/ListOfTasks';
+import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addNewTask, cancelEditing, clearTasks, saveEditedTask, setEditedText } from '@/store/toDo/slice';
 
 export default function TabThreeScreen() {
     const { editingIndex, newText } = useAppSelector((state) => state.toDo);
     const isEditing = editingIndex !== null;
+
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const [taskName, setTaskName] = useState<string>('');
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
+        padding: 20,
     },
     taskInput: {
         textAlign: 'center',

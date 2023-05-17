@@ -1,5 +1,5 @@
 // FOR TYPES
-export type Task = {
+export type Tasks = {
     text: string;
     done?: boolean;
 };
