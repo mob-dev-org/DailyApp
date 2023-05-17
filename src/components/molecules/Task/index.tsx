@@ -25,7 +25,7 @@ export default function Task({ task, index }: TaskType) {
     const confirmDelete = () =>
         alertMessages({
             title: 'DELETE',
-            message: 'Delete this tasks!?',
+            message: t('deleteSingleTask'),
             onPress: () => dispatch(deleteTask(index)),
             buttonText: 'DELETE',
             buttonStyle: 'destructive',

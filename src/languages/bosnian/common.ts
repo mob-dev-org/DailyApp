@@ -23,4 +23,6 @@ export default {
     addTaskPlaceholder: 'Dodaj zadatak...',
     editingTask: 'Zadatak se edituje...',
     deleteAll: 'OBRIŠI SVE',
+    deleteSingleTask: 'Obriši ovaj zadatak!?',
+    deleteAllTasks: 'Obriši sve zadatake!?',
 };

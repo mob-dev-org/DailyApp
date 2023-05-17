@@ -23,4 +23,6 @@ export default {
     addTaskPlaceholder: 'Add task...',
     editingTask: 'The task is being edited...',
     deleteAll: 'DEL ALL',
+    deleteSingleTask: 'Delete this task!?',
+    deleteAllTasks: 'Delete all tasks!?',
 };
