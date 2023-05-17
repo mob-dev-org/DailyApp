@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Task } from '@/constants/Types';
+import { Tasks } from '@/constants/Types';
 
-export type ToDo = { tasks: Task[]; editingIndex: number | null; newText: string };
+export type ToDo = { tasks: Tasks[]; editingIndex: number | null; newText: string };
 
 const initialState = {
     tasks: [
