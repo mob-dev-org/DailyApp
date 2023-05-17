@@ -8,7 +8,7 @@ type AlertMessageProps = {
     buttonStyle: 'destructive' | 'default' | 'cancel';
 };
 
-const alertMessage = (props: AlertMessageProps) => {
+const alertMessages = (props: AlertMessageProps) => {
     const { title, message, onPress, buttonText, buttonStyle } = props;
 
     return Alert.alert(title, message, [
@@ -24,4 +24,4 @@ const alertMessage = (props: AlertMessageProps) => {
     ]);
 };
 
-export default alertMessage;
+export default alertMessages;

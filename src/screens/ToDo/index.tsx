@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Keyboard, KeyboardAvoidingView, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Keyboard, StyleSheet, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import alertMessage from '@/components/atoms/AlertMessage';
+import alertMessages from '@/components/atoms/AlertMessage';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
@@ -14,7 +14,7 @@ import { addNewTask, cancelEditing, clearTasks, saveEditedTask, setEditedText } 
 
 export default function TabThreeScreen() {
     const { editingIndex, newText } = useAppSelector((state) => state.toDo);
-    const isEditing = editingIndex === null;
+    const isEditing = editingIndex !== null;
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
     const [taskName, setTaskName] = useState<string>('');
@@ -39,126 +39,73 @@ export default function TabThreeScreen() {
     const cancelEdit = () => dispatch(cancelEditing());
 
     const updateEdit = (text: string) => dispatch(setEditedText(text));
+    const alertMessage = () =>
+        alertMessages({
+            title: 'DELETE',
+            message: 'Delete all tasks!?',
+            onPress: () => clearAll,
+            buttonText: 'DELETE',
+            buttonStyle: 'destructive',
+        });
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <KeyboardAvoidingView behavior="height" enabled>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View>
+                        <MainButtons />
+                        {/* HEAD input */}
                         <View>
-                            <MainButtons />
-                            {/* HEAD input */}
-                            <View>
-                                <Text style={styles.title}>{t('addTasks')}</Text>
-                                {isEditing ? (
-                                    <TextInput
-                                        style={styles.taskInput}
-                                        placeholder={t('addTaskPlaceholder') || ''}
-                                        value={taskName}
-                                        onChangeText={setTaskName}
-                                    />
-                                ) : (
-                                    <TextInput style={styles.taskInput} value={newText} onChangeText={updateEdit} />
-                                )}
-                                {/* Buttons add / save,cancel/ */}
-                                {isEditing ? (
-                                    <TaskActionButton onPress={addTask} text="add" />
-                                ) : (
-                                    <View style={styles.taskItemButtons}>
-                                        <TaskActionButton onPress={saveEditing} text="save" />
-                                        <TaskActionButton onPress={cancelEdit} text="cancel" />
-                                    </View>
-                                )}
-                            </View>
-                            {/* dell all button */}
-                            <View style={styles.rowItems}>
-                                <Text style={styles.title}>{t('listOfTasks')}</Text>
-                                {isEditing && (
-                                    <TaskActionButton
-                                        onPress={() =>
-                                            alertMessage({
-                                                title: 'DELETE',
-                                                message: 'Delete all tasks!?',
-                                                onPress: clearAll,
-                                                buttonText: 'DELETE',
-                                                buttonStyle: 'destructive',
-                                            })
-                                        }
-                                        text="deleteAll"
-                                    />
-                                )}
-                            </View>
-                            {/* List of tasks*/}
-                            <Tasks />
+                            <Text style={styles.title}>{t('addTasks')}</Text>
+                            {!isEditing ? (
+                                <TextInput
+                                    style={styles.taskInput}
+                                    placeholder={t('addTaskPlaceholder') || ''}
+                                    value={taskName}
+                                    onChangeText={setTaskName}
+                                />
+                            ) : (
+                                <TextInput style={styles.taskInput} value={newText} onChangeText={updateEdit} />
+                            )}
+                            {/* Buttons add / save,cancel/ */}
+                            {!isEditing ? (
+                                <TaskActionButton onPress={addTask} text="add" />
+                            ) : (
+                                <View style={styles.taskItemButtons}>
+                                    <TaskActionButton onPress={saveEditing} text="save" />
+                                    <TaskActionButton onPress={cancelEdit} text="cancel" />
+                                </View>
+                            )}
                         </View>
-                    </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
+                        {/* dell all button  //TODO extrack to a fn*/}
+                        <View style={styles.rowItems}>
+                            <Text style={styles.title}>{t('listOfTasks')}</Text>
+                            {!isEditing && <TaskActionButton onPress={alertMessage} text="deleteAll" />}
+                        </View>
+                        {/* List of tasks*/}
+                        <Tasks />
+                    </View>
+                </TouchableWithoutFeedback>
             </ScrollView>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    taskButtonWrapper: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
     rowItems: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 20,
     },
-    taskInput2: {
-        height: 40,
-        borderColor: 'white',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginTop: 10,
-        backgroundColor: '#acdc',
-    },
     taskInput: {
         textAlign: 'center',
         fontSize: 16,
         borderBottomWidth: 1,
     },
-    pressableAdd: {
-        width: 100,
-        alignSelf: 'center',
-    },
-    addButton: {
-        backgroundColor: '#acdc',
-        fontSize: 16,
-        borderWidth: 1,
-        padding: 4,
-        margin: 8,
-        justifyContent: 'center',
-        textAlign: 'center',
-    },
-    actionIconText: {
-        fontSize: 12,
-    },
     taskItemButtons: {
         flexDirection: 'row',
     },
-    actionIcon: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#ccfc',
-        marginHorizontal: 4,
-        paddingHorizontal: 8,
-        borderRadius: 3,
-        borderWidth: 1,
-    },
-    clear: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-
     container: {
         flex: 1,
         padding: 20,
