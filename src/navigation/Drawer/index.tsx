@@ -1,13 +1,13 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import TabThreeScreen from '@/screens/ToDo';
+import ToDoScreen from '@/screens/ToDo';
 
 const Drawer = createDrawerNavigator();
 
 function MyDrawer() {
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name="ToDoApp" component={TabThreeScreen} />
+            <Drawer.Screen name="ToDoApp" component={ToDoScreen} />
         </Drawer.Navigator>
     );
 }
