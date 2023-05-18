@@ -4,7 +4,7 @@ import { Divider } from 'react-native-paper';
 
 import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-import { TaskType } from '@/constants/Types';
+import { Task as TaskType } from '@/constants/Types';
 import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask, taskIsDone, toggleEditTask } from '@/store/toDo/slice';

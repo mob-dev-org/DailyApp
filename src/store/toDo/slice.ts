@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { TaskType } from '@/constants/Types';
+import { Task as TaskType } from '@/constants/Types';
 
 export type ToDo = { tasks: TaskType[]; editingIndex: number | null; newText: string };
 
