@@ -7,7 +7,7 @@ import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { clearTasks } from '@/store/toDo/slice';
 
-export default function CelarList() {
+export default function ClearList() {
     const { editingIndex } = useAppSelector((state) => state.toDo);
     const isEditing = editingIndex !== null;
 

@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { Tasks } from '@/constants/Types';
+import { TaskType } from '@/constants/Types';
 
-export type ToDo = { tasks: Tasks[]; editingIndex: number | null; newText: string };
+export type ToDo = { tasks: TaskType[]; editingIndex: number | null; newText: string };
 
 const initialState = {
     tasks: [
@@ -25,8 +25,8 @@ export const toDoSlice = createSlice({
         deleteTask: (state, { payload }: PayloadAction<number>) => {
             state.tasks.splice(payload, 1);
         },
-        taskIsDone: (state, { payload }: PayloadAction<{ index: number }>) => {
-            const { index } = payload;
+        taskIsDone: (state, action: PayloadAction<number>) => {
+            const index = action.payload;
             state.tasks[index].done = !state.tasks[index].done;
         },
         clearTasks: (state) => {

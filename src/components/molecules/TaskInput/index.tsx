@@ -15,7 +15,7 @@ export default function TaskInput() {
     const [taskName, setTaskName] = useState<string>('');
     const addTask = () => {
         if (!taskName) {
-            Alert.alert('Error', 'You cannot add an empty task.');
+            Alert.alert('Error', t('emptyTask') || '');
             return;
         }
         dispatch(addNewTask(taskName));
@@ -23,7 +23,7 @@ export default function TaskInput() {
     };
     const saveEditing = () => {
         if (!newText) {
-            Alert.alert('Error', 'You cannot save an empty task.');
+            Alert.alert('Error', t('emptyTask') || '');
             return;
         }
         dispatch(saveEditedTask(newText));

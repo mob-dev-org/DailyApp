@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
-import CelarList from '@/components/molecules/ClearList';
+import ClearList from '@/components/molecules/ClearList';
 import Tasks from '@/components/molecules/ListOfTasks';
 import TaskInput from '@/components/molecules/TaskInput';
 
@@ -16,7 +16,7 @@ export default function ToDoScreen() {
                     <View>
                         <MainButtons />
                         <TaskInput />
-                        <CelarList />
+                        <ClearList />
                         <Tasks />
                     </View>
                 </TouchableWithoutFeedback>

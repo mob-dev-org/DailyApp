@@ -4,24 +4,27 @@ import { Divider } from 'react-native-paper';
 
 import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-import { Tasks } from '@/constants/Types';
+import { TaskType } from '@/constants/Types';
 import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask, taskIsDone, toggleEditTask } from '@/store/toDo/slice';
 
-type TaskType = {
-    task: Tasks;
+type TaskProps = {
+    task: TaskType;
     index: number;
 };
 
-export default function Task({ task, index }: TaskType) {
+export default function Task({ task, index }: TaskProps) {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
 
     const { editingIndex } = useAppSelector((state) => state.toDo);
 
     const isEditing = editingIndex !== null;
-    const toggleTaskDone = () => dispatch(taskIsDone({ index }));
+    const toggleTaskDone = () => {
+        dispatch(taskIsDone(index));
+    };
+    const editTask = () => dispatch(toggleEditTask(index));
     const confirmDelete = () =>
         alertMessages({
             title: 'DELETE',
@@ -42,7 +45,7 @@ export default function Task({ task, index }: TaskType) {
                     <Divider />
                     <View style={styles.taskItemButtons}>
                         {!isEditing && <TaskActionButton onPress={confirmDelete} text="del" />}
-                        {!task.done && <TaskActionButton onPress={() => dispatch(toggleEditTask(index))} text="edit" />}
+                        {!task.done && <TaskActionButton onPress={editTask} text="edit" />}
                     </View>
                 </>
             )}

@@ -25,4 +25,5 @@ export default {
     deleteAll: 'DEL ALL',
     deleteSingleTask: 'Delete this task!?',
     deleteAllTasks: 'Delete all tasks!?',
+    emptyTask: 'You can not save empty task',
 };

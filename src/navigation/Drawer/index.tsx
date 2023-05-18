@@ -1,6 +1,7 @@
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import TabTwoScreen from '@/screens/TabTwo';
+import BottomTabNavigator from '../BottomTabsNav';
+
 import ToDoScreen from '@/screens/ToDo';
 
 const Drawer = createDrawerNavigator();
@@ -9,7 +10,7 @@ function MyDrawer() {
     return (
         <Drawer.Navigator>
             <Drawer.Screen name="ToDo" component={ToDoScreen} />
-            <Drawer.Screen name="TabTwo" component={TabTwoScreen} />
+            <Drawer.Screen name="Termin" component={BottomTabNavigator} />
         </Drawer.Navigator>
     );
 }
