@@ -15,7 +15,7 @@ export default function TaskInput() {
     const [taskName, setTaskName] = useState<string>('');
     const addTask = () => {
         if (!taskName) {
-            Alert.alert(t('error'), t('emptyTask') || '');
+            Alert.alert(t('error'), t('emptyAddTask') || '');
             return;
         }
         dispatch(addNewTask(taskName));

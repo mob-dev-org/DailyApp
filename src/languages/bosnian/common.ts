@@ -25,6 +25,7 @@ export default {
     deleteAll: 'OBRIŠI SVE',
     deleteSingleTask: 'Obriši ovaj zadatak!?',
     deleteAllTasks: 'Obriši sve zadatake!?',
-    emptyTask: 'Ne može spremiti prazan zadatak',
+    emptyTask: 'Ne možeš spremiti prazan zadatak',
     error: 'Greška!',
+    emptyAddTask: 'Ne možeš dodati prazan zadatak',
 };

@@ -27,4 +27,5 @@ export default {
     deleteAllTasks: 'Delete all tasks!?',
     emptyTask: 'You can not save empty task',
     error: 'Error!',
+    emptyAddTask: 'You can not add empty task',
 };
