@@ -28,4 +28,5 @@ export default {
     emptyTask: 'You can not save empty task',
     error: 'Error!',
     emptyAddTask: 'You can not add empty task',
+    emptySub: 'You can not add empty subject',
 };

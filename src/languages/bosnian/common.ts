@@ -28,4 +28,5 @@ export default {
     emptyTask: 'Ne možeš spremiti prazan zadatak',
     error: 'Greška!',
     emptyAddTask: 'Ne možeš dodati prazan zadatak',
+    emptySub: 'Ne možeš dodati prazan predmet',
 };

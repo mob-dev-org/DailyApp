@@ -2,14 +2,12 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { Task as TaskType } from '@/constants/Types';
 
-export type ToDo = { tasks: TaskType[]; editingIndex: number | null; newText: string };
+export type ToDo = { tasks: TaskType[]; editingIndex: number | null; newText: string; name: string };
 
 const initialState = {
     tasks: [
         { text: 'test1', done: false },
         { text: 'test2', done: false },
-        { text: 'test3', done: false },
-        { text: 'test4', done: false },
     ],
     editingIndex: null,
     newText: '',
