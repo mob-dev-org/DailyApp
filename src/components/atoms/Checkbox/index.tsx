@@ -1,24 +1,20 @@
-// import React, { FunctionComponent } from 'react';
-// import { View, ViewStyle } from 'react-native';
+import React from 'react';
+import { Pressable } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-// import Text from '../Text';
-// import AppIcon from '../icons/AppIcon';
-// import styles from './styles';
+type CheckboxProps = {
+    done: boolean | undefined;
+    onPress: () => void;
+};
 
-// export type CheckboxProps = {
-//     checked?: boolean;
-//     style?: ViewStyle;
-// };
-
-// const Checkbox: FunctionComponent<CheckboxProps> = (props) => {
-//     const { checked, style } = props;
-//     const { container } = styles;
-
-//     return (
-//         <View testID="Checkbox" style={[container, style, checked && styles.checked]}>
-//             {checked && <AppIcon name="check" color={'#fff'} size={19} />}
-//         </View>
-//     );
-// };
-
-// export default Checkbox;
+export default function Checkbox({ done, onPress }: CheckboxProps) {
+    return (
+        <Pressable onPress={onPress}>
+            {done ? (
+                <Icon name="check-circle" size={24} color="green" />
+            ) : (
+                <Icon name="circle-thin" size={24} color="gray" />
+            )}
+        </Pressable>
+    );
+}
