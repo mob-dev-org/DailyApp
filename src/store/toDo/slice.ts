@@ -1,13 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Task as TaskType } from '@/constants/Types';
 
 export type ToDo = { tasks: TaskType[]; editingIndex: number | null; newText: string; name: string };
-
 const initialState = {
     tasks: [
-        { text: 'test1', done: false },
-        { text: 'test2', done: false },
+        { text: 'test1', done: false, id: uuidv4() },
+        { text: 'test2', done: false, id: uuidv4() },
     ],
     editingIndex: null,
     newText: '',
@@ -18,7 +18,7 @@ export const toDoSlice = createSlice({
     initialState,
     reducers: {
         addNewTask: (state, { payload }: PayloadAction<string>) => {
-            state.tasks.push({ text: payload });
+            state.tasks.push({ id: uuidv4(), text: payload });
         },
         deleteTask: (state, { payload }: PayloadAction<number>) => {
             state.tasks.splice(payload, 1);

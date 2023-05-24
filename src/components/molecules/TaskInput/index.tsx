@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addNewTask, cancelEditing, saveEditedTask, setEditedText } from '@/store/toDo/slice';
 
 export default function TaskInput() {
-    const { editingIndex, newText } = useAppSelector((state) => state.toDo);
+    const { editingIndex, newText, tasks } = useAppSelector((state) => state.toDo);
     const isEditing = editingIndex !== null;
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
@@ -31,6 +31,7 @@ export default function TaskInput() {
     const cancelEdit = () => dispatch(cancelEditing());
     const updateEdit = (text: string) => dispatch(setEditedText(text));
 
+    console.log(tasks);
     return (
         <View>
             <Text style={styles.title}>{t('addTasks')}</Text>

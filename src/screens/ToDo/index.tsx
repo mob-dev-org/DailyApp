@@ -62,7 +62,6 @@ export default function ToDoScreen() {
                     <View>
                         <View style={styles.addSubjectContainer}>
                             <Button title="Add Subject" onPress={addSubject} />
-
                             <TextInput
                                 style={styles.input}
                                 value={newSubjectName}
