@@ -29,4 +29,5 @@ export default {
     error: 'Greška!',
     emptyAddTask: 'Ne možeš dodati prazan zadatak',
     emptySub: 'Ne možeš dodati prazan predmet',
+    duplicateSub: 'Ne možeš dodati isti predmet ',
 };

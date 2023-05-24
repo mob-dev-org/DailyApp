@@ -9,6 +9,7 @@ import MainButtons from '@/components/molecules/AppearanceButtons';
 import ClearList from '@/components/molecules/ClearList';
 import Tasks from '@/components/molecules/ListOfTasks';
 import TaskInput from '@/components/molecules/TaskInput';
+import alertMessages from '@/helpers/AlertMessage';
 
 export default function ToDoScreen() {
     const [subjectNames, setSubjectNames] = useState<string[]>(['SUB', 'SUB2']);
@@ -16,12 +17,16 @@ export default function ToDoScreen() {
     const { t } = useTranslation();
 
     const addSubject = () => {
-        if (newSubjectName) {
-            setSubjectNames([...subjectNames, newSubjectName]);
-            setNewSubjectName('');
-        } else {
+        if (!newSubjectName) {
             alert(t('emptySub'));
+            return;
         }
+        if (subjectNames.includes(newSubjectName)) {
+            alert(t('duplicateSub'));
+            return;
+        }
+        setSubjectNames([...subjectNames, newSubjectName]);
+        setNewSubjectName('');
     };
 
     const removeSubject = (index: number) => {
@@ -29,26 +34,46 @@ export default function ToDoScreen() {
         updatedSubjectNames.splice(index, 1);
         setSubjectNames(updatedSubjectNames);
     };
+    const removeSubjectMessage = (index: number) =>
+        alertMessages({
+            title: 'DELETE',
+            message: t('deleteAllTasks'),
+            onPress: () => removeSubject(index),
+            buttonText: 'DELETE',
+            buttonStyle: 'destructive',
+        });
+
+    const removeAllSubject = () => setSubjectNames([]);
+    const removeAllSubjectMessage = () =>
+        alertMessages({
+            title: 'DELETE',
+            message: t('deleteAllTasks'),
+            onPress: removeAllSubject,
+            buttonText: 'DELETE',
+            buttonStyle: 'destructive',
+        });
 
     return (
         <SafeAreaView style={styles.container}>
             <MainButtons />
+            <Button title="CLEAR ALL SUBJECT " onPress={removeAllSubjectMessage} />
             <ScrollView>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <View style={styles.addSubjectContainer}>
+                            <Button title="Add Subject" onPress={addSubject} />
+
                             <TextInput
                                 style={styles.input}
                                 value={newSubjectName}
                                 onChangeText={setNewSubjectName}
                                 placeholder="Enter subject name"
                             />
-                            <Button title="Add Subject" onPress={addSubject} />
                         </View>
                         {subjectNames.map((subjectName, index) => (
                             <View key={index}>
                                 <Text style={styles.listName}>{subjectName}</Text>
-                                <Button title="DEL" onPress={() => removeSubject(index)} />
+                                <Button title="DEL" onPress={() => removeSubjectMessage(index)} />
                                 <TaskInput />
                                 <ClearList />
                                 <Tasks />

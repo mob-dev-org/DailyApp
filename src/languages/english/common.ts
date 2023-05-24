@@ -29,4 +29,5 @@ export default {
     error: 'Error!',
     emptyAddTask: 'You can not add empty task',
     emptySub: 'You can not add empty subject',
+    duplicateSub: 'You can not add subject with same name',
 };

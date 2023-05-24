@@ -9,7 +9,7 @@ const Drawer = createDrawerNavigator();
 function MyDrawer() {
     return (
         <Drawer.Navigator>
-            <Drawer.Screen name="ToDo" component={ToDoScreen} />
+            <Drawer.Screen name="To-Do" component={ToDoScreen} />
             <Drawer.Screen name="Termin" component={BottomTabNavigator} />
         </Drawer.Navigator>
     );
