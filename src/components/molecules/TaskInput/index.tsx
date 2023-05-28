@@ -13,6 +13,7 @@ export default function TaskInput() {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const [taskName, setTaskName] = useState<string>('');
+
     const addTask = () => {
         if (!taskName) {
             Alert.alert(t('error'), t('emptyAddTask') || '');

@@ -6,6 +6,7 @@ import { View } from '@/components/atoms/Themed';
 import { Theme, setLanguage, setTheme } from '@/store/appSettings/slice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { resetToDoState } from '@/store/toDo/slice';
+import { resetProjectState } from '@/store/toDoProjects/slice';
 
 export default function MainButtons() {
     const dispatch = useAppDispatch();
@@ -18,6 +19,7 @@ export default function MainButtons() {
 
     const dispatchResetState = () => {
         dispatch(resetToDoState());
+        dispatch(resetProjectState());
     };
 
     const changeTheme = (theme: Theme) => {

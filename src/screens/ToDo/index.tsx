@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Button, Keyboard, StyleSheet, Text, TextInput, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,40 +10,50 @@ import ClearList from '@/components/molecules/ClearList';
 import Tasks from '@/components/molecules/ListOfTasks';
 import TaskInput from '@/components/molecules/TaskInput';
 import alertMessages from '@/helpers/AlertMessage';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+    addProject,
+    cancelEditing,
+    deleteProject,
+    deleteProjects,
+    saveEditedTask,
+    setEditedText,
+    toggleEditTask,
+} from '@/store/toDoProjects/slice';
 
 export default function ToDoScreen() {
-    const [subjectNames, setSubjectNames] = useState<string[]>(['SUB', 'SUB2']);
+    const { newText, projectEditingIndex, projects } = useAppSelector((state) => state.projects);
     const [newSubjectName, setNewSubjectName] = useState<string>('');
+    const [showTasks, setShowTasks] = useState<boolean>(false);
     const { t } = useTranslation();
+    const dispatch = useAppDispatch();
 
     const addSubject = () => {
         if (!newSubjectName) {
             alert(t('emptySub'));
             return;
         }
-        if (subjectNames.includes(newSubjectName)) {
+        if (projects.find((project) => project.name === newSubjectName)) {
             alert(t('duplicateSub'));
             return;
         }
-        setSubjectNames([...subjectNames, newSubjectName]);
+        dispatch(addProject(newSubjectName));
         setNewSubjectName('');
     };
 
-    const removeSubject = (index: number) => {
-        const updatedSubjectNames = [...subjectNames];
-        updatedSubjectNames.splice(index, 1);
-        setSubjectNames(updatedSubjectNames);
+    const removeSubject = (projectId: string) => {
+        dispatch(deleteProject(projectId));
     };
-    const removeSubjectMessage = (index: number) =>
+    const removeSubjectMessage = (projectId: string) =>
         alertMessages({
             title: 'DELETE',
             message: t('deleteAllTasks'),
-            onPress: () => removeSubject(index),
+            onPress: () => removeSubject(projectId),
             buttonText: 'DELETE',
             buttonStyle: 'destructive',
         });
 
-    const removeAllSubject = () => setSubjectNames([]);
+    const removeAllSubject = () => dispatch(deleteProjects());
     const removeAllSubjectMessage = () =>
         alertMessages({
             title: 'DELETE',
@@ -53,29 +63,75 @@ export default function ToDoScreen() {
             buttonStyle: 'destructive',
         });
 
+    const startEditingProject = (index: number) => {
+        dispatch(toggleEditTask(index));
+    };
+
+    const cancelEditingProject = () => {
+        dispatch(cancelEditing());
+    };
+
+    const saveEditedProject = (index: number, projectName: string) => {
+        if (!newText) {
+            Alert.alert(t('error'), t('emptyTask') || '');
+            return;
+        }
+        dispatch(saveEditedTask(projectName));
+    };
+    const updateEditProject = (text: string) => dispatch(setEditedText(text));
+
+    const toggleShowTasks = () => {
+        setShowTasks((showTasks) => !showTasks);
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <MainButtons />
-            <Button title="CLEAR ALL SUBJECT " onPress={removeAllSubjectMessage} />
+            <Button title="CLEAR ALL SUBJECT" onPress={removeAllSubjectMessage} />
+            <View style={styles.addSubjectContainer}>
+                <TextInput
+                    style={styles.input}
+                    value={newSubjectName}
+                    onChangeText={setNewSubjectName}
+                    placeholder="Enter subject name"
+                />
+                <Button title="Add Subject" onPress={addSubject} />
+            </View>
             <ScrollView>
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
-                        <View style={styles.addSubjectContainer}>
-                            <Button title="Add Subject" onPress={addSubject} />
-                            <TextInput
-                                style={styles.input}
-                                value={newSubjectName}
-                                onChangeText={setNewSubjectName}
-                                placeholder="Enter subject name"
-                            />
-                        </View>
-                        {subjectNames.map((subjectName, index) => (
-                            <View key={index}>
-                                <Text style={styles.listName}>{subjectName}</Text>
-                                <Button title="DEL" onPress={() => removeSubjectMessage(index)} />
-                                <TaskInput />
-                                <ClearList />
-                                <Tasks />
+                        {projects.map((project, index) => (
+                            <View key={project.id}>
+                                {projectEditingIndex === index ? (
+                                    <View>
+                                        <TextInput
+                                            style={styles.input}
+                                            value={newText}
+                                            onChangeText={updateEditProject}
+                                        />
+                                        <Button title="Save" onPress={() => saveEditedProject(index, newText)} />
+                                        <Button title="Cancel" onPress={cancelEditingProject} />
+                                    </View>
+                                ) : (
+                                    <View>
+                                        <View style={styles.projectHeader}>
+                                            <Text style={styles.listName}>{project.name}</Text>
+                                            <Button
+                                                title={showTasks ? 'Hide Tasks' : 'Show Tasks'}
+                                                onPress={toggleShowTasks}
+                                            />
+                                            <Button title="DEL" onPress={() => removeSubjectMessage(project.id)} />
+                                            <Button title="Edit" onPress={() => startEditingProject(index)} />
+                                        </View>
+                                        {showTasks && (
+                                            <>
+                                                <TaskInput />
+                                                <ClearList />
+                                                <Tasks />
+                                            </>
+                                        )}
+                                    </View>
+                                )}
                             </View>
                         ))}
                     </View>
@@ -88,22 +144,27 @@ export default function ToDoScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
     },
-    listName: {
-        fontSize: 24,
-        fontWeight: 'bold',
+    addSubjectContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 10,
     },
     input: {
+        flex: 1,
+        height: 40,
         borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 4,
-        padding: 8,
+        marginRight: 10,
+        padding: 10,
+    },
+    projectHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
         marginBottom: 10,
     },
-    addSubjectContainer: {
-        marginBottom: 10,
+    listName: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginRight: 10,
     },
 });
