@@ -10,12 +10,9 @@ import { clearTasks } from '@/store/toDo/slice';
 export default function ClearList() {
     const { editingIndex } = useAppSelector((state) => state.toDo);
     const isEditing = editingIndex !== null;
-
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
-
     const clearAll = () => dispatch(clearTasks());
-
     const alertMessage = () =>
         alertMessages({
             title: 'DELETE',
@@ -24,7 +21,6 @@ export default function ClearList() {
             buttonText: 'DELETE',
             buttonStyle: 'destructive',
         });
-
     return (
         <View style={styles.rowItems}>
             <Text style={styles.title}>{t('listOfTasks')}</Text>

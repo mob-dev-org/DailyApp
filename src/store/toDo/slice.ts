@@ -30,6 +30,7 @@ export const toDoSlice = createSlice({
         clearTasks: (state) => {
             state.tasks = [];
         },
+
         saveEditedTask: (state, { payload }: PayloadAction<string>) => {
             const index = state.editingIndex;
             const newText = payload;

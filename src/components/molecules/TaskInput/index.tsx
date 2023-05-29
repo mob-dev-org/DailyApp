@@ -9,11 +9,13 @@ import { addNewTask, cancelEditing, saveEditedTask, setEditedText } from '@/stor
 
 export default function TaskInput() {
     const { editingIndex, newText, tasks } = useAppSelector((state) => state.toDo);
+    const { projects } = useAppSelector((state) => state.projects);
+    const projectID = projects[0].id;
+    console.log(projectID);
     const isEditing = editingIndex !== null;
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const [taskName, setTaskName] = useState<string>('');
-
     const addTask = () => {
         if (!taskName) {
             Alert.alert(t('error'), t('emptyAddTask') || '');
@@ -31,7 +33,6 @@ export default function TaskInput() {
     };
     const cancelEdit = () => dispatch(cancelEditing());
     const updateEdit = (text: string) => dispatch(setEditedText(text));
-
     console.log(tasks);
     return (
         <View>
@@ -57,7 +58,6 @@ export default function TaskInput() {
         </View>
     );
 }
-
 const styles = StyleSheet.create({
     rowItems: {
         flexDirection: 'row',
