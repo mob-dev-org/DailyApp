@@ -33,6 +33,7 @@
         "@react-navigation/native": "^6.1.6",
         "@react-navigation/native-stack": "^6.9.11",
         "@reduxjs/toolkit": "^1.9.3",
+        "axios": "^1.4.0",
         "expo": "~48.0.15",
         "expo-asset": "~8.9.0",
         "expo-community-flipper": "^47.0.2",
