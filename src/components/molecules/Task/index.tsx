@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask, taskIsDone, toggleEditTask } from '@/store/toDo/slice';
 
 type TaskProps = {
-    task: TaskType;
+    task: TaskType | string;
     index: number;
 };
 
