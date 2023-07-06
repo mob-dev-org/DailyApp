@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Keyboard, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,19 +11,23 @@ import TaskInput from '@/components/molecules/TaskInput';
 import TestComponent from '@/components/molecules/TestApi';
 
 export default function ToDoScreen() {
+    const queryClient = new QueryClient();
+
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View>
-                        <MainButtons />
-                        <TaskInput />
-                        <ClearList />
-                        <TestComponent />
-                        {/* <Tasks /> */}
-                    </View>
-                </TouchableWithoutFeedback>
-            </ScrollView>
+            <QueryClientProvider client={queryClient}>
+                <ScrollView>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View>
+                            <MainButtons />
+                            <TaskInput />
+                            <ClearList />
+                            <TestComponent />
+                            {/* <Tasks /> */}
+                        </View>
+                    </TouchableWithoutFeedback>
+                </ScrollView>
+            </QueryClientProvider>
         </SafeAreaView>
     );
 }

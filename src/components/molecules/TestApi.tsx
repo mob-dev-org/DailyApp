@@ -1,5 +1,5 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import { Button, Text, View } from 'react-native';
 
 interface Task {
@@ -13,38 +13,22 @@ interface Task {
 }
 
 function MyComponent() {
-    const [data, setData] = useState<Task[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<Error | null>(null);
+    const { data, isLoading, isError, error, refetch } = useQuery<Task[]>({
+        queryKey: ['mykey'],
+        queryFn: () => axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks').then((res) => res.data),
+    });
 
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
-            setData(data);
-            setLoading(false);
-        } catch (error) {
-            setError(error);
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const syncData = () => fetchData();
     return (
         <View>
-            <Button title="SYNC" onPress={syncData} />
+            <Button title="SYNC" onPress={refetch} />
 
-            {loading ? (
+            {isLoading ? (
                 <Text>Loading...</Text>
-            ) : error ? (
-                <Text>Error: {error.message}</Text>
+            ) : isError ? (
+                <Text>Error: {error?.message} </Text>
             ) : (
                 <View>
-                    {data.map((item) => (
+                    {data?.map((item) => (
                         <Text key={item.id}>{item.name}</Text>
                     ))}
                 </View>
