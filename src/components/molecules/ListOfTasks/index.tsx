@@ -15,10 +15,11 @@ import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 
 import Task from '../Task';
+import TaskApi from '../TaskApi';
 
 import { useAppSelector } from '@/store/hooks';
 
-interface Task {
+interface ApiTask {
     completed: boolean;
     createdAt: string;
     id: string;
@@ -30,7 +31,7 @@ interface Task {
 
 function Tasks() {
     const { tasks } = useAppSelector((state) => state.toDo);
-    const [fetchedTasks, setFetchedTasks] = useState<Task[]>([]);
+    const [fetchedTasks, setFetchedTasks] = useState<ApiTask[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -52,7 +53,7 @@ function Tasks() {
                 <Task key={index} index={index} task={task} />
             ))}
             {fetchedTasks.map((task, index) => (
-                <Task key={index} index={index} task={task.name} />
+                <TaskApi key={index} index={index} task={task} />
             ))}
         </View>
     );

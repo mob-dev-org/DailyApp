@@ -4,17 +4,27 @@ import { Divider } from 'react-native-paper';
 
 import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-import { Task as TaskType } from '@/constants/Types';
+// Replace with your API task type
 import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask, taskIsDone, toggleEditTask } from '@/store/toDo/slice';
 
+interface ApiTask {
+    completed: boolean;
+    createdAt: string;
+    id: string;
+    name: string;
+    projectId: string | null;
+    updatedAt: string;
+    userId: string;
+}
+
 type TaskProps = {
-    task: TaskType;
+    task: ApiTask; // Replace with your API task type
     index: number;
 };
 
-export default function Task({ task, index }: TaskProps) {
+export default function TaskApi({ task, index }: TaskProps) {
     const { t } = useTranslation();
     const dispatch = useAppDispatch();
 
@@ -40,12 +50,12 @@ export default function Task({ task, index }: TaskProps) {
                 <Text>{t('editingTask')}</Text>
             ) : (
                 <>
-                    <Checkbox done={task.done} onPress={toggleTaskDone} />
-                    <Text style={[styles.taskText, task.done && styles.taskDone]}>{task.text}</Text>
+                    <Checkbox done={task.completed} onPress={toggleTaskDone} />
+                    <Text style={[styles.taskText, task.completed && styles.taskDone]}>{task.name}</Text>
                     <Divider />
                     <View style={styles.taskItemButtons}>
                         {!isEditing && <TaskActionButton onPress={confirmDelete} text="del" />}
-                        {!task.done && <TaskActionButton onPress={editTask} text="edit" />}
+                        {!task.completed && <TaskActionButton onPress={editTask} text="edit" />}
                     </View>
                 </>
             )}

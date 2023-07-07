@@ -22,8 +22,8 @@ export default function ToDoScreen() {
                             <MainButtons />
                             <TaskInput />
                             <ClearList />
-                            <TestComponent />
-                            {/* <Tasks /> */}
+                            {/* <TestComponent /> */}
+                            <Tasks />
                         </View>
                     </TouchableWithoutFeedback>
                 </ScrollView>
