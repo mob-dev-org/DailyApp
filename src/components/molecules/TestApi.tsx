@@ -12,14 +12,21 @@ interface Task {
     userId: string;
 }
 
+async function fetchData() {
+    const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
+    return data;
+}
+
 function MyComponent() {
-    const { data, isLoading, isError, error, refetch, isFetching } = useQuery<Task[]>({
+    const { data, isLoading, isError, error, refetch } = useQuery<Task[]>({
         queryKey: ['mykey'],
-        queryFn: () => axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks').then((res) => res.data),
+        queryFn: fetchData,
     });
 
-    const sync = () => refetch();
-    console.log('click', sync);
+    const sync = () => {
+        refetch();
+    };
+
     return (
         <View>
             <Button title="SYNC" onPress={sync} />
@@ -35,9 +42,6 @@ function MyComponent() {
                     ))}
                 </View>
             )}
-            <View>
-                <Text>{isFetching ? 'fetching..' : null}</Text>
-            </View>
         </View>
     );
 }
