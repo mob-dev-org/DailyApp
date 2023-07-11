@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, TextInput } from 'react-native';
 
@@ -22,6 +22,7 @@ type ApiTask = {
 export default function TaskApiInput() {
     const { t } = useTranslation();
     const [apiTask, setApiTask] = useState<string>('');
+    const [apiData, setData] = useState<ApiTask[]>([]);
 
     const addApiTask = async () => {
         if (!apiTask) {
@@ -32,11 +33,26 @@ export default function TaskApiInput() {
             await axios.post('https://t3-to-do-nextjs.vercel.app/api/tasks', { name: apiTask });
             alertMessages({ title: 'Success', message: 'Task added to API' });
             setApiTask('');
+            fetchData();
         } catch (error) {
             console.log(`Error: ${error}`);
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
         }
     };
+
+    const fetchData = async () => {
+        try {
+            const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
+            setData(data);
+            console.log('Dobavi api', data);
+        } catch (error) {
+            alertMessages({ title: 'Ups..', message: `Error: ${error}` });
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <View>

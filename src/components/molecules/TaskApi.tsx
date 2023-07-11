@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Divider } from 'react-native-paper';
 
@@ -17,7 +18,6 @@ export type ApiTask = {
 
 type TaskProps = {
     task: ApiTask;
-    index: number;
 };
 
 export default function TaskApi({ task }: TaskProps) {
@@ -29,6 +29,18 @@ export default function TaskApi({ task }: TaskProps) {
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
         }
     };
+    const fetchData = async () => {
+        try {
+            const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
+            console.log(data);
+        } catch (error) {
+            alertMessages({ title: 'Ups..', message: `Error: ${error}` });
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     return (
         <View style={styles.taskItem}>
