@@ -4,7 +4,6 @@ import { Divider } from 'react-native-paper';
 
 import Checkbox from '@/components/atoms/Checkbox';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
-// Replace with your API task type
 import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask, taskIsDone, toggleEditTask } from '@/store/toDo/slice';
@@ -20,45 +19,21 @@ interface ApiTask {
 }
 
 type TaskProps = {
-    task: ApiTask; // Replace with your API task type
+    task: ApiTask;
     index: number;
 };
 
-export default function TaskApi({ task, index }: TaskProps) {
-    const { t } = useTranslation();
-    const dispatch = useAppDispatch();
-
-    const { editingIndex } = useAppSelector((state) => state.toDo);
-
-    const isEditing = editingIndex !== null;
-    const toggleTaskDone = () => {
-        dispatch(taskIsDone(index));
-    };
-    const editTask = () => dispatch(toggleEditTask(index));
-    const confirmDelete = () =>
-        alertMessages({
-            title: 'DELETE',
-            message: t('deleteSingleTask'),
-            onPress: () => dispatch(deleteTask(index)),
-            buttonText: 'DELETE',
-            buttonStyle: 'destructive',
-        });
-
+export default function TaskApi({ task }: TaskProps) {
     return (
         <View style={styles.taskItem}>
-            {isEditing ? (
-                <Text>{t('editingTask')}</Text>
-            ) : (
-                <>
-                    <Checkbox done={task.completed} onPress={toggleTaskDone} />
-                    <Text style={[styles.taskText, task.completed && styles.taskDone]}>{task.name}</Text>
-                    <Divider />
-                    <View style={styles.taskItemButtons}>
-                        {!isEditing && <TaskActionButton onPress={confirmDelete} text="del" />}
-                        {!task.completed && <TaskActionButton onPress={editTask} text="edit" />}
-                    </View>
-                </>
-            )}
+            <>
+                <Text style={[styles.taskText, task.completed && styles.taskDone]}>{task.name}</Text>
+                <Divider />
+                <View style={styles.taskItemButtons}>
+                    <TaskActionButton onPress={() => null} text="del" />
+                    <TaskActionButton onPress={() => null} text="edit" />
+                </View>
+            </>
         </View>
     );
 }
