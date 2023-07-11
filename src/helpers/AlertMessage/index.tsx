@@ -1,11 +1,11 @@
 import { Alert } from 'react-native';
 
 type AlertMessage = {
-    title: string;
-    message: string;
-    onPress: () => void;
-    buttonText: string;
-    buttonStyle: 'destructive' | 'default' | 'cancel';
+    title?: string;
+    message?: string;
+    onPress?: () => void;
+    buttonText?: string;
+    buttonStyle?: 'destructive' | 'default' | 'cancel';
 };
 
 const alertMessages = ({ title, message, onPress, buttonText, buttonStyle }: AlertMessage) => {
