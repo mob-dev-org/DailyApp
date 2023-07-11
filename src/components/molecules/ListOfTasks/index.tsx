@@ -33,7 +33,6 @@ function Tasks() {
     //     refetch();
     // };
 
-    const { tasks } = useAppSelector((state) => state.toDo);
     const [apiData, setData] = useState<ApiTask[]>([]);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<Error | null>(null);
