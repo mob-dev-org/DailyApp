@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { Divider, TextInput } from 'react-native-paper';
 
 import TaskActionButton from '@/components/atoms/TaskActionButton';
@@ -20,7 +21,8 @@ type TaskProps = {
     task: ApiTask;
 };
 
-export default function TaskApi({ task, index }: TaskProps) {
+export default function TaskApi({ task }: TaskProps) {
+    const { t } = useTranslation();
     const [apiTaskName, setApiTaskName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -44,6 +46,10 @@ export default function TaskApi({ task, index }: TaskProps) {
     };
 
     const saveApiTask = async () => {
+        if (!apiTaskName) {
+            alertMessages({ title: 'Empty', message: 'Cant save empty task' });
+            return;
+        }
         try {
             await axios.put(`https://t3-to-do-nextjs.vercel.app/api/tasks/${task.id}`, { name: apiTaskName });
             alertMessages({ title: 'Success', message: 'Task changed' });
