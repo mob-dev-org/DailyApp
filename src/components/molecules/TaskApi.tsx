@@ -1,3 +1,4 @@
+import { taskCompleted } from '@reduxjs/toolkit/dist/listenerMiddleware/exceptions';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,8 @@ import TaskActionButton from '@/components/atoms/TaskActionButton';
 import alertMessages from '@/helpers/AlertMessage';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { deleteTask } from '@/store/toDo/slice';
-import { deleteApiTask } from '@/store/toDoApi/slice';
+
+// import { deleteApiTask } from '@/store/toDoApi/slice';
 
 export type ApiTask = {
     completed?: boolean;
@@ -22,14 +24,16 @@ export type ApiTask = {
 
 type TaskProps = {
     task: ApiTask;
+    onDelete: (id: string) => void;
 };
 
-export default function TaskApi({ task }: TaskProps) {
+export default function TaskApi({ task, onDelete }: TaskProps) {
     const { t } = useTranslation();
+    const [tasks, setTasks] = useState<ApiTask[]>([]);
     const [apiTaskName, setApiTaskName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState(false);
-    const { tasks } = useAppSelector((state) => state.apiToDo);
+    // const { tasks } = useAppSelector((state) => state.apiToDo);
     const dispatch = useAppDispatch();
 
     const startEditing = () => {
@@ -40,12 +44,17 @@ export default function TaskApi({ task }: TaskProps) {
         setApiTaskName('');
         setIsEditing(false);
     };
+    const deleteTasks = (id) => {
+        const newTasks = tasks.filter((task) => task.id !== id);
+        setTasks(newTasks);
+        console.log('delete', task.name);
+    };
 
     const deleteApiTask = async (id) => {
         try {
+            onDelete(id);
             await axios.delete(`https://t3-to-do-nextjs.vercel.app/api/tasks/${id}`);
             alertMessages({ title: 'Success', message: 'Task deleted from API ' });
-            await dispatch(deleteTask(id));
         } catch (error) {
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
         }

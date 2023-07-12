@@ -31,6 +31,10 @@ function Tasks() {
         console.log('Test slice', tasks);
     };
 
+    const deleteApiTaskLocally = (id: string) => {
+        setData((prevData) => prevData.filter((task) => task.id !== id));
+    };
+
     return (
         <View>
             <Button title="SYNC" onPress={syncData} />
@@ -41,7 +45,7 @@ function Tasks() {
             ) : (
                 <View>
                     {apiData.map((task: ApiTask, index: number) => (
-                        <TaskApi key={index} task={task} />
+                        <TaskApi key={task.id} task={task} onDelete={deleteApiTaskLocally} />
                     ))}
                 </View>
             )}
