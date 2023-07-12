@@ -6,15 +6,18 @@ import { Divider, TextInput } from 'react-native-paper';
 
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import alertMessages from '@/helpers/AlertMessage';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { deleteTask } from '@/store/toDo/slice';
+import { deleteApiTask } from '@/store/toDoApi/slice';
 
 export type ApiTask = {
-    completed: boolean;
-    createdAt: string;
-    id: string;
+    completed?: boolean;
+    createdAt?: string;
+    id?: string;
     name: string;
-    projectId: string | null;
-    updatedAt: string;
-    userId: string;
+    projectId?: string | null;
+    updatedAt?: string;
+    userId?: string;
 };
 
 type TaskProps = {
@@ -26,6 +29,8 @@ export default function TaskApi({ task }: TaskProps) {
     const [apiTaskName, setApiTaskName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState(false);
+    const { tasks } = useAppSelector((state) => state.apiToDo);
+    const dispatch = useAppDispatch();
 
     const startEditing = () => {
         setApiTaskName(task.name);
@@ -40,6 +45,7 @@ export default function TaskApi({ task }: TaskProps) {
         try {
             await axios.delete(`https://t3-to-do-nextjs.vercel.app/api/tasks/${id}`);
             alertMessages({ title: 'Success', message: 'Task deleted from API ' });
+            await dispatch(deleteTask(id));
         } catch (error) {
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
         }
@@ -53,6 +59,7 @@ export default function TaskApi({ task }: TaskProps) {
         try {
             await axios.put(`https://t3-to-do-nextjs.vercel.app/api/tasks/${task.id}`, { name: apiTaskName });
             alertMessages({ title: 'Success', message: 'Task changed' });
+            await setIsEditing(false);
         } catch (error) {
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
         }

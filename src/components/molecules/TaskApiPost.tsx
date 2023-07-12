@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Alert, StyleSheet, TextInput } from 'react-native';
 
+import { ApiTask } from './TaskApi';
+
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import alertMessages from '@/helpers/AlertMessage';
@@ -11,6 +13,7 @@ export default function TaskApiInput() {
     const { t } = useTranslation();
     const [apiTask, setApiTask] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [apiData, setData] = useState<ApiTask[]>([]);
 
     const addApiTask = async () => {
         if (!apiTask) {
@@ -22,7 +25,7 @@ export default function TaskApiInput() {
             await axios.post('https://t3-to-do-nextjs.vercel.app/api/tasks', { name: apiTask });
             alertMessages({ title: 'Success', message: 'Task added to API' });
             setApiTask('');
-            fetchData();
+            // fetchData();
             setIsLoading(false);
         } catch (error) {
             console.log(`Error: ${error}`);

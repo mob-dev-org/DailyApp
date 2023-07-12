@@ -1,36 +1,23 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+import { ApiTask } from '@/components/molecules/TaskApi';
 import { deletePlayerA } from '@/store/teamA/slice';
 
-type ApiTask = {
-    completed: boolean;
-    createdAt: string;
-    id: string;
-    name: string;
-    projectId: string | null;
-    updatedAt: string;
-    userId: string;
-};
-
 export type ApiToDo = {
-    tasks: ApiTask[];
-    editingIndex: number | null;
-    newText: string;
+    tasks: any;
     isLoading: boolean;
     refresh: boolean;
+    error: null;
 };
 
 const initialState = {
-    tasks: [],
-    editingIndex: null,
-    newText: '',
-    error: null,
-    isLoading: false,
-    refresh: false,
+    tasks: [{ name: 'harun', completed: false }],
+    isLoading: true,
+    refresh: true,
 } as ApiToDo;
 
-export const apiToDo = createSlice({
+export const apiToDoslice = createSlice({
     name: 'toDoApi',
     initialState,
     reducers: {
@@ -42,9 +29,13 @@ export const apiToDo = createSlice({
                 state.tasks = res.data;
             });
         },
+        deleteTask: (state, action: PayloadAction<string>) => {
+            const taskId = action.payload;
+            state.tasks = state.tasks.filter((task) => task.id !== taskId);
+        },
     },
 });
 
-export const { resetToDoState, apiData } = apiToDo.actions;
+export const { resetToDoState, apiData, deleteTask } = apiToDoslice.actions;
 
-export default apiToDo.reducer;
+export default apiToDoslice.reducer;

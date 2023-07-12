@@ -11,6 +11,7 @@ function Tasks() {
     const [apiData, setData] = useState<ApiTask[]>([]);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<Error | null>(null);
+
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -29,7 +30,7 @@ function Tasks() {
         fetchData();
         console.log('Test slice', tasks);
     };
-    const apiData1 = tasks ? tasks : [];
+
     return (
         <View>
             <Button title="SYNC" onPress={syncData} />
@@ -39,7 +40,7 @@ function Tasks() {
                 <Text>Error:{error.message}</Text>
             ) : (
                 <View>
-                    {apiData.map((task, index) => (
+                    {apiData.map((task: ApiTask, index: number) => (
                         <TaskApi key={index} task={task} />
                     ))}
                 </View>
