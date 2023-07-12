@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { Divider, TextInput } from 'react-native-paper';
 
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import alertMessages from '@/helpers/AlertMessage';
@@ -20,7 +20,20 @@ type TaskProps = {
     task: ApiTask;
 };
 
-export default function TaskApi({ task }: TaskProps) {
+export default function TaskApi({ task, index }: TaskProps) {
+    const [apiTaskName, setApiTaskName] = useState<string>('');
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isEditing, setIsEditing] = useState(false);
+
+    const startEditing = () => {
+        setApiTaskName(task.name);
+        setIsEditing(true);
+    };
+    const cancelEditing = () => {
+        setApiTaskName('');
+        setIsEditing(false);
+    };
+
     const deleteApiTask = async (id) => {
         try {
             await axios.delete(`https://t3-to-do-nextjs.vercel.app/api/tasks/${id}`);
@@ -29,6 +42,16 @@ export default function TaskApi({ task }: TaskProps) {
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
         }
     };
+
+    const saveApiTask = async () => {
+        try {
+            await axios.put(`https://t3-to-do-nextjs.vercel.app/api/tasks/${task.id}`, { name: apiTaskName });
+            alertMessages({ title: 'Success', message: 'Task changed' });
+        } catch (error) {
+            alertMessages({ title: 'Ups..', message: `Error: ${error}` });
+        }
+    };
+
     const fetchData = async () => {
         try {
             const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
@@ -45,12 +68,23 @@ export default function TaskApi({ task }: TaskProps) {
     return (
         <View style={styles.taskItem}>
             <>
-                <Text style={[styles.taskText, task.completed && styles.taskDone]}>{task.name}</Text>
+                {!isEditing ? (
+                    <Text style={[styles.taskText, task.completed && styles.taskDone]}>{task.name}</Text>
+                ) : (
+                    <TextInput onChangeText={setApiTaskName} defaultValue={task.name} />
+                )}
                 <Divider />
-                <View style={styles.taskItemButtons}>
-                    <TaskActionButton onPress={() => deleteApiTask(task.id)} text="del" />
-                    <TaskActionButton onPress={() => null} text="edit" />
-                </View>
+                {!isEditing ? (
+                    <View style={styles.taskItemButtons}>
+                        <TaskActionButton onPress={() => deleteApiTask(task.id)} text="del" />
+                        <TaskActionButton onPress={startEditing} text="edit" />
+                    </View>
+                ) : (
+                    <View style={styles.taskItemButtons}>
+                        <TaskActionButton onPress={saveApiTask} text="save" />
+                        <TaskActionButton onPress={cancelEditing} text="cancel" />
+                    </View>
+                )}
             </>
         </View>
     );

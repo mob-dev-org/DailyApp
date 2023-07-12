@@ -7,10 +7,10 @@ import TaskApi, { ApiTask } from '../TaskApi';
 import { useAppSelector } from '@/store/hooks';
 
 function Tasks() {
+    const { tasks } = useAppSelector((state) => state.apiToDo);
     const [apiData, setData] = useState<ApiTask[]>([]);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<Error | null>(null);
-
     const fetchData = async () => {
         setLoading(true);
         try {
@@ -22,13 +22,14 @@ function Tasks() {
             setLoading(false);
         }
     };
-
     useEffect(() => {
         fetchData();
     }, []);
-
-    const syncData = () => fetchData();
-
+    const syncData = () => {
+        fetchData();
+        console.log('Test slice', tasks);
+    };
+    const apiData1 = tasks ? tasks : [];
     return (
         <View>
             <Button title="SYNC" onPress={syncData} />
@@ -39,21 +40,23 @@ function Tasks() {
             ) : (
                 <View>
                     {apiData.map((task, index) => (
-                        <TaskApi key={index} index={index} task={task} />
+                        <TaskApi key={index} task={task} />
                     ))}
                 </View>
             )}
         </View>
     );
 }
-
 export default Tasks;
-
 // import { View } from 'react-native';
+
 // import Task from '../Task';
+
 // import { useAppSelector } from '@/store/hooks';
+
 // export default function Tasks() {
-//     const { tasks } = useAppSelector((state) => state.toDo);
+//     const { tasks } = useAppSelector((state) => state.apiToDo);
+
 //     return (
 //         <View>
 //             {tasks.map((task, index) => (
@@ -61,3 +64,4 @@ export default Tasks;
 //             ))}
 //         </View>
 //     );
+// }

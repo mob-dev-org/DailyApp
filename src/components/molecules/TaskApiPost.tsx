@@ -6,53 +6,30 @@ import { Alert, StyleSheet, TextInput } from 'react-native';
 import TaskActionButton from '@/components/atoms/TaskActionButton';
 import { Text, View } from '@/components/atoms/Themed';
 import alertMessages from '@/helpers/AlertMessage';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { addNewTask, cancelEditing, saveEditedTask, setEditedText } from '@/store/toDo/slice';
-
-type ApiTask = {
-    completed: boolean;
-    createdAt: string;
-    id: string;
-    name: string;
-    projectId: string | null;
-    updatedAt: string;
-    userId: string;
-};
 
 export default function TaskApiInput() {
     const { t } = useTranslation();
     const [apiTask, setApiTask] = useState<string>('');
-    const [apiData, setData] = useState<ApiTask[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const addApiTask = async () => {
         if (!apiTask) {
             Alert.alert(t('error'), t('emptyTask') || '');
             return;
         }
+        setIsLoading(true);
         try {
             await axios.post('https://t3-to-do-nextjs.vercel.app/api/tasks', { name: apiTask });
             alertMessages({ title: 'Success', message: 'Task added to API' });
             setApiTask('');
-            fetchData();
+            // fetchData();
+            setIsLoading(false);
         } catch (error) {
             console.log(`Error: ${error}`);
             alertMessages({ title: 'Ups..', message: `Error: ${error}` });
+            setIsLoading(false);
         }
     };
-
-    const fetchData = async () => {
-        try {
-            const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
-            setData(data);
-            console.log('Dobavi api', data);
-        } catch (error) {
-            alertMessages({ title: 'Ups..', message: `Error: ${error}` });
-        }
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, []);
 
     return (
         <View>
@@ -63,7 +40,12 @@ export default function TaskApiInput() {
                 value={apiTask}
                 onChangeText={setApiTask}
             />
-            <TaskActionButton onPress={addApiTask} text="add" />
+
+            {isLoading ? (
+                <TaskActionButton onPress={() => null} text="Adding..." />
+            ) : (
+                <TaskActionButton onPress={addApiTask} text="Add" />
+            )}
         </View>
     );
 }
@@ -97,3 +79,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 });
+
+// const fetchData = async () => {
+//     setIsLoading(true);
+//     try {
+//         const { data } = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
+//         setData(data);
+//         setIsLoading(false);
+//     } catch (error) {
+//         console.log('Error', error);
+//         setIsLoading(false);
+//     }
+// };
+
+// useEffect(() => {
+//     fetchData;
+// }, [isLoading]);
