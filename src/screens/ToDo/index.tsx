@@ -6,7 +6,9 @@ import { View } from '@/components/atoms/Themed';
 import MainButtons from '@/components/molecules/AppearanceButtons';
 import ClearList from '@/components/molecules/ClearList';
 import Tasks from '@/components/molecules/ListOfTasks';
+import TaskApiInput from '@/components/molecules/TaskApiPost';
 import TaskInput from '@/components/molecules/TaskInput';
+import TestComponent from '@/components/molecules/TestApi';
 
 export default function ToDoScreen() {
     return (
@@ -15,8 +17,10 @@ export default function ToDoScreen() {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View>
                         <MainButtons />
-                        <TaskInput />
+                        {/* <TaskInput /> */}
+                        <TaskApiInput />
                         <ClearList />
+                        {/* <TestComponent /> */}
                         <Tasks />
                     </View>
                 </TouchableWithoutFeedback>
