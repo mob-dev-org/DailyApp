@@ -15,6 +15,17 @@ export default function TaskApiInput() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [apiData, setData] = useState<ApiTask[]>([]);
 
+    const fetchData = async () => {
+        try {
+            const response = await axios.get('https://t3-to-do-nextjs.vercel.app/api/tasks');
+            setData(response.data);
+            console.log('TEST nakon ADD', response.data);
+        } catch (error) {
+            console.log(`Error: ${error}`);
+            alertMessages({ title: 'Ups..', message: `Error: ${error}` });
+        }
+    };
+
     const addApiTask = async () => {
         if (!apiTask) {
             Alert.alert(t('error'), t('emptyTask') || '');
@@ -25,7 +36,7 @@ export default function TaskApiInput() {
             await axios.post('https://t3-to-do-nextjs.vercel.app/api/tasks', { name: apiTask });
             alertMessages({ title: 'Success', message: 'Task added to API' });
             setApiTask('');
-            // fetchData();
+            fetchData();
             setIsLoading(false);
         } catch (error) {
             console.log(`Error: ${error}`);
@@ -33,6 +44,10 @@ export default function TaskApiInput() {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchData();
+    }, [isLoading]);
 
     return (
         <View>

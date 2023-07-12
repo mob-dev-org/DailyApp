@@ -29,7 +29,6 @@ type TaskProps = {
 
 export default function TaskApi({ task, onDelete }: TaskProps) {
     const { t } = useTranslation();
-    const [tasks, setTasks] = useState<ApiTask[]>([]);
     const [apiTaskName, setApiTaskName] = useState<string>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -43,11 +42,6 @@ export default function TaskApi({ task, onDelete }: TaskProps) {
     const cancelEditing = () => {
         setApiTaskName('');
         setIsEditing(false);
-    };
-    const deleteTasks = (id) => {
-        const newTasks = tasks.filter((task) => task.id !== id);
-        setTasks(newTasks);
-        console.log('delete', task.name);
     };
 
     const deleteApiTask = async (id) => {
@@ -113,6 +107,11 @@ export default function TaskApi({ task, onDelete }: TaskProps) {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        padding: 20,
+        backgroundColor: '#fff',
+    },
+
     taskItemButtons: {
         flexDirection: 'row',
     },
